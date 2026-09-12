@@ -1,1 +1,45 @@
-# The-Book-of-Loops
+# location_map_tool — dense branching 100-location adventure map
+
+Open `index.html` in a modern browser.
+
+## Automatic location art
+
+Location art is loaded automatically from PNG files in the **same folder as `index.html`**.
+
+The filename must exactly match the location name, followed by `.png`.
+
+Examples:
+
+- `Crystal caves` → `Crystal caves.png`
+- `Great river plain` → `Great river plain.png`
+- `Miller's crown` → `Miller's crown.png`
+- `High crown castle` → `High crown castle.png`
+
+There is no manual art assignment step. When the map renders a location, it requests that PNG automatically. If the file is not present, the location displays `no_art`. Renaming a location immediately changes the filename the tool looks for.
+
+On case-sensitive systems or web servers, capitalization must match the location name exactly. Spaces and apostrophes are valid and are handled automatically by the browser.
+
+The legacy `art` property is still preserved in imported/exported JSON for compatibility, but rendering no longer depends on it.
+
+## Map topology
+
+- exactly 100 locations
+- 6 starting villages, each with exactly 1 connection
+- `Stillwater sanctum`, with exactly 1 connection
+- 75 ordinary locations with exactly 3 connections
+- 18 ordinary locations with exactly 2 connections
+- 134 total links
+- 35 independent graph cycles
+- clustered branches, local loops, splits and later reconnections
+- all added dense links stay within their local regional clusters
+
+Hard layout/routing rules remain enabled:
+
+- infinite pannable canvas
+- 20 px grid-snapped tiles
+- tiles cannot overlap
+- links use orthogonal grid routing
+- links cannot cross or share route segments
+- links cannot pass through tiles
+
+The embedded preset is also supplied as `location_map.json`.

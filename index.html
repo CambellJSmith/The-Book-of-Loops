@@ -1,0 +1,2269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Location Map Tool</title>
+<style>
+    :root {
+        --bg: #1e1f22;
+        --panel: #2b2d31;
+        --panel-2: #35373c;
+        --panel-3: #232428;
+        --border: #474a50;
+        --text: #e8e8e8;
+        --muted: #a9adb5;
+        --accent: #e87d0d;
+        --accent-2: #ff9b33;
+        --danger: #cf4d4d;
+        --grid: rgba(255,255,255,0.035);
+        --node-w: 240px;
+        --node-h: 180px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button, input, textarea { font: inherit; }
+
+    button {
+        border: 1px solid var(--border);
+        color: var(--text);
+        background: var(--panel-2);
+        border-radius: 5px;
+        padding: 7px 10px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    button:hover { background: #40434a; }
+    button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    button.primary:hover { background: var(--accent-2); }
+    button.danger { background: #4a2a2a; border-color: #6e3636; }
+    button.danger:hover { background: #633030; }
+
+    #app {
+        height: 100%;
+        display: grid;
+        grid-template-rows: 42px 1fr;
+    }
+
+    #topbar {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 6px 8px;
+        background: #25262a;
+        border-bottom: 1px solid var(--border);
+        z-index: 30;
+    }
+
+    #brand {
+        font-size: 14px;
+        font-weight: 700;
+        margin-right: 12px;
+        white-space: nowrap;
+    }
+
+    #status {
+        margin-left: auto;
+        color: var(--muted);
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    #main {
+        min-height: 0;
+        display: grid;
+        grid-template-columns: 285px 1fr;
+    }
+
+    #sidebar {
+        min-height: 0;
+        overflow-y: auto;
+        background: var(--panel);
+        border-right: 1px solid var(--border);
+        padding: 12px;
+    }
+
+    .section {
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 14px;
+        margin-bottom: 14px;
+    }
+
+    .section:last-child { border-bottom: 0; }
+
+    h2 {
+        font-size: 13px;
+        margin: 0 0 10px 0;
+        color: #f4f4f4;
+    }
+
+    label {
+        display: block;
+        font-size: 11px;
+        color: var(--muted);
+        margin: 10px 0 5px;
+    }
+
+    input[type="text"], textarea {
+        width: 100%;
+        border: 1px solid var(--border);
+        border-radius: 5px;
+        background: var(--panel-3);
+        color: var(--text);
+        padding: 8px;
+        outline: none;
+    }
+
+    input[type="text"]:focus, textarea:focus { border-color: var(--accent); }
+
+    textarea {
+        min-height: 80px;
+        resize: vertical;
+    }
+
+    .button-row {
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+    }
+
+    #art_preview {
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        object-fit: cover;
+        background: #18191c;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        display: none;
+        margin-top: 8px;
+    }
+
+    #empty_editor {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    #workspace_wrap {
+        min-width: 0;
+        min-height: 0;
+        position: relative;
+        overflow: hidden;
+        background:
+            linear-gradient(var(--grid) 1px, transparent 1px),
+            linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+            #1c1d20;
+        background-size: 20px 20px;
+    }
+
+    #workspace {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 0;
+        transform-origin: 0 0;
+        overflow: visible;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    #nodes_layer {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 0;
+        overflow: visible;
+        pointer-events: none;
+    }
+
+    #links_svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    .link-group {
+        pointer-events: stroke;
+        cursor: pointer;
+    }
+
+    .link-hit {
+        fill: none;
+        stroke: transparent;
+        stroke-width: 15;
+        pointer-events: stroke;
+    }
+
+    .link-line {
+        fill: none;
+        stroke: #848990;
+        stroke-width: 3;
+        vector-effect: non-scaling-stroke;
+        pointer-events: none;
+    }
+
+    .link-group.selected .link-line {
+        stroke: var(--accent);
+        stroke-width: 4;
+    }
+
+    #temp_link {
+        fill: none;
+        stroke: var(--accent-2);
+        stroke-width: 3;
+        stroke-dasharray: 8 6;
+        vector-effect: non-scaling-stroke;
+        pointer-events: none;
+        display: none;
+    }
+
+    .node {
+        position: absolute;
+        pointer-events: auto;
+        width: var(--node-w);
+        height: var(--node-h);
+        background: #2e3035;
+        border: 1px solid #50535a;
+        border-radius: 8px;
+        box-shadow: 0 4px 14px rgba(0,0,0,.28);
+        overflow: visible;
+        user-select: none;
+    }
+
+    .node.selected {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 1px var(--accent), 0 6px 18px rgba(0,0,0,.35);
+    }
+
+    .node_art {
+        height: 118px;
+        border-radius: 7px 7px 0 0;
+        background: #202125;
+        background-size: cover;
+        background-position: center;
+        border-bottom: 1px solid #45484f;
+        display: grid;
+        place-items: center;
+        color: #737780;
+        font-size: 11px;
+        overflow: hidden;
+    }
+
+    .node_name {
+        padding: 10px 34px 10px 10px;
+        font-weight: 650;
+        font-size: 13px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .connector {
+        position: absolute;
+        width: 17px;
+        height: 17px;
+        border-radius: 50%;
+        border: 2px solid #202125;
+        background: var(--accent);
+        transform: translate(-50%, -50%);
+        cursor: crosshair;
+        z-index: 6;
+    }
+
+    .connector:hover {
+        transform: translate(-50%, -50%) scale(1.22);
+        background: var(--accent-2);
+    }
+
+    .connector.selected {
+        box-shadow: 0 0 0 3px rgba(255,155,51,.32);
+        background: var(--accent-2);
+    }
+
+    .node_hint {
+        position: absolute;
+        left: 9px;
+        bottom: 7px;
+        color: #80848c;
+        font-size: 10px;
+        pointer-events: none;
+    }
+
+    #help {
+        font-size: 11px;
+        color: var(--muted);
+        line-height: 1.55;
+    }
+
+    #zoom_controls {
+        position: absolute;
+        right: 12px;
+        bottom: 12px;
+        display: flex;
+        gap: 6px;
+        z-index: 20;
+    }
+
+    #toast {
+        position: absolute;
+        left: 50%;
+        bottom: 18px;
+        transform: translateX(-50%);
+        background: #111216;
+        color: #eee;
+        border: 1px solid var(--border);
+        border-radius: 5px;
+        padding: 8px 12px;
+        font-size: 12px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity .15s ease;
+        z-index: 50;
+    }
+
+    #toast.show { opacity: 1; }
+
+    .kbd {
+        border: 1px solid #555960;
+        border-bottom-width: 2px;
+        background: #27282c;
+        padding: 1px 4px;
+        border-radius: 4px;
+        font-size: 10px;
+        color: #ddd;
+    }
+
+    .file-button {
+        display: inline-block;
+        border: 1px solid var(--border);
+        color: var(--text);
+        background: var(--panel-2);
+        border-radius: 5px;
+        padding: 7px 10px;
+        cursor: pointer;
+    }
+
+    .file-button:hover { background: #40434a; }
+
+    #selected_link_panel,
+    #selected_connector_panel {
+        display: none;
+    }
+</style>
+</head>
+<body>
+<div id="app">
+    <div id="topbar">
+        <div id="brand">location_map_tool</div>
+        <button id="add_btn" class="primary">add_location</button>
+        <button id="export_btn">export_json</button>
+        <label class="file-button" for="import_input">import_json</label>
+        <input id="import_input" type="file" accept=".json,application/json" hidden>
+        <button id="clear_btn" class="danger">clear_map</button>
+        <div id="status">0 locations · 0 connectors · 0 links</div>
+    </div>
+
+    <div id="main">
+        <aside id="sidebar">
+            <div class="section">
+                <h2>selected_location</h2>
+                <div id="empty_editor">Select a location on the map, or create one.</div>
+
+                <div id="location_editor" hidden>
+                    <label for="name_input">name</label>
+                    <input id="name_input" type="text" autocomplete="off">
+
+                    <label for="description_input">notes</label>
+                    <textarea id="description_input"></textarea>
+
+                    <label>art</label>
+                    <img id="art_preview" alt="location art preview">
+                    <div id="art_filename" style="margin-top:7px;color:var(--muted);font-size:11px;overflow-wrap:anywhere"></div>
+
+                    <label>connectors</label>
+                    <div class="button-row">
+                        <button id="add_connector_btn" class="primary">add_connector</button>
+                    </div>
+
+                    <div class="button-row" style="margin-top:12px">
+                        <button id="delete_location_btn" class="danger">delete_location</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="selected_connector_panel">
+                <h2>selected_connector</h2>
+                <div id="connector_summary" style="font-size:12px;color:var(--muted);margin-bottom:9px"></div>
+                <button id="delete_connector_btn" class="danger">delete_connector</button>
+            </div>
+
+            <div class="section" id="selected_link_panel">
+                <h2>selected_link</h2>
+                <div id="link_summary" style="font-size:12px;color:var(--muted);margin-bottom:9px"></div>
+                <button id="delete_link_btn" class="danger">delete_link</button>
+            </div>
+
+            <div class="section">
+                <h2>controls</h2>
+                <div id="help">
+                    Each location can have <b>unlimited connectors</b>.<br><br>
+                    Use <b>add_connector</b> repeatedly, or double-click near any edge of a location to create one exactly there.<br><br>
+                    Drag any orange connector onto another connector to link them. You can also drop onto the body of another location and a new connector will be created automatically at that point.<br><br>
+                    Connected connectors are automatically repositioned onto the routing grid. If a connector is already in use, creating another link from it automatically creates a separate routed connector.<br><br>
+                    Drag a location card to reposition it. Every tile is locked to the grid. Tiles cannot overlap other tiles or established link routes. Accepted links use exclusive orthogonal grid routes, so links cannot cross or overlap each other or pass through tiles. If a move or link cannot satisfy those rules, it is rejected.<br><br>
+                    The canvas is unbounded: drag empty space to pan in any direction. Use the mouse wheel to zoom.
+                </div>
+            </div>
+        </aside>
+
+        <section id="workspace_wrap">
+            <svg id="links_svg">
+                <g id="links_world">
+                    <path id="temp_link"></path>
+                </g>
+            </svg>
+            <div id="workspace">
+                <div id="nodes_layer"></div>
+            </div>
+
+            <div id="zoom_controls">
+                <button id="zoom_out_btn">−</button>
+                <button id="zoom_reset_btn">100%</button>
+                <button id="zoom_in_btn">+</button>
+            </div>
+
+            <div id="toast"></div>
+        </section>
+    </div>
+</div>
+
+<script>
+(() => {
+    "use strict";
+
+    const STORAGE_KEY = "location_map_tool_v4_100_adventure_network_dense_v1";
+    const LEGACY_STORAGE_KEYS = [];
+    const NODE_WIDTH = 240;
+    const NODE_HEIGHT = 180;
+    const TILE_GRID = 20;
+    const NODE_GAP = 40;
+    const ROUTE_GRID = 20;
+    const MAX_ROUTE_EXPANSIONS = 18000;
+    const MAX_PORT_PAIRS = 28;
+
+    const workspaceWrap = document.getElementById("workspace_wrap");
+    const workspace = document.getElementById("workspace");
+    const nodesLayer = document.getElementById("nodes_layer");
+    const linksSvg = document.getElementById("links_svg");
+    const linksWorld = document.getElementById("links_world");
+    const tempLink = document.getElementById("temp_link");
+    const status = document.getElementById("status");
+    const toast = document.getElementById("toast");
+
+    const addBtn = document.getElementById("add_btn");
+    const exportBtn = document.getElementById("export_btn");
+    const importInput = document.getElementById("import_input");
+    const clearBtn = document.getElementById("clear_btn");
+
+    const emptyEditor = document.getElementById("empty_editor");
+    const locationEditor = document.getElementById("location_editor");
+    const nameInput = document.getElementById("name_input");
+    const descriptionInput = document.getElementById("description_input");
+    const artPreview = document.getElementById("art_preview");
+    const artFilename = document.getElementById("art_filename");
+    const addConnectorBtn = document.getElementById("add_connector_btn");
+    const deleteLocationBtn = document.getElementById("delete_location_btn");
+
+    const selectedConnectorPanel = document.getElementById("selected_connector_panel");
+    const connectorSummary = document.getElementById("connector_summary");
+    const deleteConnectorBtn = document.getElementById("delete_connector_btn");
+
+    const selectedLinkPanel = document.getElementById("selected_link_panel");
+    const linkSummary = document.getElementById("link_summary");
+    const deleteLinkBtn = document.getElementById("delete_link_btn");
+
+    const zoomOutBtn = document.getElementById("zoom_out_btn");
+    const zoomResetBtn = document.getElementById("zoom_reset_btn");
+    const zoomInBtn = document.getElementById("zoom_in_btn");
+
+    const PRESET_MAP = {"locations":[{"id":"loc_001","name":"Confluence village","description":"Confluence village occupies a wedge of raised ground between two rivers, forcing its lanes into a crooked fan around the meeting of the waters. A broad masonry bridge carries the main road over the deeper channel, while a smaller timber bridge reaches watermills and dye sheds on the opposite bank. Stone flood marks climb the lower house walls, and every spring the villagers dismantle the market stalls before the rivers rise. At the point itself, a weather-smoothed shrine faces upstream toward both valleys.","art":"","x":-2100,"y":4560,"connectors":[{"id":"loc_001_link_094","side":"top","offset":0.9166666666666666}]},{"id":"loc_002","name":"Flowermead village","description":"Flowermead village sits in a shallow sea of pasture where bands of wildflowers make the surrounding fields look painted from a distance. The settlement is loose and bright: limewashed farmhouses, fenced kitchen gardens, hayricks, bee skeps, and a long green used for markets and midsummer games. Narrow irrigation ditches glitter between the meadows, crossed by flat stepping stones worn smooth by generations of boots. A derelict dovecote on the western rise is the only structure tall enough to see above the flowering grass.","art":"","x":-900,"y":4560,"connectors":[{"id":"loc_002_link_095","side":"top","offset":0.08333333333333333}]},{"id":"loc_003","name":"Arched ford hamlet","description":"Arched ford hamlet has grown around an unusually old bridge whose single black-stone arch barely clears the river in wet months. The roadway pinches between leaning houses built directly against the bridge approaches, their upper floors almost touching above the lane. Below, the ford spreads across pale gravel beside fish traps, tethering rings, and a half-collapsed washing platform. One bridge pier contains a sealed iron door at water level, visible only when the river runs low.","art":"","x":-640,"y":5200,"connectors":[{"id":"loc_003_link_096","side":"top","offset":0.9166666666666666}]},{"id":"loc_004","name":"Applevale hollow","description":"Applevale hollow is a warm, sheltered depression filled with orchards older than the cottages scattered among them. Mossy stone walls divide terraces of apple, pear, and quince trees; ladders lean permanently against the gnarled trunks and windfalls perfume the grass. At the lowest point stands a communal press house with a huge screw press and channels cut into the flagstone floor for juice. Beyond it, one abandoned orchard has grown so dense that its interlocked branches form a dim tunnel over the forgotten path.","art":"","x":560,"y":5200,"connectors":[{"id":"loc_004_link_097","side":"top","offset":0.08333333333333333}]},{"id":"loc_005","name":"Verdigris brook","description":"Verdigris brook follows a mineral seam through a compact industrial town, staining stones, gutters, and bridge piers blue-green wherever its water splashes. Smithies and coppersmiths crowd the lower bank, their workshops connected by gantries carrying buckets and ore carts above the street. The upper quarter climbs in slate steps toward old prospecting tunnels cut into the hillside. At dusk, runoff from the workings leaves thin metallic films on quiet pools, turning the brook into a broken ribbon of shifting colour.","art":"","x":900,"y":4560,"connectors":[{"id":"loc_005_link_098","side":"top","offset":0.9166666666666666}]},{"id":"loc_006","name":"Shower hill village","description":"Shower hill village is built in steep terraces on a rain-facing slope, with every roof, stair, and retaining wall engineered to move water somewhere useful. Gutters empty into stone cisterns, cisterns feed vegetable beds, and overflow channels run down the central stair like miniature canals during a storm. From the watch platform above the houses, curtains of rain can be seen marching across the valley before they arrive. A line of old lightning-struck trees marks the exposed crest where nobody now builds.","art":"","x":2100,"y":4560,"connectors":[{"id":"loc_006_link_099","side":"top","offset":0.08333333333333333}]},{"id":"loc_007","name":"Great river plain","description":"The Great river plain is an enormous open grassland divided by a river so broad and slow that it resembles a moving strip of sky. Seasonal floods have left curved oxbow ponds, raised gravel islands, and dark silt scars far from the present banks. Herd trails converge on patches of higher ground where lone thorn trees and abandoned cattle pens offer the only landmarks for miles. On clear days, distant travellers can be watched for hours before they come within shouting distance.","art":"","x":-2100,"y":3100,"connectors":[{"id":"loc_007_link_001","side":"right","offset":0.4444444444444444},{"id":"loc_007_link_009","side":"bottom","offset":0.5},{"id":"loc_007_link_125","side":"right","offset":0.5555555555555556}]},{"id":"loc_008","name":"Clearstone ford","description":"Clearstone ford crosses a wide, shallow reach where the river has washed the bed down to pale limestone slabs and rounded quartz pebbles. Generations of travellers have set upright marker stones along the safest diagonal route, each one carved with a different simple symbol rather than words. Fish gather in the deeper blue channels between the slabs, while old wicker traps are anchored downstream. At the eastern bank, a toppled milestone reveals an earlier road continuing straight beneath the water.","art":"","x":-1700,"y":3100,"connectors":[{"id":"loc_008_link_002","side":"right","offset":0.4444444444444444},{"id":"loc_008_link_102","side":"right","offset":0.1111111111111111},{"id":"loc_008_link_001","side":"left","offset":0.5555555555555556}]},{"id":"loc_009","name":"Miller's crown","description":"Miller's crown is a smooth, windswept hill capped by a timber windmill whose patched sails can be seen from every road across the plain. The mill yard contains cracked querns, discarded gears, flour carts, and a low circular wall where villagers wait out sudden squalls. Grass on the summit has been worn into concentric tracks by livestock and wagons turning around the mill. Beneath the floorboards, a trapdoor opens into an unexpectedly ancient stone foundation that predates the machinery above it.","art":"","x":-1300,"y":3100,"connectors":[{"id":"loc_009_link_003","side":"right","offset":0.5555555555555556},{"id":"loc_009_link_002","side":"left","offset":0.4444444444444444},{"id":"loc_009_link_125","side":"left","offset":0.5555555555555556}]},{"id":"loc_010","name":"Hollowway road","description":"Hollowway road has been worn so deeply into the landscape that a wagon can pass unseen only a few metres from the fields above. Its earthen walls rise in root-bound tiers, pierced by rabbit holes, old drainage mouths, and narrow footpaths climbing toward vanished farms. Rainwater collects in wheel ruts beneath a canopy of hazel and ash that nearly closes overhead. Halfway along the cutting, a sealed side passage is faced with dressed stone instead of soil, suggesting the road intersected something older.","art":"","x":-900,"y":3100,"connectors":[{"id":"loc_010_link_004","side":"bottom","offset":0.5},{"id":"loc_010_link_003","side":"left","offset":0.5555555555555556}]},{"id":"loc_011","name":"White clover downs","description":"White clover downs roll in long chalk ridges under close-cropped turf, their slopes patterned by sheep tracks and broad drifts of clover. Bright white outcrops break through the green like exposed bone, and shallow dew ponds occupy several unnatural circular hollows along the crest. The highest ridge carries a chain of low burial mounds that align with the sunrise at midsummer. From there, the surrounding country appears as a patchwork of river, woodland, and distant storm-dark hills.","art":"","x":-900,"y":3500,"connectors":[{"id":"loc_011_link_004","side":"top","offset":0.5},{"id":"loc_011_link_005","side":"bottom","offset":0.08333333333333333},{"id":"loc_011_link_100","side":"bottom","offset":0.9166666666666666}]},{"id":"loc_012","name":"Reedwater bridge","description":"Reedwater bridge is less a single crossing than a chain of narrow timber spans hopping from island to island through a braided river. Reed beds tower above the handrails, hiding side channels where flat-bottomed skiffs are tied beneath crude fishing shelters. The bridge deck is patched from many kinds of wood, and removable sections can be lifted when flood debris comes downstream. Near the central island, hundreds of carved tally marks cover one old support post from just above the waterline to far above a person's head.","art":"","x":-1100,"y":3900,"connectors":[{"id":"loc_012_link_005","side":"top","offset":0.9166666666666666},{"id":"loc_012_link_095","side":"bottom","offset":0.9166666666666666},{"id":"loc_012_link_006","side":"left","offset":0.5555555555555556}]},{"id":"loc_013","name":"Lambwatch bluff","description":"Lambwatch bluff rises abruptly from gentle grazing land into a wind-scoured shelf of turf and exposed stone. A shepherd's hut crouches behind a semicircular wall, surrounded by old lambing pens built into natural hollows for shelter. Along the cliff edge stands a broken line of waist-high stones, each drilled through with a neat round hole that whistles in strong wind. The drop overlooks three separate roads, making the bluff as useful to sentries as it is to shepherds.","art":"","x":-1500,"y":3900,"connectors":[{"id":"loc_013_link_006","side":"right","offset":0.5555555555555556},{"id":"loc_013_link_007","side":"left","offset":0.4444444444444444},{"id":"loc_013_link_115","side":"left","offset":0.1111111111111111}]},{"id":"loc_014","name":"Saffron prairie","description":"Saffron prairie stretches beneath a huge sky in waves of dry amber grass, interrupted by clay-red termite mounds and sparse flat-topped thorn trees. Seed heads brush against a traveller's waist and release clouds of yellow dust that cling to boots and hems. Shallow depressions conceal seasonal pools now reduced to cracked mud rings visited by antelope and wild horses. Far out on the plain, a perfectly straight line of dark stones cuts across the natural contours with no visible destination.","art":"","x":-1900,"y":3900,"connectors":[{"id":"loc_014_link_008","side":"top","offset":0.08333333333333333},{"id":"loc_014_link_007","side":"right","offset":0.5555555555555556},{"id":"loc_014_link_094","side":"bottom","offset":0.08333333333333333}]},{"id":"loc_015","name":"Four roads monument","description":"Four roads monument stands at a crossroads broad enough to resemble a small plaza, its centre occupied by a tall weather-beaten pillar covered in overlapping route inscriptions from different eras. The four roads are visibly unlike one another: paved military stone, rutted trade road, grassy pilgrim track, and a narrow raised causeway. A roofless tollhouse provides crude shelter beside rusted hitching rails. Travellers have wedged coins, teeth, ribbons, and written scraps into cracks around the monument's base for luck before choosing a direction.","art":"","x":-2100,"y":3500,"connectors":[{"id":"loc_015_link_009","side":"top","offset":0.5},{"id":"loc_015_link_008","side":"bottom","offset":0.9166666666666666},{"id":"loc_015_link_115","side":"right","offset":0.8888888888888888}]},{"id":"loc_016","name":"Thornwall gate","description":"Thornwall gate marks the abrupt boundary between cultivated land and an ancient enclosed woodland. Two square gate towers have collapsed into ivy-covered shoulders of masonry, but the wall between them is now continued by living hawthorn trunks woven together so densely that even light struggles through. The road passes beneath their arched branches over paving lifted into ridges by roots. Just inside, dozens of iron pruning hooks hang from pegs in a deserted keeper's shelter, all carefully sharpened despite the building's neglect.","art":"","x":-600,"y":3640,"connectors":[{"id":"loc_016_link_010","side":"top","offset":0.9166666666666666},{"id":"loc_016_link_018","side":"bottom","offset":0.5},{"id":"loc_016_link_116","side":"right","offset":0.5555555555555556}]},{"id":"loc_017","name":"Murmuring hollow","description":"Murmuring hollow drops into a bowl of colossal beech roots, leaf-dark earth, and hidden watercourses. No stream remains visible for more than a few metres; each one slips under roots or stone and reappears elsewhere, producing overlapping trickles that make whispered words seem to come from the wrong direction. Fallen trunks bridge the steeper sides of the hollow, their bark covered in small carved names. At the centre, one living tree has grown around a waist-high block of masonry until only its carved face remains exposed.","art":"","x":-200,"y":3240,"connectors":[{"id":"loc_017_link_103","side":"top","offset":0.5},{"id":"loc_017_link_011","side":"bottom","offset":0.9166666666666666},{"id":"loc_017_link_010","side":"bottom","offset":0.08333333333333333}]},{"id":"loc_018","name":"Silvermoon tarn","description":"Silvermoon tarn is a deep circular pool enclosed by a pale birch wood whose white trunks reflect even faint night light. Flat black stones form a broken ring at the water's edge, and a narrow, decaying boardwalk reaches a tiny roofed platform near the middle. The tarn has no visible inlet, yet a slow current continually turns the lilies clockwise around the platform. Beneath clear patches of water, rows of squared stones can be seen descending toward the centre far deeper than the surrounding land would suggest.","art":"","x":200,"y":3640,"connectors":[{"id":"loc_018_link_012","side":"right","offset":0.5555555555555556},{"id":"loc_018_link_011","side":"top","offset":0.08333333333333333},{"id":"loc_018_link_116","side":"left","offset":0.6666666666666666}]},{"id":"loc_019","name":"Tangleroot gorge","description":"Tangleroot gorge is a narrow red-earth ravine where generations of trees have grown from opposite rims until their exposed roots knit into bridges overhead. The floor alternates between cold stream, gravel bars, and chambers roofed entirely by living wood. Some root masses have trapped fallen stones into natural walls, forcing the water through sudden chutes and pools. An abandoned rope ladder hangs from one of the highest crossings, ending several metres above the present gorge floor as evidence of how much the stream has cut downward.","art":"","x":600,"y":3640,"connectors":[{"id":"loc_019_link_013","side":"bottom","offset":0.4166666666666667},{"id":"loc_019_link_012","side":"left","offset":0.5555555555555556},{"id":"loc_019_link_126","side":"bottom","offset":0.08333333333333333}]},{"id":"loc_020","name":"Owl idol grove","description":"Owl idol grove is a deliberate circle of ancient trees surrounding a blocky stone figure with enormous round eyes and folded wings. The canopy meets almost perfectly above it, leaving the grove in green shade even at noon, while the forest floor inside the ring is strangely clear of undergrowth except for ferns around the idol's feet. Small offerings occupy niches cut into nearby roots: feathers, polished seeds, mouse bones, and tiny clay lamps. Behind the statue, one tree bears a door-shaped scar in its bark.","art":"","x":600,"y":4040,"connectors":[{"id":"loc_020_link_013","side":"top","offset":0.4166666666666667},{"id":"loc_020_link_101","side":"top","offset":0.9166666666666666},{"id":"loc_020_link_014","side":"bottom","offset":0.08333333333333333}]},{"id":"loc_021","name":"Crystal caves","description":"Crystal caves begin as ordinary limestone passages before opening into chambers crowded with mineral growth on an architectural scale. Translucent crystal blades rise from clear pools, violet clusters bridge cracks in the walls, and milky columns have fused floor to ceiling in places. Light carried into one chamber travels through the formations and emerges metres away in unexpected colours, making distant tunnels appear occupied. Several crystals have been cleanly cut at their bases, leaving smooth sockets and cart grooves leading toward an inaccessible lower gallery.","art":"","x":400,"y":4440,"connectors":[{"id":"loc_021_link_014","side":"top","offset":0.9166666666666666},{"id":"loc_021_link_097","side":"bottom","offset":0.9166666666666666},{"id":"loc_021_link_015","side":"left","offset":0.5555555555555556}]},{"id":"loc_022","name":"Fernfall basin","description":"Fernfall basin is a steep amphitheatre carved by a waterfall that divides into several white ribbons before striking a jade-green pool. Tree ferns crowd every ledge that remains permanently wet, their fronds overlapping into dripping walls of foliage. A narrow path ducks behind the main curtain of water and continues onto a shelf containing ruined stone benches and a view through the falling water. In the pool below, a fallen column lies visible beneath the surface, pointing toward a dark cleft behind the cascade.","art":"","x":0,"y":4440,"connectors":[{"id":"loc_022_link_015","side":"right","offset":0.5555555555555556},{"id":"loc_022_link_016","side":"left","offset":0.5555555555555556},{"id":"loc_022_link_126","side":"top","offset":0.9166666666666666}]},{"id":"loc_023","name":"Red deer meadow","description":"Red deer meadow is a long sunlit clearing hidden so thoroughly within old forest that its brightness feels abrupt after the surrounding shade. Tall grass is flattened into winding tracks where deer repeatedly cross between a mineral lick, a cold stream, and the sheltered treeline. Antlers shed over many seasons have been wired to weathered posts around a low earthen mound near the centre. At dawn, mist settles only in the northern half of the meadow, revealing the raised outline of rectangular foundations beneath the turf.","art":"","x":-400,"y":4440,"connectors":[{"id":"loc_023_link_017","side":"top","offset":0.08333333333333333},{"id":"loc_023_link_016","side":"right","offset":0.5555555555555556},{"id":"loc_023_link_096","side":"bottom","offset":0.08333333333333333}]},{"id":"loc_024","name":"Duskpine trail","description":"Duskpine trail threads through an unusually dense stand of straight black-green firs whose branches begin high overhead and block most direct sunlight. The forest floor is a quiet carpet of needles broken by pale bracket fungi, exposed granite, and occasional patches of luminous lichen. Old trail markers have been nailed far above head height, implying either deep former snow or trees that have since grown enormously. Every few hundred metres, the path divides around a standing dead pine carved with the same three vertical cuts.","art":"","x":-600,"y":4040,"connectors":[{"id":"loc_024_link_018","side":"top","offset":0.4166666666666667},{"id":"loc_024_link_100","side":"top","offset":0.08333333333333333},{"id":"loc_024_link_017","side":"bottom","offset":0.9166666666666666}]},{"id":"loc_025","name":"Raven pine ridge","description":"Raven pine ridge is a knife-backed height of dark stone where wind-bent pines cling to cracks with roots exposed like claws. The western face falls away into forest, while the eastern slope is bare enough to reveal a switchback road far below. Ravens use the ridge as a nesting corridor, filling certain ledges with bones, shell fragments, and stolen bright objects. Near the highest point, a collapsed signal cairn contains a bronze mirror still mounted on a pivot beneath the stones.","art":"","x":900,"y":3100,"connectors":[{"id":"loc_025_link_019","side":"right","offset":0.5555555555555556},{"id":"loc_025_link_027","side":"bottom","offset":0.4166666666666667},{"id":"loc_025_link_127","side":"bottom","offset":0.9166666666666666}]},{"id":"loc_026","name":"Moonreed marsh","description":"Moonreed marsh is a broad wetland of silver-green reeds growing from water shallow enough to reflect the entire sky. Dry ground exists only as scattered hummocks linked by narrow planks, many of which have shifted or sunk below the surface. At night, pale reed flowers catch moonlight and outline old drainage channels invisible by day. A cluster of abandoned stilt huts stands beyond the main path, each with its doorway facing the same patch of open water where no reeds grow at all.","art":"","x":1300,"y":3100,"connectors":[{"id":"loc_026_link_020","side":"right","offset":0.5555555555555556},{"id":"loc_026_link_019","side":"left","offset":0.4444444444444444},{"id":"loc_026_link_104","side":"left","offset":0.1111111111111111}]},{"id":"loc_027","name":"Green chorus fen","description":"Green chorus fen is warm, crowded, and loud with life: frog calls overlap from lily pools, dragonflies patrol the sedges, and unseen water birds answer from beyond curtains of rush. Peat islands rise just enough to support alder bushes and crooked fence posts left from an attempt to drain the land. The safest route follows a sequence of half-sunken stone troughs that now function as stepping stones. One pool near the middle continually bubbles from below, keeping a perfect circle free of duckweed even on windless days.","art":"","x":1700,"y":3100,"connectors":[{"id":"loc_027_link_021","side":"right","offset":0.4444444444444444},{"id":"loc_027_link_020","side":"left","offset":0.5555555555555556},{"id":"loc_027_link_117","side":"bottom","offset":0.9166666666666666}]},{"id":"loc_028","name":"Flooded kingway","description":"Flooded kingway runs ruler-straight across drowned lowland, its ancient paving visible beneath a handspan of brown water for long stretches before vanishing into deeper channels. Broken parapets, statue bases, and milestone stumps protrude at regular intervals, allowing the road's line to be followed across the flood. Fish move between the paving stones where wagon wheels once ran. A collapsed section reveals that the causeway is hollow inside, with a narrow vaulted conduit continuing beneath the road toward the horizon.","art":"","x":2100,"y":3100,"connectors":[{"id":"loc_028_link_022","side":"bottom","offset":0.5},{"id":"loc_028_link_021","side":"left","offset":0.5555555555555556}]},{"id":"loc_029","name":"Lanternmoth bog","description":"Lanternmoth bog is a black-water peatland where pale moths gather in dense spirals over patches of faintly luminous moss. Their moving light gives the impression of distant lanterns, especially where dead trees stand like posts along vanished footpaths. The ground alternates unpredictably between springy moss and pools deep enough to swallow a pole. Near a cluster of leaning birches, an old peat cutter's sled remains half embedded in the bog with a locked iron chest still chained to its frame.","art":"","x":2100,"y":3500,"connectors":[{"id":"loc_029_link_022","side":"top","offset":0.5},{"id":"loc_029_link_023","side":"bottom","offset":0.08333333333333333},{"id":"loc_029_link_117","side":"top","offset":0.08333333333333333}]},{"id":"loc_030","name":"Clearbottom spring","description":"Clearbottom spring wells from a dark seam of rock into a pool so transparent that depth is difficult to judge. Natural shelves descend in broad pale terraces, each edged by fine mineral crystals and wavering ribbons of water grass. Coins and pottery fragments are visible far below, apparently resting within easy reach until perspective proves otherwise. The overflow escapes through a narrow channel that has built a white mineral lip across the grass, and fresh footprints sometimes appear there without matching tracks around the pool.","art":"","x":1900,"y":3900,"connectors":[{"id":"loc_030_link_023","side":"top","offset":0.9166666666666666},{"id":"loc_030_link_099","side":"bottom","offset":0.9166666666666666},{"id":"loc_030_link_024","side":"left","offset":0.5555555555555556}]},{"id":"loc_031","name":"Willow refuge","description":"Willow refuge is a rare patch of dependable ground in the wetlands, hidden beneath ancient willows whose trunks lean outward over the floodwater. Their enormous exposed roots form dry chambers, benches, and tunnel-like gaps large enough to crawl through, while rope bridges connect several higher root masses. A small fire pit and old storage hooks show that travellers have sheltered here for years. One hollow trunk contains a vertical ladder descending below the island's soil line into a dry space beneath the roots.","art":"","x":1500,"y":3900,"connectors":[{"id":"loc_031_link_024","side":"right","offset":0.5555555555555556},{"id":"loc_031_link_025","side":"left","offset":0.5555555555555556},{"id":"loc_031_link_127","side":"top","offset":0.08333333333333333}]},{"id":"loc_032","name":"Lightning fields","description":"Lightning fields occupy a bleak, treeless plain where iron-rich grasses hiss in the charged wind and storms seem to gather with unnatural speed. Repeated strikes have fused the dark soil into branching veins and shallow craters of glossy black glass, some still warm after a storm has passed. Stone shelters squat below ground level because nothing tall survives for long. Across the centre of the plain, a row of copper pylons attracts lightning in sequence, each discharge briefly illuminating symbols cut into their bases.","art":"","x":1100,"y":3900,"connectors":[{"id":"loc_032_link_026","side":"top","offset":0.08333333333333333},{"id":"loc_032_link_025","side":"right","offset":0.5555555555555556},{"id":"loc_032_link_098","side":"bottom","offset":0.08333333333333333}]},{"id":"loc_033","name":"Stormscar hill","description":"Stormscar hill rises alone from the lightning country, its crown split into jagged wedges by centuries of direct strikes. Scorched grass grows in radial patterns around glassy impact pits, and the exposed rock bears branching white scars like frozen lightning. A low refuge built into the lee side has thick stone walls, a chained copper door, and racks for grounding rods. At the summit, a melted metal framework surrounds a socket where some tall object once stood.","art":"","x":900,"y":3500,"connectors":[{"id":"loc_033_link_027","side":"top","offset":0.5},{"id":"loc_033_link_026","side":"bottom","offset":0.9166666666666666},{"id":"loc_033_link_101","side":"bottom","offset":0.08333333333333333}]},{"id":"loc_034","name":"Manymouth delta","description":"Manymouth delta is a restless fan of mud islands, sandbars, reed beds, and shallow channels where a great river loses any single identity before reaching the sea. Routes change from season to season; yesterday's bank may be today's waist-deep crossing, and stranded boats serve as landmarks more reliably than trees. Fisher families build temporary platforms on driven poles and move them when the channels migrate. One unusually deep branch runs arrow-straight through the maze, against the shape of the natural delta.","art":"","x":-600,"y":1960,"connectors":[{"id":"loc_034_link_105","side":"top","offset":0.08333333333333333},{"id":"loc_034_link_028","side":"right","offset":0.5555555555555556},{"id":"loc_034_link_037","side":"bottom","offset":0.5}]},{"id":"loc_035","name":"Flooded orchard","description":"Flooded orchard preserves the rigid geometry of farmland beneath still brown water. Dead fruit trees stand in orderly rows with silvered trunks and branches, while submerged walls, gates, and drainage ditches form a visible grid below the surface. The upper storey of a stone farmhouse remains dry on a slight rise, accessible by a ladder tied to an upstairs window. Inside the flooded ground floor, cupboard doors drift open and shut with the current, and a cellar stair disappears into unnaturally clear water.","art":"","x":-200,"y":1960,"connectors":[{"id":"loc_035_link_029","side":"right","offset":0.5555555555555556},{"id":"loc_035_link_028","side":"left","offset":0.4444444444444444},{"id":"loc_035_link_118","side":"bottom","offset":0.08333333333333333}]},{"id":"loc_036","name":"Long heron bend","description":"Long heron bend is a broad, quiet curve of river bordered by tawny reeds and long gravel spits that shift after every flood. Herons stand along the shallows in such numbers that their sudden flight can fill the entire bend with beating grey wings. Driftwood has accumulated against a fallen willow to form a natural footbridge onto a midstream island. The island contains a ring of upright poles wrapped in old fishing line and feathers, visible only when the river is low enough to expose the gravel around them.","art":"","x":200,"y":1960,"connectors":[{"id":"loc_036_link_030","side":"right","offset":0.4444444444444444},{"id":"loc_036_link_029","side":"left","offset":0.5555555555555556},{"id":"loc_036_link_128","side":"bottom","offset":0.9166666666666666}]},{"id":"loc_037","name":"Flintcap hills","description":"Flintcap hills are low chalk uplands crowned by hard black flint that breaks through the turf in sharp, shining bands. Centuries of digging have left a confusing landscape of shallow pits, spoil mounds, grassy trenches, and sudden sinkholes where miners followed the best stone. Sheep tracks weave through the old workings and vanish at collapsed shafts. On one hilltop, thousands of discarded flakes cover the ground so densely that it crunches like glass beneath every step.","art":"","x":600,"y":1960,"connectors":[{"id":"loc_037_link_106","side":"top","offset":0.9166666666666666},{"id":"loc_037_link_031","side":"bottom","offset":0.5},{"id":"loc_037_link_030","side":"left","offset":0.5555555555555556}]},{"id":"loc_038","name":"Bellgoat ridge","description":"Bellgoat ridge climbs steeply through scrub and loose grey stone toward a narrow pass used by mountain herders. Old route posts carry small bronze bells instead of painted markers, allowing travellers to hear the path during fog or snow. Feral goats move easily across ledges that force everyone else onto a precarious zigzag trail. At the ridge's highest saddle, a giant bell hangs from a freestanding stone frame, but its clapper has been removed and lies chained to the ground nearby.","art":"","x":600,"y":2360,"connectors":[{"id":"loc_038_link_031","side":"top","offset":0.5},{"id":"loc_038_link_032","side":"bottom","offset":0.5},{"id":"loc_038_link_128","side":"top","offset":0.08333333333333333}]},{"id":"loc_039","name":"Giant's cleft","description":"Giant's cleft is a monumental split in the hills where two leaning walls of rock form a gateway tall enough to dwarf trees. The road narrows to a strip of ancient paving between the slabs, its wheel grooves cut deep into the stone. Wind funnels through the gap with enough force to carry grit and loose leaves far into the valley beyond. High overhead, several enormous rectangular sockets have been carved opposite one another in the rock faces, as if the cleft once held a gate.","art":"","x":600,"y":2760,"connectors":[{"id":"loc_039_link_032","side":"top","offset":0.5},{"id":"loc_039_link_104","side":"right","offset":0.8888888888888888},{"id":"loc_039_link_033","side":"left","offset":0.5555555555555556}]},{"id":"loc_040","name":"Singing cavern","description":"Singing cavern is a dry, pale chamber shaped like an immense dome, with terraces descending toward a smooth central floor. Every sound produces several delayed echoes from different parts of the roof, and particular stones ring with distinct notes when struck. Stalactites have been deliberately trimmed into organ-pipe rows along one wall, suggesting the acoustics were once used rather than merely admired. A narrow shaft overhead admits a moving circle of daylight that crosses the floor like a slow clock hand.","art":"","x":200,"y":2760,"connectors":[{"id":"loc_040_link_033","side":"right","offset":0.5555555555555556},{"id":"loc_040_link_034","side":"left","offset":0.5555555555555556}]},{"id":"loc_041","name":"Verdigris mine","description":"Verdigris mine enters the hillside through a timbered adit stained turquoise by decades of copper-rich seepage. The main haulage tunnel still carries iron rails past abandoned ore carts, collapsed side workings, and walls sparkling with exposed mineral veins. Deeper in, the mine opens into a vast excavated chamber supported by pillars deliberately left from the original rock. One pillar has been cut open to reveal a fitted stone doorway that the miners apparently discovered rather than built.","art":"","x":-200,"y":2760,"connectors":[{"id":"loc_041_link_034","side":"right","offset":0.5555555555555556},{"id":"loc_041_link_103","side":"bottom","offset":0.5},{"id":"loc_041_link_035","side":"left","offset":0.5555555555555556}]},{"id":"loc_042","name":"Knife wind bluffs","description":"Knife wind bluffs form a long escarpment sculpted into blades, fins, and narrow chimneys by relentless crosswinds. The exposed plateau above is almost barren, but sheltered ledges support strips of tough grass and miniature flowering plants. The safest trail follows the cliff face behind freestanding rock ribs, occasionally squeezing through gaps barely wide enough for a pack animal. Several ribs contain old iron rings at regular heights, remnants of a rope system once used to haul cargo along the otherwise impassable route.","art":"","x":-600,"y":2760,"connectors":[{"id":"loc_042_link_036","side":"top","offset":0.5},{"id":"loc_042_link_035","side":"right","offset":0.5555555555555556},{"id":"loc_042_link_102","side":"left","offset":0.8888888888888888}]},{"id":"loc_043","name":"Staircut quarry","description":"Staircut quarry descends in geometric terraces around a central pit of opaque blue water. Saw marks stripe the vertical faces, squared blocks wait where workers abandoned them, and rusted cranes lean over ramps broad enough for teams of oxen. Rain has turned the lowest benches into flooded shelves where fish now swim between unfinished columns. One quarry wall bears a complete doorway and decorative arch carved directly into the living stone, leading nowhere because the block around it was never removed.","art":"","x":-600,"y":2360,"connectors":[{"id":"loc_043_link_037","side":"top","offset":0.5},{"id":"loc_043_link_036","side":"bottom","offset":0.5},{"id":"loc_043_link_118","side":"top","offset":0.9166666666666666}]},{"id":"loc_044","name":"Stormtable plateau","description":"Stormtable plateau is a flat-topped upland rising abruptly above broken country, its surface covered by low grass, shallow rain pools, and scattered sandstone slabs. Storms arriving from the west strike the plateau first, often leaving the valleys below dry while rain sweeps sideways across the top. A line of waist-high cairns crosses the open ground toward a circular stone platform blackened by old fires. Lightning has magnetized parts of the rock strongly enough to tug at loose iron objects.","art":"","x":-1960,"y":560,"connectors":[{"id":"loc_044_link_038","side":"right","offset":0.5555555555555556},{"id":"loc_044_link_046","side":"bottom","offset":0.5}]},{"id":"loc_045","name":"Stonefang maze","description":"Stonefang maze is a badland of narrow passages between tilted limestone spires that resemble rows of broken teeth. Some corridors are broad enough for carts, others close to shoulder width, and many end abruptly at smooth cliff faces only to continue above on inaccessible shelves. Windblown sand collects in the lowest passages, preserving footprints for days. Near the maze's centre, several stone fangs have been carved with matching arrows that point in contradictory directions depending on which side is viewed.","art":"","x":-1560,"y":560,"connectors":[{"id":"loc_045_link_039","side":"right","offset":0.5555555555555556},{"id":"loc_045_link_038","side":"left","offset":0.4444444444444444},{"id":"loc_045_link_119","side":"bottom","offset":0.08333333333333333}]},{"id":"loc_046","name":"Eagle road outpost","description":"Eagle road outpost occupies a fortified bend on a high mountain road where travellers once paid tolls before entering the pass. A square tower, roofless barracks, and a walled yard cling to the slope above a dramatic drop, while iron rings for pack animals remain set into the roadside wall. Eagles nest on the inaccessible tower cornice and scatter bones across the courtyard. The old gate mechanism still works from inside, but its counterweight hangs in a shaft that now opens onto a hidden lower room.","art":"","x":-1160,"y":560,"connectors":[{"id":"loc_046_link_040","side":"right","offset":0.4444444444444444},{"id":"loc_046_link_107","side":"right","offset":0.1111111111111111},{"id":"loc_046_link_039","side":"left","offset":0.5555555555555556}]},{"id":"loc_047","name":"Scarlet bloom plain","description":"Scarlet bloom plain is a broad grassland transformed each season by millions of red flowers that grow almost shoulder to shoulder. Narrow animal tracks become the only practical routes through the dense stems, and pollen hangs in visible clouds whenever the wind rises. Dark basalt boulders protrude from the field like islands, often supporting small shrines or traveller cairns. One long strip across the plain never flowers at all, remaining bare green grass in a perfectly straight line from horizon to horizon.","art":"","x":-760,"y":560,"connectors":[{"id":"loc_047_link_041","side":"bottom","offset":0.5},{"id":"loc_047_link_040","side":"left","offset":0.5555555555555556}]},{"id":"loc_048","name":"Bloodsalt flats","description":"Bloodsalt flats spread as a red-white crust across the floor of an ancient inland sea. Thin crimson mineral films pool in shallow depressions, while polygonal plates of salt crack loudly as temperature changes. Islands of black rock provide the only shade and are ringed with abandoned camps where salt cutters once worked. At the centre of the flats, a cluster of vertical salt pillars encloses a dry circular floor covered in footprints that stop at the ring rather than continuing away.","art":"","x":-760,"y":960,"connectors":[{"id":"loc_048_link_041","side":"top","offset":0.5},{"id":"loc_048_link_042","side":"bottom","offset":0.08333333333333333},{"id":"loc_048_link_129","side":"left","offset":0.8888888888888888}]},{"id":"loc_049","name":"Last desert well","description":"Last desert well is a deep stone shaft beside the final dependable water on an old caravan route. A roofed wheel, animal troughs, and low windbreak walls surround it, all polished by sand and generations of use. Hundreds of route marks have been scratched into the plaster beneath the canopy, including several pointing toward roads no longer visible in the dunes. The bucket returns with cold clear water, but the echo from the shaft suggests a chamber far wider than the narrow opening above.","art":"","x":-960,"y":1360,"connectors":[{"id":"loc_049_link_042","side":"top","offset":0.9166666666666666},{"id":"loc_049_link_105","side":"bottom","offset":0.9166666666666666},{"id":"loc_049_link_043","side":"left","offset":0.5555555555555556}]},{"id":"loc_050","name":"Shardglass dunes","description":"Shardglass dunes are sweeping hills of pale sand mixed with countless thin fragments of naturally formed glass. In sunlight the dune faces glitter like frost, while after dark the buried shards release stored warmth and create wavering mirages close to the ground. Walking the exposed ridges is hazardous because the glass gathers in knife-edged drifts where the wind sorts it from the sand. A half-buried stone staircase descends directly into one dune and is repeatedly uncovered in the same place after storms.","art":"","x":-1360,"y":1360,"connectors":[{"id":"loc_050_link_043","side":"right","offset":0.4444444444444444},{"id":"loc_050_link_044","side":"left","offset":0.5555555555555556},{"id":"loc_050_link_129","side":"right","offset":0.1111111111111111}]},{"id":"loc_051","name":"Buried bazaar","description":"Buried bazaar is the exposed upper level of a market town almost entirely swallowed by sand. Canvas awnings have long vanished, but stone shop fronts, tiled counters, sign brackets, and roof terraces still define a maze of narrow commercial lanes. Wind enters through upper windows now level with the dunes and fills rooms from above instead of through their doors. In the central arcade, sand has poured away from a domed ceiling to reveal hanging bronze lamps and a staircase descending into untouched darkness.","art":"","x":-1760,"y":1360,"connectors":[{"id":"loc_051_link_045","side":"top","offset":0.08333333333333333},{"id":"loc_051_link_044","side":"right","offset":0.5555555555555556}]},{"id":"loc_052","name":"Smokerift canyon","description":"Smokerift canyon cuts through burnt-red rock in a series of faulted steps where warm vapour escapes from cracks along the floor. Sulphur-yellow deposits rim the vents, and thin columns of steam drift between towering walls streaked black by ancient heat. The old trail follows cooler ledges above the fissures and crosses them on stone slabs set in place by unknown builders. At one bend, the vapour condenses on a perfectly smooth wall to reveal a large relief map invisible when the stone is dry.","art":"","x":-1960,"y":960,"connectors":[{"id":"loc_052_link_046","side":"top","offset":0.5},{"id":"loc_052_link_045","side":"bottom","offset":0.9166666666666666},{"id":"loc_052_link_119","side":"top","offset":0.9166666666666666}]},{"id":"loc_053","name":"Solar needle basin","description":"Solar needle basin is a bowl of pale desert surrounded by low cliffs and dominated by a single impossibly slender stone spire. Its shadow sweeps across a floor marked with concentric rings, numbered pillars, and shallow channels that together form a gigantic calendar. Small shade shelters cluster at the basin rim because the centre becomes brutally hot at midday. On certain mornings, the needle's shadow points not to a marker on the surface but directly into the mouth of a narrow canyon in the eastern wall.","art":"","x":760,"y":760,"connectors":[{"id":"loc_053_link_047","side":"right","offset":0.5555555555555556},{"id":"loc_053_link_055","side":"bottom","offset":0.5}]},{"id":"loc_054","name":"Fossil arch valley","description":"Fossil arch valley winds between ochre cliffs packed with the exposed bones and shell impressions of creatures from a vanished sea. The largest fossil ribs have weathered free of softer stone to form natural arches over the trail, some high enough for trees to grow beneath them. Loose slabs display perfect spirals, fins, and leaflike corals underfoot. At the valley's end, an entire stone skeleton remains embedded vertically in the cliff as though the seabed that buried it had somehow been turned on edge.","art":"","x":1160,"y":760,"connectors":[{"id":"loc_054_link_108","side":"top","offset":0.08333333333333333},{"id":"loc_054_link_048","side":"right","offset":0.5555555555555556},{"id":"loc_054_link_047","side":"left","offset":0.5555555555555556}]},{"id":"loc_055","name":"Firetable mesa","description":"Firetable mesa rises from the desert as a broad red plateau with sides too sheer for approach except by one switchback stair. Its flat summit is scattered with black volcanic stones and shallow basins that collect rainwater after rare storms. Near the centre stands an enormous rectangular slab of dark rock on short natural pillars, giving the mesa its name. The underside of the slab is covered in soot and ancient handprints despite there being no obvious source of fuel anywhere on the exposed summit.","art":"","x":1560,"y":760,"connectors":[{"id":"loc_055_link_049","side":"right","offset":0.4444444444444444},{"id":"loc_055_link_048","side":"left","offset":0.5555555555555556},{"id":"loc_055_link_120","side":"bottom","offset":0.9166666666666666}]},{"id":"loc_056","name":"Ashen monolith","description":"Ashen monolith stands alone in a grey basin where old volcanic ash has hardened into soft, wind-carved ridges. The monolith itself is a seamless column of darker stone, narrow at the base and widening slightly toward its broken top. Nothing grows within a broad circle around it, although hardy scrub returns immediately beyond that boundary. Ash continually gathers on the sheltered eastern face, and when brushed away it reveals fresh-looking inscriptions beneath layers that should have protected them for centuries.","art":"","x":1960,"y":760,"connectors":[{"id":"loc_056_link_050","side":"bottom","offset":0.5},{"id":"loc_056_link_049","side":"left","offset":0.5555555555555556}]},{"id":"loc_057","name":"White salt coast","description":"White salt coast is a blinding shoreline where chalky cliffs, salt pans, and a pale shingle beach merge into one nearly colourless landscape. Wind drives sea foam into the evaporation pools, leaving delicate crusts over old wooden walkways and abandoned salt sheds. Dark tidal caves puncture the base of the cliffs with dramatic contrast. At low tide, a line of square stone foundations emerges far offshore, implying that a substantial structure once stood where waves now break.","art":"","x":1960,"y":1160,"connectors":[{"id":"loc_057_link_050","side":"top","offset":0.5},{"id":"loc_057_link_051","side":"bottom","offset":0.08333333333333333},{"id":"loc_057_link_120","side":"top","offset":0.08333333333333333}]},{"id":"loc_058","name":"Broken hull cove","description":"Broken hull cove is a sheltered inlet packed with the remains of wrecked ships driven ashore by generations of storms. Some hulls are reduced to black ribs in the sand, while others lie almost intact above the tide line, their decks tilted into makeshift ramps and shelters. Rope, pottery, figureheads, rusted fittings, and cargo fragments gather in tangled windrows. A narrow stair hacked into the cliff begins inside the stern of the largest wreck and continues upward through solid rock.","art":"","x":1760,"y":1560,"connectors":[{"id":"loc_058_link_051","side":"top","offset":0.9166666666666666},{"id":"loc_058_link_052","side":"left","offset":0.4444444444444444},{"id":"loc_058_link_130","side":"left","offset":0.5555555555555556}]},{"id":"loc_059","name":"Seabird cliffs","description":"Seabird cliffs fall in brilliant white faces to a restless sea, every ledge crowded with nesting birds and streaked by centuries of guano. The clifftop path winds between patches of cropped grass, sinkholes, and abandoned stone hides built for egg collectors. Noise rises continuously from below like distant surf even when the water is calm. One narrow promontory supports a roofless watch hut whose floor contains a mosaic compass pointing several degrees away from true north.","art":"","x":1360,"y":1560,"connectors":[{"id":"loc_059_link_052","side":"right","offset":0.5555555555555556},{"id":"loc_059_link_053","side":"left","offset":0.5555555555555556}]},{"id":"loc_060","name":"Blue tide caverns","description":"Blue tide caverns are a chain of sea caves entered across slick shelves only when the tide retreats. Sunlight reflects upward through submerged openings, filling the chambers with moving blue light and making the ceilings seem to ripple like water. Kelp hangs from high cracks that mark the reach of storms, while deep pools connect passages too narrow to walk. In the furthest accessible chamber, a stone quay has been built against a pool whose current flows inward even as the tide outside falls.","art":"","x":960,"y":1560,"connectors":[{"id":"loc_060_link_054","side":"top","offset":0.08333333333333333},{"id":"loc_060_link_053","side":"right","offset":0.4444444444444444},{"id":"loc_060_link_130","side":"right","offset":0.6666666666666666}]},{"id":"loc_061","name":"Azure cliffwalk","description":"Azure cliffwalk is a precarious coastal route carved directly into blue-grey sea cliffs high above the surf. Flights of narrow steps connect natural balconies, old quarry cuts, and sections reinforced with timber galleries bolted to the rock. Every turn reveals a different view of offshore stacks and hidden coves far below. Midway along the traverse, the path passes through a short tunnel containing dozens of tiny windows cut through the seaward wall at eye level, each framing a different landmark on the horizon.","art":"","x":760,"y":1160,"connectors":[{"id":"loc_061_link_055","side":"top","offset":0.5},{"id":"loc_061_link_054","side":"bottom","offset":0.9166666666666666},{"id":"loc_061_link_106","side":"bottom","offset":0.08333333333333333}]},{"id":"loc_062","name":"Blackglass shore","description":"Blackglass shore curves beneath a dark volcanic headland in a sweep of polished black pebbles and obsidian sand. Storms constantly rearrange the beach, exposing bands of coloured sea glass, fragments of pottery, and ancient timber before burying them again. Tide pools occupy cooled lava hollows and shine like mirrors against the matte shore. Near the high-water line, a broad patch of glass has fused into one continuous rippled sheet, preserving the impressions of bare footprints beneath its surface.","art":"","x":-500,"y":-700,"connectors":[{"id":"loc_062_link_109","side":"top","offset":0.08333333333333333},{"id":"loc_062_link_056","side":"right","offset":0.5555555555555556},{"id":"loc_062_link_065","side":"bottom","offset":0.5}]},{"id":"loc_063","name":"Weathered beacon","description":"Weathered beacon crowns a narrow grassy promontory reached by a stone causeway submerged at the highest tides. The lighthouse is squat and massively built, with salt-whitened walls, a rusting gallery, and a lantern room whose great lens remains intact beneath cracked panes. Keeper's quarters below still contain bunks, oil lockers, and meticulous weather logs. The lamp mechanism can be turned by hand, causing the lens to focus daylight onto a distant point inland rather than toward the shipping lanes.","art":"","x":-100,"y":-700,"connectors":[{"id":"loc_063_link_057","side":"right","offset":0.5555555555555556},{"id":"loc_063_link_056","side":"left","offset":0.4444444444444444},{"id":"loc_063_link_121","side":"bottom","offset":0.08333333333333333}]},{"id":"loc_064","name":"Seafoam shelves","description":"Seafoam shelves are broad limestone terraces descending toward the water like a giant natural stair. Each level holds shallow pools that fill explosively when waves break over the outer edge, then drain through networks of tiny channels filled with shells and anemones. Salt has crystallized around some basins in ornate white rims. At the lowest safe shelf, a series of circular holes forms a musical sequence as trapped air whistles through them with every incoming swell.","art":"","x":300,"y":-700,"connectors":[{"id":"loc_064_link_058","side":"right","offset":0.4444444444444444},{"id":"loc_064_link_057","side":"left","offset":0.5555555555555556},{"id":"loc_064_link_131","side":"bottom","offset":0.9166666666666666}]},{"id":"loc_065","name":"Wreckwater bay","description":"Wreckwater bay is a wide crescent anchorage whose clear shallows contain ships from several distinct periods layered across one another. Masts and ribs break the surface near shore, while darker shapes can be seen deeper out through the blue water. Salvagers have built crude jetties from recovered planks and marked dangerous wrecks with painted floats. At extreme low tide, the stone keel of something much older than the wooden vessels appears beneath them all, aligned directly toward the centre of the bay.","art":"","x":700,"y":-700,"connectors":[{"id":"loc_065_link_110","side":"right","offset":0.1111111111111111},{"id":"loc_065_link_059","side":"bottom","offset":0.5},{"id":"loc_065_link_058","side":"left","offset":0.5555555555555556}]},{"id":"loc_066","name":"Gale wall fort","description":"Gale wall fort is a compact coastal fortress designed around relentless wind rather than enemy assault. Its outer walls are low and heavily sloped, courtyards are sunk below parapet level, and every doorway turns through a sheltered angle before reaching the open air. Seaward batteries overlook the bay from embrasures polished by salt. A sealed powder room at the rear contains no ammunition, only a bank of enormous bellows connected to ducts running through the walls toward the cliff face.","art":"","x":700,"y":-300,"connectors":[{"id":"loc_066_link_059","side":"top","offset":0.5},{"id":"loc_066_link_060","side":"bottom","offset":0.5},{"id":"loc_066_link_131","side":"top","offset":0.08333333333333333}]},{"id":"loc_067","name":"Frost lake foothills","description":"Frost lake foothills rise in dark ridges above a steel-blue mountain lake whose shallows freeze long before its centre. Reed beds stand trapped in clear ice along the shore, while sparse pine woods occupy sunny slopes where snow retreats first. Old boat ramps end beneath the ice beside overturned fishing huts weighted with stones against winter winds. Across the lake, a line of evenly spaced black posts emerges from the frozen surface and continues toward a valley no road reaches.","art":"","x":700,"y":100,"connectors":[{"id":"loc_067_link_060","side":"top","offset":0.5},{"id":"loc_067_link_108","side":"bottom","offset":0.9166666666666666},{"id":"loc_067_link_061","side":"left","offset":0.5555555555555556}]},{"id":"loc_068","name":"Bellmarker pass","description":"Bellmarker pass climbs between rounded peaks through snowfields where fog can erase the world beyond a few paces. Instead of cairns, the route is marked by tall iron poles carrying different bells, each tuned distinctly so travellers can navigate by sound when visibility collapses. Wind has sculpted deep cornices over the leeward slopes and buried sections of old paving. One marker pole stands far away from the recognised route on an exposed ridge, but its bell sounds whenever the others fall silent.","art":"","x":300,"y":100,"connectors":[{"id":"loc_068_link_061","side":"right","offset":0.5555555555555556},{"id":"loc_068_link_062","side":"left","offset":0.5555555555555556}]},{"id":"loc_069","name":"Ghostpine shelf","description":"Ghostpine shelf is a broad ledge high above the valleys, covered by widely spaced pines with pale bark bleached by cold and wind. Their twisted branches all lean downhill, making the entire sparse forest appear frozen in motion. Between the trees lie long stripes of snow separated by bare granite warmed by afternoon sun. Several trunks have grown around iron plaques at chest height, while one ancient pine encloses a complete metal helmet in its wood with only the visor still visible.","art":"","x":-100,"y":100,"connectors":[{"id":"loc_069_link_062","side":"right","offset":0.5555555555555556},{"id":"loc_069_link_063","side":"left","offset":0.5555555555555556}]},{"id":"loc_070","name":"Blue ice chamber","description":"Blue ice chamber lies behind a frozen waterfall where a narrow gap at one edge opens into a cathedral-like cave of layered glacier ice. Light filters through metres of blue wall, revealing bands of trapped stones, bubbles, twigs, and even intact leaves preserved at different depths. Ice columns meet the ceiling in translucent curtains and crack softly as temperature changes. Deep inside, a dark stone stair is visible through the ice itself, descending beyond reach as though the glacier flowed over an older entrance.","art":"","x":-500,"y":100,"connectors":[{"id":"loc_070_link_064","side":"top","offset":0.5},{"id":"loc_070_link_063","side":"right","offset":0.5555555555555556},{"id":"loc_070_link_107","side":"left","offset":0.8888888888888888}]},{"id":"loc_071","name":"Frostspan gorge","description":"Frostspan gorge is a deep cut through black mountain rock crossed by a single natural bridge glazed with permanent rime. The river below is visible only in brief flashes between overhanging ice, moving fast enough to keep its centre unfrozen even in winter. Wind blows powdered snow continuously across the bridge and erases tracks within minutes. On the far side, a line of iron spikes climbs the cliff to a small ledge holding the remains of a signal fire and a sealed copper tube.","art":"","x":-500,"y":-300,"connectors":[{"id":"loc_071_link_065","side":"top","offset":0.5},{"id":"loc_071_link_064","side":"bottom","offset":0.5},{"id":"loc_071_link_121","side":"top","offset":0.9166666666666666}]},{"id":"loc_072","name":"Howling ice plain","description":"Howling ice plain is an exposed plateau where snow rarely settles evenly because powerful crosswinds peel it into hard ridges and long streaming banners. The surface alternates between blue ice, wind-packed crust, and sudden cracks hidden beneath powder. Low stone shelters appear as dark humps, each entrance facing a different direction to cope with shifting storms. Near the centre, hundreds of shallow scratches radiate from a fixed point where something heavy appears to have turned repeatedly on the ice.","art":"","x":-1840,"y":-2040,"connectors":[{"id":"loc_072_link_066","side":"right","offset":0.5555555555555556},{"id":"loc_072_link_074","side":"bottom","offset":0.5}]},{"id":"loc_073","name":"Snowbound chapel","description":"Snowbound chapel is a small stone sanctuary nearly consumed by drifted snow at the foot of a glacier. Entry is through an upper window because the original doorway lies buried several metres below the present surface. Inside, frost feathers cover pews, carved saints, and a cracked altar, while a hole in the roof admits a narrow column of blue daylight. Behind the altar, a warmer patch of wall stays mysteriously free of ice and conceals the outline of a bricked-up arch.","art":"","x":-1440,"y":-2040,"connectors":[{"id":"loc_073_link_067","side":"right","offset":0.5555555555555556},{"id":"loc_073_link_066","side":"left","offset":0.4444444444444444},{"id":"loc_073_link_122","side":"bottom","offset":0.08333333333333333}]},{"id":"loc_074","name":"Glacier corridor","description":"Glacier corridor winds between two towering walls of compressed blue ice where summer meltwater has opened a temporary passage. Bands of ancient ash and gravel run horizontally through the walls, turning the corridor into a visible record of forgotten eruptions and winters. Water flows ankle-deep over polished stone and vanishes beneath the glacier at the lower end. Embedded high in one wall is the splintered side of a wooden structure, complete with a shuttered window, carried here by the moving ice.","art":"","x":-1040,"y":-2040,"connectors":[{"id":"loc_074_link_068","side":"right","offset":0.4444444444444444},{"id":"loc_074_link_112","side":"right","offset":0.1111111111111111},{"id":"loc_074_link_067","side":"left","offset":0.5555555555555556}]},{"id":"loc_075","name":"Northern lights observatory","description":"Northern lights observatory occupies a circular stone platform on a remote ridge with an unobstructed view across the polar horizon. Its roof has partly collapsed, exposing a brass armillary, rotating star charts, and a forest of finely geared instruments to the open sky. At night, aurora curtains reflect from polished metal dishes set into the floor, bathing the chamber in moving green and violet light. A surviving mechanism tracks neither stars nor planets, but slowly follows the brightest fold of the aurora itself.","art":"","x":-640,"y":-2040,"connectors":[{"id":"loc_075_link_069","side":"bottom","offset":0.4166666666666667},{"id":"loc_075_link_068","side":"left","offset":0.5555555555555556},{"id":"loc_075_link_132","side":"bottom","offset":0.08333333333333333}]},{"id":"loc_076","name":"Crowned peaks basin","description":"Crowned peaks basin is a high alpine bowl completely encircled by jagged summits whose silhouettes resemble the points of a broken crown. A frozen tarn occupies the centre, ringed by wind-carved snow and exposed black boulders. Stone stairs climb inexplicably from the shore toward three separate saddles, disappearing beneath scree before reaching any visible structure. When wind crosses the peaks in the right direction, low tones resonate around the basin as though the mountains themselves form a gigantic instrument.","art":"","x":-640,"y":-1640,"connectors":[{"id":"loc_076_link_069","side":"top","offset":0.5},{"id":"loc_076_link_111","side":"right","offset":0.8888888888888888},{"id":"loc_076_link_070","side":"bottom","offset":0.08333333333333333}]},{"id":"loc_077","name":"Cascade aqueduct","description":"Cascade aqueduct strides across a dry valley on enormous stone arches, carrying a surviving ribbon of mountain water far above the ground. Several collapsed spans force the channel into accidental waterfalls that feed green pools among fields of fallen masonry. Maintenance stairs and inspection tunnels honeycomb the thicker piers, many still accessible from below. One intact pier contains a locked sluice mechanism capable of diverting the entire flow into a sealed vertical shaft rather than along the aqueduct.","art":"","x":-840,"y":-1240,"connectors":[{"id":"loc_077_link_070","side":"top","offset":0.9166666666666666},{"id":"loc_077_link_109","side":"bottom","offset":0.9166666666666666},{"id":"loc_077_link_071","side":"left","offset":0.5555555555555556}]},{"id":"loc_078","name":"White marble quarter","description":"White marble quarter is the hushed ruin of an affluent district built from pale stone that still catches light beneath layers of dust and vine. Roofless villas surround colonnaded courtyards, mosaic floors continue beneath encroaching grass, and dry fountains preserve elaborate sea-creature carvings. Narrow service alleys behind the grand facades reveal ovens, drains, storerooms, and servants' stairs untouched by later looting. One townhouse remains inexplicably clean inside, although its doors have stood open for decades.","art":"","x":-1240,"y":-1240,"connectors":[{"id":"loc_078_link_071","side":"right","offset":0.5555555555555556},{"id":"loc_078_link_072","side":"left","offset":0.5555555555555556},{"id":"loc_078_link_132","side":"top","offset":0.9166666666666666}]},{"id":"loc_079","name":"Empty civic square","description":"Empty civic square is a monumental plaza large enough to hold a small army, enclosed by public halls, colonnades, and broad ceremonial stairs. Wind pushes leaves and scraps of old cloth into spirals across paving laid in enormous geometric patterns. Statues remain on most plinths, but each has been turned to face away from the square toward the surrounding buildings. Beneath the central speaking platform, an echoing service corridor links multiple structures without ever emerging onto the streets.","art":"","x":-1640,"y":-1240,"connectors":[{"id":"loc_079_link_073","side":"top","offset":0.08333333333333333},{"id":"loc_079_link_072","side":"right","offset":0.5555555555555556}]},{"id":"loc_080","name":"Brass engine vault","description":"Brass engine vault is an underground mechanical complex dominated by concentric bronze rings, counterweighted arms, stone gears, and shafts descending beyond the reach of light. Narrow catwalks weave through machinery large enough to resemble architecture, with maintenance alcoves cut into the surrounding rock. Most mechanisms are motionless, but one small governor still turns at a constant pace without an obvious power source. Its rotation periodically releases a deep vibration that can be felt through the entire floor before vanishing again.","art":"","x":-1840,"y":-1640,"connectors":[{"id":"loc_080_link_074","side":"top","offset":0.5},{"id":"loc_080_link_073","side":"bottom","offset":0.9166666666666666},{"id":"loc_080_link_122","side":"top","offset":0.9166666666666666}]},{"id":"loc_081","name":"Deep record stacks","description":"Deep record stacks descend around a central void in tier after tier of stone galleries packed with sealed tubes, clay tablets, metal leaves, and rotting bundles of paper. Bridges once linked opposite sides, but many have collapsed, forcing long detours through reading chambers and cataloguing rooms. Surviving lamps burn with a low smokeless flame fed by pipes in the walls. The catalogue symbols become older with each lower level until the deepest visible shelves use an alphabet absent from everything above them.","art":"","x":900,"y":-1840,"connectors":[{"id":"loc_081_link_075","side":"right","offset":0.5555555555555556},{"id":"loc_081_link_083","side":"bottom","offset":0.4166666666666667},{"id":"loc_081_link_133","side":"bottom","offset":0.9166666666666666}]},{"id":"loc_082","name":"Mechanical garden","description":"Mechanical garden fills a sheltered ruin with bronze trees, jointed vines, metal insects, and flowers assembled from hundreds of overlapping plates. A hidden water system still circulates through channels beneath the paths, powering slow movements: blossoms open to sunlight, branches turn, and tiny birds dip their beaks into fountains. Verdigris and real moss have softened the boundary between sculpture and living garden. One tree remains polished and warm, its roots enclosing a small chair as though it expects someone to sit there.","art":"","x":1300,"y":-1840,"connectors":[{"id":"loc_082_link_113","side":"top","offset":0.08333333333333333},{"id":"loc_082_link_076","side":"right","offset":0.5555555555555556},{"id":"loc_082_link_075","side":"left","offset":0.5555555555555556}]},{"id":"loc_083","name":"Celestial map chamber","description":"Celestial map chamber is a vast domed hall whose floor forms an inlaid model of the heavens in coloured stone, brass, and dark glass. Planet tracks curve between constellation figures, while suspended lenses and mirrored arms hang from a broken mechanism above. Narrow galleries circle the dome at several heights, each aligned with different parts of the map below. Several brass planets can still be moved by hidden gears, but one unmarked black sphere travels on a track that does not correspond to any known orbit.","art":"","x":1700,"y":-1840,"connectors":[{"id":"loc_083_link_077","side":"right","offset":0.4444444444444444},{"id":"loc_083_link_076","side":"left","offset":0.5555555555555556},{"id":"loc_083_link_123","side":"bottom","offset":0.9166666666666666}]},{"id":"loc_084","name":"Fallen pillars avenue","description":"Fallen pillars avenue was once a triumphal approach lined with columns so massive that their broken drums now form rooms, ramps, and barriers of their own. Grass and young trees occupy the spaces between toppled shafts, while intact columns rise unpredictably among them like isolated towers. Relief fragments show processions heading toward a destination no longer visible from the avenue. One fallen capital has landed upside down and collects rainwater in its carving, forming a clear pool deep enough to conceal a stair opening beneath it.","art":"","x":2100,"y":-1840,"connectors":[{"id":"loc_084_link_078","side":"bottom","offset":0.5},{"id":"loc_084_link_077","side":"left","offset":0.5555555555555556}]},{"id":"loc_085","name":"Pilgrim stair","description":"Pilgrim stair climbs a mountainside in hundreds of shallow steps interrupted by terraces, shrines, resting niches, and stone basins fed by tiny springs. The lower landings are broad and worn smooth; higher ones narrow into cloud and are littered with prayer tokens left in cracks. Many steps have paired depressions where generations of travellers knelt rather than walked. Near the summit, an entire flight has been deliberately removed, leaving a clean gap crossed only by a chain of iron handholds set into the cliff.","art":"","x":2100,"y":-1440,"connectors":[{"id":"loc_085_link_078","side":"top","offset":0.5},{"id":"loc_085_link_079","side":"bottom","offset":0.08333333333333333},{"id":"loc_085_link_123","side":"top","offset":0.08333333333333333}]},{"id":"loc_086","name":"High crown castle","description":"High crown castle dominates a dark rocky spur through successive rings of fortification, each adapted to a different age of warfare. The outer ward contains stables, workshops, cisterns, and a market court; the inner walls rise around barracks, chapels, and towers linked by wall walks; the central keep crowns the highest rock like a city within a city. One side is defended by a dry moat cut directly into bedrock. Beneath the keep, several older foundations continue below the level of the moat, implying the castle was built over something substantial.","art":"","x":1900,"y":-1040,"connectors":[{"id":"loc_086_link_079","side":"top","offset":0.9166666666666666},{"id":"loc_086_link_080","side":"left","offset":0.5555555555555556}]},{"id":"loc_087","name":"Sky garden terraces","description":"Sky garden terraces cling to the exposed side of a ruined palace hundreds of feet above the valley floor. Narrow stone beds, arcaded balconies, and staircases descend in layers, all fed by a thin aqueduct that still distributes clear mountain water through carved channels. Fruit trees have grown wild and heavy vines drape from broken balustrades into open air. At the lowest surviving terrace, water disappears through a lion-headed spout and can be heard continuing somewhere deep inside the palace wall.","art":"","x":1500,"y":-1040,"connectors":[{"id":"loc_087_link_080","side":"right","offset":0.5555555555555556},{"id":"loc_087_link_081","side":"left","offset":0.5555555555555556},{"id":"loc_087_link_133","side":"top","offset":0.08333333333333333}]},{"id":"loc_088","name":"Spiral depth well","description":"Spiral depth well is a colossal cylindrical shaft lined by a stair that coils downward around its wall for many storeys. Rather than serving only water, arched doorways open from landings into workshops, cisterns, shrines, and abandoned sleeping chambers cut at different depths. The centre remains open from top to bottom, crossed occasionally by narrow stone bridges. Far below the lowest accessible landing, a steady amber light reflects from the shaft wall even though no flame can be seen from above.","art":"","x":1100,"y":-1040,"connectors":[{"id":"loc_088_link_082","side":"top","offset":0.08333333333333333},{"id":"loc_088_link_081","side":"right","offset":0.5555555555555556},{"id":"loc_088_link_110","side":"left","offset":0.8888888888888888}]},{"id":"loc_089","name":"Quiet white courtyard","description":"Quiet white courtyard lies completely enclosed by tall undecorated walls that block wind and reduce outside noise to a distant murmur. Pale paving surrounds a dry circular fountain and a single white-barked tree whose canopy spreads almost exactly to the courtyard edges. Moss grows only in the joints between stones, forming a fine green grid underfoot. Every wall is blank except the north side, where thousands of tiny pinholes form a pattern visible only when late sunlight shines through from somewhere beyond the solid masonry.","art":"","x":900,"y":-1440,"connectors":[{"id":"loc_089_link_083","side":"top","offset":0.5},{"id":"loc_089_link_082","side":"bottom","offset":0.9166666666666666},{"id":"loc_089_link_111","side":"left","offset":0.1111111111111111}]},{"id":"loc_090","name":"Black mirror tombs","description":"Black mirror tombs are a labyrinth of burial corridors faced with polished volcanic stone that reflects torchlight almost perfectly. Repeated arches multiply into false passages in the mirrors, while shallow niches contain sealed stone coffins marked only by small metal emblems. Floors slope so gradually that travellers often fail to notice they are descending. In one junction chamber, the reflections show an additional doorway between two arches even though the corresponding section of real wall is completely solid.","art":"","x":-440,"y":-3400,"connectors":[{"id":"loc_090_link_084","side":"right","offset":0.5555555555555556},{"id":"loc_090_link_093","side":"bottom","offset":0.5}]},{"id":"loc_091","name":"Midnight glass arcade","description":"Midnight glass arcade is a long vaulted gallery enclosed by smoky blue-black panes held in an intricate metal lattice. During daylight the interior remains dim, but moonlight passes through selected panels in sharp silver bands that crawl across the polished floor as the night advances. Empty display plinths and locked cabinets line the central walk, surrounded by fragments of shattered glass that never seem to gather dust. At the far end, an intact pane reflects a furnished version of the otherwise ruined gallery behind the viewer.","art":"","x":-40,"y":-3400,"connectors":[{"id":"loc_091_link_114","side":"top","offset":0.9166666666666666},{"id":"loc_091_link_085","side":"right","offset":0.5555555555555556},{"id":"loc_091_link_084","side":"left","offset":0.5555555555555556}]},{"id":"loc_092","name":"Chasm bell tower","description":"Chasm bell tower rises from a narrow rock pedestal above a mist-filled gulf, accessible by a steep stair wrapped around the tower's exterior. The upper belfry is open to the weather and houses a single enormous dark-metal bell suspended from beams far heavier than the surrounding masonry. Its missing clapper has left the bell silent despite constant wind. Deep scratches around the tower's base suggest that a bridge once rotated outward from the rock toward another structure now hidden in the chasm fog.","art":"","x":360,"y":-3400,"connectors":[{"id":"loc_092_link_086","side":"right","offset":0.4444444444444444},{"id":"loc_092_link_085","side":"left","offset":0.5555555555555556},{"id":"loc_092_link_124","side":"bottom","offset":0.9166666666666666}]},{"id":"loc_093","name":"Faceless bridge","description":"Faceless bridge crosses a gulf so deep that drifting cloud often hides both the bottom and the opposite cliff. Colossal statues stand along the parapets at regular intervals, but every face has been removed with deliberate smooth cuts while hands, clothing, and ceremonial objects remain exquisitely detailed. The roadway widens at the midpoint into a circular platform with an empty socket at its centre. Beneath the parapet, narrow maintenance ledges lead to doors built into the bridge piers themselves.","art":"","x":760,"y":-3400,"connectors":[{"id":"loc_093_link_087","side":"bottom","offset":0.5},{"id":"loc_093_link_086","side":"left","offset":0.5555555555555556}]},{"id":"loc_094","name":"Dark crystal core","description":"Dark crystal core occupies a perfectly circular chamber around a suspended black crystal whose asymmetrical points never quite touch the surrounding stone. Thin bridges radiate toward a central platform beneath it, crossing concentric channels cut deep into the floor. The crystal absorbs most direct light but throws back faint coloured reflections from angles that should remain dark. Chips found on the platform do not match the object above; they are transparent, suggesting the suspended mass may be a shell or something altered over time.","art":"","x":760,"y":-3000,"connectors":[{"id":"loc_094_link_087","side":"top","offset":0.5},{"id":"loc_094_link_088","side":"bottom","offset":0.5},{"id":"loc_094_link_124","side":"top","offset":0.08333333333333333}]},{"id":"loc_095","name":"Sunshadow stair","description":"Sunshadow stair climbs an exposed slope between tall fins of polished obsidian that cast razor-straight bands of darkness across the steps. Circular reliefs are positioned on particular landings so that the rising or setting sun shines through their cut centres only on specific days. The black paving mirrors clouds underfoot, making the steep ascent visually disorienting. Halfway up, one landing remains in shadow at every hour because a hidden overhang blocks the sun from an angle not apparent from the stair itself.","art":"","x":760,"y":-2600,"connectors":[{"id":"loc_095_link_088","side":"top","offset":0.5},{"id":"loc_095_link_113","side":"bottom","offset":0.9166666666666666},{"id":"loc_095_link_089","side":"left","offset":0.5555555555555556}]},{"id":"loc_096","name":"Final gate watch","description":"Final gate watch is a hardened military station built on a ledge overlooking the inner valley and, unusually, fortified most heavily toward the road behind it. Empty barracks flank a narrow gate court beneath signal towers equipped with rusted mirror frames and fire baskets. Arrow slits, murder holes, and portcullis grooves all face outward toward approaching travellers rather than deeper into the stronghold. The command room contains a wall map with several roads carefully scratched away after the original map was made.","art":"","x":360,"y":-2600,"connectors":[{"id":"loc_096_link_089","side":"right","offset":0.5555555555555556},{"id":"loc_096_link_090","side":"left","offset":0.5555555555555556}]},{"id":"loc_097","name":"Royal procession road","description":"Royal procession road advances toward the fortress heart in a straight ceremonial ascent through a sequence of increasingly elaborate courts. Plain outer paving gives way to coloured stone, bronze inlays, victory reliefs, and ranks of statues whose carved clothing records changing fashions across centuries. Side doors and servants' passages remain deliberately hidden from the formal route, allowing the road itself to function like a controlled stage. One section of pavement can be raised mechanically, revealing a defensive trench beneath the otherwise ceremonial surface.","art":"","x":-40,"y":-2600,"connectors":[{"id":"loc_097_link_090","side":"right","offset":0.5555555555555556},{"id":"loc_097_link_091","side":"left","offset":0.4444444444444444},{"id":"loc_097_link_134","side":"top","offset":0.08333333333333333}]},{"id":"loc_098","name":"Stone seal hall","description":"Stone seal hall is an immense antechamber dominated by doors so thick they occupy nearly the depth of the wall. Every surface is covered in low relief: geometric seals, bound creatures, processions of masked figures, and repeated hands pressed flat against circular symbols. Several side corridors have been permanently filled with blocks cut to fit so precisely that their seams are almost invisible. Dust on the main floor is undisturbed except for a narrow arc near one sealed passage, as though that section of wall occasionally swings inward.","art":"","x":-440,"y":-2600,"connectors":[{"id":"loc_098_link_092","side":"top","offset":0.5},{"id":"loc_098_link_091","side":"right","offset":0.5555555555555556},{"id":"loc_098_link_112","side":"left","offset":0.8888888888888888}]},{"id":"loc_099","name":"Resonant throne hall","description":"Resonant throne hall extends beneath a ribbed stone vault whose proportions amplify footsteps, whispers, and dropped objects into long overlapping echoes. A central aisle crosses patterned paving toward a raised throne platform, while empty galleries and screened balconies occupy both sides above head height. Decorative metal plates embedded in the walls vibrate softly at different frequencies as people move through the chamber. Behind the throne, a dark doorway produces no echo at all, swallowing sound the moment it crosses the threshold.","art":"","x":-440,"y":-3000,"connectors":[{"id":"loc_099_link_093","side":"top","offset":0.5},{"id":"loc_099_link_092","side":"bottom","offset":0.5},{"id":"loc_099_link_134","side":"bottom","offset":0.9166666666666666}]},{"id":"loc_100","name":"Stillwater sanctum","description":"Stillwater sanctum is a perfectly circular inner chamber arranged around a motionless black pool that surrounds a small stone dais. Pale light falls from an unseen opening high above, illuminating the dais while leaving the uninterrupted outer wall in soft shadow. No dust settles on the water, and even footsteps on the surrounding walkway fail to disturb its surface. A narrow submerged path can be seen beneath the pool leading from the entrance to the centre, where a shallow depression in the dais is shaped for an object that is no longer present.","art":"","x":160,"y":-4200,"connectors":[{"id":"loc_100_link_114","side":"bottom","offset":0.08333333333333333}]}],"links":[{"id":"link_001","source":"loc_007","source_connector":"loc_007_link_001","target":"loc_008","target_connector":"loc_008_link_001"},{"id":"link_002","source":"loc_008","source_connector":"loc_008_link_002","target":"loc_009","target_connector":"loc_009_link_002"},{"id":"link_003","source":"loc_009","source_connector":"loc_009_link_003","target":"loc_010","target_connector":"loc_010_link_003"},{"id":"link_004","source":"loc_010","source_connector":"loc_010_link_004","target":"loc_011","target_connector":"loc_011_link_004"},{"id":"link_005","source":"loc_011","source_connector":"loc_011_link_005","target":"loc_012","target_connector":"loc_012_link_005"},{"id":"link_006","source":"loc_012","source_connector":"loc_012_link_006","target":"loc_013","target_connector":"loc_013_link_006"},{"id":"link_007","source":"loc_013","source_connector":"loc_013_link_007","target":"loc_014","target_connector":"loc_014_link_007"},{"id":"link_008","source":"loc_014","source_connector":"loc_014_link_008","target":"loc_015","target_connector":"loc_015_link_008"},{"id":"link_009","source":"loc_015","source_connector":"loc_015_link_009","target":"loc_007","target_connector":"loc_007_link_009"},{"id":"link_010","source":"loc_016","source_connector":"loc_016_link_010","target":"loc_017","target_connector":"loc_017_link_010"},{"id":"link_011","source":"loc_017","source_connector":"loc_017_link_011","target":"loc_018","target_connector":"loc_018_link_011"},{"id":"link_012","source":"loc_018","source_connector":"loc_018_link_012","target":"loc_019","target_connector":"loc_019_link_012"},{"id":"link_013","source":"loc_019","source_connector":"loc_019_link_013","target":"loc_020","target_connector":"loc_020_link_013"},{"id":"link_014","source":"loc_020","source_connector":"loc_020_link_014","target":"loc_021","target_connector":"loc_021_link_014"},{"id":"link_015","source":"loc_021","source_connector":"loc_021_link_015","target":"loc_022","target_connector":"loc_022_link_015"},{"id":"link_016","source":"loc_022","source_connector":"loc_022_link_016","target":"loc_023","target_connector":"loc_023_link_016"},{"id":"link_017","source":"loc_023","source_connector":"loc_023_link_017","target":"loc_024","target_connector":"loc_024_link_017"},{"id":"link_018","source":"loc_024","source_connector":"loc_024_link_018","target":"loc_016","target_connector":"loc_016_link_018"},{"id":"link_019","source":"loc_025","source_connector":"loc_025_link_019","target":"loc_026","target_connector":"loc_026_link_019"},{"id":"link_020","source":"loc_026","source_connector":"loc_026_link_020","target":"loc_027","target_connector":"loc_027_link_020"},{"id":"link_021","source":"loc_027","source_connector":"loc_027_link_021","target":"loc_028","target_connector":"loc_028_link_021"},{"id":"link_022","source":"loc_028","source_connector":"loc_028_link_022","target":"loc_029","target_connector":"loc_029_link_022"},{"id":"link_023","source":"loc_029","source_connector":"loc_029_link_023","target":"loc_030","target_connector":"loc_030_link_023"},{"id":"link_024","source":"loc_030","source_connector":"loc_030_link_024","target":"loc_031","target_connector":"loc_031_link_024"},{"id":"link_025","source":"loc_031","source_connector":"loc_031_link_025","target":"loc_032","target_connector":"loc_032_link_025"},{"id":"link_026","source":"loc_032","source_connector":"loc_032_link_026","target":"loc_033","target_connector":"loc_033_link_026"},{"id":"link_027","source":"loc_033","source_connector":"loc_033_link_027","target":"loc_025","target_connector":"loc_025_link_027"},{"id":"link_028","source":"loc_034","source_connector":"loc_034_link_028","target":"loc_035","target_connector":"loc_035_link_028"},{"id":"link_029","source":"loc_035","source_connector":"loc_035_link_029","target":"loc_036","target_connector":"loc_036_link_029"},{"id":"link_030","source":"loc_036","source_connector":"loc_036_link_030","target":"loc_037","target_connector":"loc_037_link_030"},{"id":"link_031","source":"loc_037","source_connector":"loc_037_link_031","target":"loc_038","target_connector":"loc_038_link_031"},{"id":"link_032","source":"loc_038","source_connector":"loc_038_link_032","target":"loc_039","target_connector":"loc_039_link_032"},{"id":"link_033","source":"loc_039","source_connector":"loc_039_link_033","target":"loc_040","target_connector":"loc_040_link_033"},{"id":"link_034","source":"loc_040","source_connector":"loc_040_link_034","target":"loc_041","target_connector":"loc_041_link_034"},{"id":"link_035","source":"loc_041","source_connector":"loc_041_link_035","target":"loc_042","target_connector":"loc_042_link_035"},{"id":"link_036","source":"loc_042","source_connector":"loc_042_link_036","target":"loc_043","target_connector":"loc_043_link_036"},{"id":"link_037","source":"loc_043","source_connector":"loc_043_link_037","target":"loc_034","target_connector":"loc_034_link_037"},{"id":"link_038","source":"loc_044","source_connector":"loc_044_link_038","target":"loc_045","target_connector":"loc_045_link_038"},{"id":"link_039","source":"loc_045","source_connector":"loc_045_link_039","target":"loc_046","target_connector":"loc_046_link_039"},{"id":"link_040","source":"loc_046","source_connector":"loc_046_link_040","target":"loc_047","target_connector":"loc_047_link_040"},{"id":"link_041","source":"loc_047","source_connector":"loc_047_link_041","target":"loc_048","target_connector":"loc_048_link_041"},{"id":"link_042","source":"loc_048","source_connector":"loc_048_link_042","target":"loc_049","target_connector":"loc_049_link_042"},{"id":"link_043","source":"loc_049","source_connector":"loc_049_link_043","target":"loc_050","target_connector":"loc_050_link_043"},{"id":"link_044","source":"loc_050","source_connector":"loc_050_link_044","target":"loc_051","target_connector":"loc_051_link_044"},{"id":"link_045","source":"loc_051","source_connector":"loc_051_link_045","target":"loc_052","target_connector":"loc_052_link_045"},{"id":"link_046","source":"loc_052","source_connector":"loc_052_link_046","target":"loc_044","target_connector":"loc_044_link_046"},{"id":"link_047","source":"loc_053","source_connector":"loc_053_link_047","target":"loc_054","target_connector":"loc_054_link_047"},{"id":"link_048","source":"loc_054","source_connector":"loc_054_link_048","target":"loc_055","target_connector":"loc_055_link_048"},{"id":"link_049","source":"loc_055","source_connector":"loc_055_link_049","target":"loc_056","target_connector":"loc_056_link_049"},{"id":"link_050","source":"loc_056","source_connector":"loc_056_link_050","target":"loc_057","target_connector":"loc_057_link_050"},{"id":"link_051","source":"loc_057","source_connector":"loc_057_link_051","target":"loc_058","target_connector":"loc_058_link_051"},{"id":"link_052","source":"loc_058","source_connector":"loc_058_link_052","target":"loc_059","target_connector":"loc_059_link_052"},{"id":"link_053","source":"loc_059","source_connector":"loc_059_link_053","target":"loc_060","target_connector":"loc_060_link_053"},{"id":"link_054","source":"loc_060","source_connector":"loc_060_link_054","target":"loc_061","target_connector":"loc_061_link_054"},{"id":"link_055","source":"loc_061","source_connector":"loc_061_link_055","target":"loc_053","target_connector":"loc_053_link_055"},{"id":"link_056","source":"loc_062","source_connector":"loc_062_link_056","target":"loc_063","target_connector":"loc_063_link_056"},{"id":"link_057","source":"loc_063","source_connector":"loc_063_link_057","target":"loc_064","target_connector":"loc_064_link_057"},{"id":"link_058","source":"loc_064","source_connector":"loc_064_link_058","target":"loc_065","target_connector":"loc_065_link_058"},{"id":"link_059","source":"loc_065","source_connector":"loc_065_link_059","target":"loc_066","target_connector":"loc_066_link_059"},{"id":"link_060","source":"loc_066","source_connector":"loc_066_link_060","target":"loc_067","target_connector":"loc_067_link_060"},{"id":"link_061","source":"loc_067","source_connector":"loc_067_link_061","target":"loc_068","target_connector":"loc_068_link_061"},{"id":"link_062","source":"loc_068","source_connector":"loc_068_link_062","target":"loc_069","target_connector":"loc_069_link_062"},{"id":"link_063","source":"loc_069","source_connector":"loc_069_link_063","target":"loc_070","target_connector":"loc_070_link_063"},{"id":"link_064","source":"loc_070","source_connector":"loc_070_link_064","target":"loc_071","target_connector":"loc_071_link_064"},{"id":"link_065","source":"loc_071","source_connector":"loc_071_link_065","target":"loc_062","target_connector":"loc_062_link_065"},{"id":"link_066","source":"loc_072","source_connector":"loc_072_link_066","target":"loc_073","target_connector":"loc_073_link_066"},{"id":"link_067","source":"loc_073","source_connector":"loc_073_link_067","target":"loc_074","target_connector":"loc_074_link_067"},{"id":"link_068","source":"loc_074","source_connector":"loc_074_link_068","target":"loc_075","target_connector":"loc_075_link_068"},{"id":"link_069","source":"loc_075","source_connector":"loc_075_link_069","target":"loc_076","target_connector":"loc_076_link_069"},{"id":"link_070","source":"loc_076","source_connector":"loc_076_link_070","target":"loc_077","target_connector":"loc_077_link_070"},{"id":"link_071","source":"loc_077","source_connector":"loc_077_link_071","target":"loc_078","target_connector":"loc_078_link_071"},{"id":"link_072","source":"loc_078","source_connector":"loc_078_link_072","target":"loc_079","target_connector":"loc_079_link_072"},{"id":"link_073","source":"loc_079","source_connector":"loc_079_link_073","target":"loc_080","target_connector":"loc_080_link_073"},{"id":"link_074","source":"loc_080","source_connector":"loc_080_link_074","target":"loc_072","target_connector":"loc_072_link_074"},{"id":"link_075","source":"loc_081","source_connector":"loc_081_link_075","target":"loc_082","target_connector":"loc_082_link_075"},{"id":"link_076","source":"loc_082","source_connector":"loc_082_link_076","target":"loc_083","target_connector":"loc_083_link_076"},{"id":"link_077","source":"loc_083","source_connector":"loc_083_link_077","target":"loc_084","target_connector":"loc_084_link_077"},{"id":"link_078","source":"loc_084","source_connector":"loc_084_link_078","target":"loc_085","target_connector":"loc_085_link_078"},{"id":"link_079","source":"loc_085","source_connector":"loc_085_link_079","target":"loc_086","target_connector":"loc_086_link_079"},{"id":"link_080","source":"loc_086","source_connector":"loc_086_link_080","target":"loc_087","target_connector":"loc_087_link_080"},{"id":"link_081","source":"loc_087","source_connector":"loc_087_link_081","target":"loc_088","target_connector":"loc_088_link_081"},{"id":"link_082","source":"loc_088","source_connector":"loc_088_link_082","target":"loc_089","target_connector":"loc_089_link_082"},{"id":"link_083","source":"loc_089","source_connector":"loc_089_link_083","target":"loc_081","target_connector":"loc_081_link_083"},{"id":"link_084","source":"loc_090","source_connector":"loc_090_link_084","target":"loc_091","target_connector":"loc_091_link_084"},{"id":"link_085","source":"loc_091","source_connector":"loc_091_link_085","target":"loc_092","target_connector":"loc_092_link_085"},{"id":"link_086","source":"loc_092","source_connector":"loc_092_link_086","target":"loc_093","target_connector":"loc_093_link_086"},{"id":"link_087","source":"loc_093","source_connector":"loc_093_link_087","target":"loc_094","target_connector":"loc_094_link_087"},{"id":"link_088","source":"loc_094","source_connector":"loc_094_link_088","target":"loc_095","target_connector":"loc_095_link_088"},{"id":"link_089","source":"loc_095","source_connector":"loc_095_link_089","target":"loc_096","target_connector":"loc_096_link_089"},{"id":"link_090","source":"loc_096","source_connector":"loc_096_link_090","target":"loc_097","target_connector":"loc_097_link_090"},{"id":"link_091","source":"loc_097","source_connector":"loc_097_link_091","target":"loc_098","target_connector":"loc_098_link_091"},{"id":"link_092","source":"loc_098","source_connector":"loc_098_link_092","target":"loc_099","target_connector":"loc_099_link_092"},{"id":"link_093","source":"loc_099","source_connector":"loc_099_link_093","target":"loc_090","target_connector":"loc_090_link_093"},{"id":"link_094","source":"loc_001","source_connector":"loc_001_link_094","target":"loc_014","target_connector":"loc_014_link_094"},{"id":"link_095","source":"loc_002","source_connector":"loc_002_link_095","target":"loc_012","target_connector":"loc_012_link_095"},{"id":"link_096","source":"loc_003","source_connector":"loc_003_link_096","target":"loc_023","target_connector":"loc_023_link_096"},{"id":"link_097","source":"loc_004","source_connector":"loc_004_link_097","target":"loc_021","target_connector":"loc_021_link_097"},{"id":"link_098","source":"loc_005","source_connector":"loc_005_link_098","target":"loc_032","target_connector":"loc_032_link_098"},{"id":"link_099","source":"loc_006","source_connector":"loc_006_link_099","target":"loc_030","target_connector":"loc_030_link_099"},{"id":"link_100","source":"loc_011","source_connector":"loc_011_link_100","target":"loc_024","target_connector":"loc_024_link_100"},{"id":"link_101","source":"loc_020","source_connector":"loc_020_link_101","target":"loc_033","target_connector":"loc_033_link_101"},{"id":"link_102","source":"loc_008","source_connector":"loc_008_link_102","target":"loc_042","target_connector":"loc_042_link_102"},{"id":"link_103","source":"loc_017","source_connector":"loc_017_link_103","target":"loc_041","target_connector":"loc_041_link_103"},{"id":"link_104","source":"loc_026","source_connector":"loc_026_link_104","target":"loc_039","target_connector":"loc_039_link_104"},{"id":"link_105","source":"loc_034","source_connector":"loc_034_link_105","target":"loc_049","target_connector":"loc_049_link_105"},{"id":"link_106","source":"loc_037","source_connector":"loc_037_link_106","target":"loc_061","target_connector":"loc_061_link_106"},{"id":"link_107","source":"loc_046","source_connector":"loc_046_link_107","target":"loc_070","target_connector":"loc_070_link_107"},{"id":"link_108","source":"loc_054","source_connector":"loc_054_link_108","target":"loc_067","target_connector":"loc_067_link_108"},{"id":"link_109","source":"loc_062","source_connector":"loc_062_link_109","target":"loc_077","target_connector":"loc_077_link_109"},{"id":"link_110","source":"loc_065","source_connector":"loc_065_link_110","target":"loc_088","target_connector":"loc_088_link_110"},{"id":"link_111","source":"loc_076","source_connector":"loc_076_link_111","target":"loc_089","target_connector":"loc_089_link_111"},{"id":"link_112","source":"loc_074","source_connector":"loc_074_link_112","target":"loc_098","target_connector":"loc_098_link_112"},{"id":"link_113","source":"loc_082","source_connector":"loc_082_link_113","target":"loc_095","target_connector":"loc_095_link_113"},{"id":"link_114","source":"loc_091","source_connector":"loc_091_link_114","target":"loc_100","target_connector":"loc_100_link_114"},{"id":"link_115","source":"loc_013","source_connector":"loc_013_link_115","target":"loc_015","target_connector":"loc_015_link_115"},{"id":"link_116","source":"loc_016","source_connector":"loc_016_link_116","target":"loc_018","target_connector":"loc_018_link_116"},{"id":"link_117","source":"loc_027","source_connector":"loc_027_link_117","target":"loc_029","target_connector":"loc_029_link_117"},{"id":"link_118","source":"loc_035","source_connector":"loc_035_link_118","target":"loc_043","target_connector":"loc_043_link_118"},{"id":"link_119","source":"loc_045","source_connector":"loc_045_link_119","target":"loc_052","target_connector":"loc_052_link_119"},{"id":"link_120","source":"loc_055","source_connector":"loc_055_link_120","target":"loc_057","target_connector":"loc_057_link_120"},{"id":"link_121","source":"loc_063","source_connector":"loc_063_link_121","target":"loc_071","target_connector":"loc_071_link_121"},{"id":"link_122","source":"loc_073","source_connector":"loc_073_link_122","target":"loc_080","target_connector":"loc_080_link_122"},{"id":"link_123","source":"loc_083","source_connector":"loc_083_link_123","target":"loc_085","target_connector":"loc_085_link_123"},{"id":"link_124","source":"loc_092","source_connector":"loc_092_link_124","target":"loc_094","target_connector":"loc_094_link_124"},{"id":"link_125","source":"loc_007","source_connector":"loc_007_link_125","target":"loc_009","target_connector":"loc_009_link_125"},{"id":"link_126","source":"loc_019","source_connector":"loc_019_link_126","target":"loc_022","target_connector":"loc_022_link_126"},{"id":"link_127","source":"loc_025","source_connector":"loc_025_link_127","target":"loc_031","target_connector":"loc_031_link_127"},{"id":"link_128","source":"loc_036","source_connector":"loc_036_link_128","target":"loc_038","target_connector":"loc_038_link_128"},{"id":"link_129","source":"loc_048","source_connector":"loc_048_link_129","target":"loc_050","target_connector":"loc_050_link_129"},{"id":"link_130","source":"loc_058","source_connector":"loc_058_link_130","target":"loc_060","target_connector":"loc_060_link_130"},{"id":"link_131","source":"loc_064","source_connector":"loc_064_link_131","target":"loc_066","target_connector":"loc_066_link_131"},{"id":"link_132","source":"loc_075","source_connector":"loc_075_link_132","target":"loc_078","target_connector":"loc_078_link_132"},{"id":"link_133","source":"loc_081","source_connector":"loc_081_link_133","target":"loc_087","target_connector":"loc_087_link_133"},{"id":"link_134","source":"loc_097","source_connector":"loc_097_link_134","target":"loc_099","target_connector":"loc_099_link_134"}]};
+
+    let data = { locations: [], links: [] };
+    let selectedLocationId = null;
+    let selectedConnector = null;
+    let selectedLinkId = null;
+    let view = { x: 0, y: 0, scale: 1 };
+
+    let nodeDrag = null;
+    let panDrag = null;
+    let linkDrag = null;
+    let toastTimer = null;
+
+    let locationIndex = new Map();
+    let connectorIndex = new Map();
+    let linkIndex = new Map();
+    let connectorLinkIndex = new Map();
+    let locationLinkIndex = new Map();
+    let linkElementIndex = new Map();
+
+    let linkRoutes = new Map();
+    let routePointOwners = new Map();
+    let dragCollisionIndex = null;
+
+    function makeId(prefix) {
+        return `${prefix}_${crypto.randomUUID()}`;
+    }
+
+    function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+    }
+
+    function snap(value, grid = TILE_GRID) {
+        return Math.round(value / grid) * grid;
+    }
+
+    function gridKey(x, y) {
+        return `${Math.round(x / ROUTE_GRID)}:${Math.round(y / ROUTE_GRID)}`;
+    }
+
+    function connectorKey(locationId, connectorId) {
+        return `${locationId}:${connectorId}`;
+    }
+
+    function sideVector(side) {
+        if (side === "top") return { x: 0, y: -1 };
+        if (side === "right") return { x: 1, y: 0 };
+        if (side === "bottom") return { x: 0, y: 1 };
+        return { x: -1, y: 0 };
+    }
+
+    function sideLength(side) {
+        return side === "top" || side === "bottom" ? NODE_WIDTH : NODE_HEIGHT;
+    }
+
+    function normalizeConnectorOffset(side, offset) {
+        const length = sideLength(side);
+        const pixel = clamp(
+            snap(clamp(Number(offset) || 0.5, 0, 1) * length, ROUTE_GRID),
+            ROUTE_GRID,
+            length - ROUTE_GRID
+        );
+        return pixel / length;
+    }
+
+    function automaticArtFilename(location) {
+        const name = String(location?.name || "").trim();
+        return name ? `${name}.png` : "";
+    }
+
+    function automaticArtUrl(location) {
+        const filename = automaticArtFilename(location);
+        return filename ? new URL(encodeURIComponent(filename), window.location.href).href : "";
+    }
+
+    function applyAutomaticArt(element, location) {
+        const url = automaticArtUrl(location);
+        element.dataset.artUrl = url;
+        element.style.backgroundImage = "";
+        element.textContent = "no_art";
+        if (!url) return;
+
+        const image = new Image();
+        image.onload = () => {
+            if (element.dataset.artUrl !== url) return;
+            element.style.backgroundImage = `url("${url}")`;
+            element.textContent = "";
+        };
+        image.onerror = () => {
+            if (element.dataset.artUrl !== url) return;
+            element.style.backgroundImage = "";
+            element.textContent = "no_art";
+        };
+        image.src = url;
+    }
+
+    function updateAutomaticArtPreview(location) {
+        const filename = automaticArtFilename(location);
+        const url = automaticArtUrl(location);
+        artFilename.textContent = filename ? `automatic file: ${filename}` : "automatic file: none";
+        artPreview.removeAttribute("src");
+        artPreview.style.display = "none";
+        if (!url) return;
+
+        artPreview.onload = () => {
+            if (artPreview.dataset.artUrl === url) artPreview.style.display = "block";
+        };
+        artPreview.onerror = () => {
+            if (artPreview.dataset.artUrl === url) artPreview.style.display = "none";
+        };
+        artPreview.dataset.artUrl = url;
+        artPreview.src = url;
+    }
+
+    function createConnector(side = "right", offset = 0.5) {
+        return {
+            id: makeId("con"),
+            side,
+            offset: normalizeConnectorOffset(side, offset)
+        };
+    }
+
+    function defaultConnectors() {
+        return [
+            createConnector("top", 0.5),
+            createConnector("right", 0.5),
+            createConnector("bottom", 0.5),
+            createConnector("left", 0.5)
+        ];
+    }
+
+    function normalizeLocation(location) {
+        const normalized = {
+            id: String(location.id || makeId("loc")),
+            name: String(location.name || "unnamed_location"),
+            description: String(location.description || ""),
+            art: String(location.art || ""),
+            x: snap(Number.isFinite(location.x) ? location.x : 400),
+            y: snap(Number.isFinite(location.y) ? location.y : 300),
+            connectors: []
+        };
+
+        if (Array.isArray(location.connectors) && location.connectors.length > 0) {
+            normalized.connectors = location.connectors.map(raw => {
+                const side = ["top", "right", "bottom", "left"].includes(raw.side)
+                    ? raw.side
+                    : "right";
+                return {
+                    id: String(raw.id || makeId("con")),
+                    side,
+                    offset: normalizeConnectorOffset(
+                        side,
+                        Number.isFinite(raw.offset) ? raw.offset : 0.5
+                    )
+                };
+            });
+        } else {
+            normalized.connectors = defaultConnectors();
+        }
+
+        return normalized;
+    }
+
+    function migrateParsedData(parsed) {
+        const locations = Array.isArray(parsed.locations)
+            ? parsed.locations.map(normalizeLocation)
+            : [];
+        const locationMap = new Map(locations.map(location => [location.id, location]));
+        const links = [];
+
+        for (const rawLink of Array.isArray(parsed.links) ? parsed.links : []) {
+            const sourceLocation = locationMap.get(String(rawLink.source));
+            const targetLocation = locationMap.get(String(rawLink.target));
+            if (!sourceLocation || !targetLocation) continue;
+
+            let sourceConnectorId = String(rawLink.source_connector || "");
+            let targetConnectorId = String(rawLink.target_connector || "");
+
+            if (!sourceLocation.connectors.some(connector => connector.id === sourceConnectorId)) {
+                sourceConnectorId = sourceLocation.connectors[0]?.id || createAndAttachConnector(sourceLocation).id;
+            }
+            if (!targetLocation.connectors.some(connector => connector.id === targetConnectorId)) {
+                targetConnectorId = targetLocation.connectors[0]?.id || createAndAttachConnector(targetLocation).id;
+            }
+
+            links.push({
+                id: String(rawLink.id || makeId("link")),
+                source: sourceLocation.id,
+                source_connector: sourceConnectorId,
+                target: targetLocation.id,
+                target_connector: targetConnectorId
+            });
+        }
+
+        return { locations, links };
+    }
+
+    function createAndAttachConnector(location, side = "right", offset = 0.5) {
+        const connector = createConnector(side, offset);
+        location.connectors.push(connector);
+        return connector;
+    }
+
+    function rebuildIndexes() {
+        locationIndex = new Map();
+        connectorIndex = new Map();
+        linkIndex = new Map();
+        connectorLinkIndex = new Map();
+        locationLinkIndex = new Map();
+
+        for (const location of data.locations) {
+            locationIndex.set(location.id, location);
+            for (const connector of location.connectors) {
+                connectorIndex.set(connectorKey(location.id, connector.id), connector);
+            }
+        }
+
+        for (const link of data.links) {
+            linkIndex.set(link.id, link);
+
+            for (const locationId of [link.source, link.target]) {
+                let bucket = locationLinkIndex.get(locationId);
+                if (!bucket) {
+                    bucket = [];
+                    locationLinkIndex.set(locationId, bucket);
+                }
+                bucket.push(link);
+            }
+
+            for (const key of [
+                connectorKey(link.source, link.source_connector),
+                connectorKey(link.target, link.target_connector)
+            ]) {
+                let bucket = connectorLinkIndex.get(key);
+                if (!bucket) {
+                    bucket = [];
+                    connectorLinkIndex.set(key, bucket);
+                }
+                bucket.push(link);
+            }
+        }
+    }
+
+    function getLocation(id) {
+        return locationIndex.get(id) || null;
+    }
+
+    function getConnector(locationId, connectorId) {
+        return connectorIndex.get(connectorKey(locationId, connectorId)) || null;
+    }
+
+    function getLink(id) {
+        return linkIndex.get(id) || null;
+    }
+
+    function linksForLocation(locationId) {
+        return locationLinkIndex.get(locationId) || [];
+    }
+
+    function linksForConnector(locationId, connectorId) {
+        return connectorLinkIndex.get(connectorKey(locationId, connectorId)) || [];
+    }
+
+    function splitSharedConnectors() {
+        const used = new Set();
+
+        for (const link of data.links) {
+            for (const endpoint of ["source", "target"]) {
+                const locationId = link[endpoint];
+                const connectorField = `${endpoint}_connector`;
+                const connectorId = link[connectorField];
+                const key = connectorKey(locationId, connectorId);
+
+                if (!used.has(key)) {
+                    used.add(key);
+                    continue;
+                }
+
+                const location = data.locations.find(item => item.id === locationId);
+                const original = location?.connectors.find(item => item.id === connectorId);
+                if (!location || !original) continue;
+
+                const clone = createConnector(original.side, original.offset);
+                location.connectors.push(clone);
+                link[connectorField] = clone.id;
+                used.add(connectorKey(locationId, clone.id));
+            }
+        }
+    }
+
+    function connectorPoint(location, connector) {
+        const offset = clamp(connector.offset, 0, 1);
+
+        if (connector.side === "top") {
+            return { x: location.x + NODE_WIDTH * offset, y: location.y };
+        }
+        if (connector.side === "right") {
+            return { x: location.x + NODE_WIDTH, y: location.y + NODE_HEIGHT * offset };
+        }
+        if (connector.side === "bottom") {
+            return { x: location.x + NODE_WIDTH * offset, y: location.y + NODE_HEIGHT };
+        }
+        return { x: location.x, y: location.y + NODE_HEIGHT * offset };
+    }
+
+    function rectanglesOverlap(aX, aY, bX, bY, gap = 0) {
+        return (
+            aX < bX + NODE_WIDTH + gap &&
+            aX + NODE_WIDTH + gap > bX &&
+            aY < bY + NODE_HEIGHT + gap &&
+            aY + NODE_HEIGHT + gap > bY
+        );
+    }
+
+    function spatialCellKey(x, y) {
+        return `${x}:${y}`;
+    }
+
+    function spatialCellRange(x, y, width, height, padding = 0) {
+        const cell = Math.max(NODE_WIDTH, NODE_HEIGHT) + NODE_GAP;
+        return {
+            minX: Math.floor((x - padding) / cell),
+            maxX: Math.floor((x + width + padding) / cell),
+            minY: Math.floor((y - padding) / cell),
+            maxY: Math.floor((y + height + padding) / cell),
+            cell
+        };
+    }
+
+    function buildDragCollisionIndex(excludedLocationId) {
+        const grid = new Map();
+
+        for (const location of data.locations) {
+            if (location.id === excludedLocationId) continue;
+            const range = spatialCellRange(location.x, location.y, NODE_WIDTH, NODE_HEIGHT, NODE_GAP);
+
+            for (let cellX = range.minX; cellX <= range.maxX; cellX += 1) {
+                for (let cellY = range.minY; cellY <= range.maxY; cellY += 1) {
+                    const key = spatialCellKey(cellX, cellY);
+                    let bucket = grid.get(key);
+                    if (!bucket) {
+                        bucket = [];
+                        grid.set(key, bucket);
+                    }
+                    bucket.push(location);
+                }
+            }
+        }
+
+        return grid;
+    }
+
+    function dragPositionOverlapsTile(x, y) {
+        if (!dragCollisionIndex) return false;
+        const range = spatialCellRange(x, y, NODE_WIDTH, NODE_HEIGHT);
+        const checked = new Set();
+
+        for (let cellX = range.minX; cellX <= range.maxX; cellX += 1) {
+            for (let cellY = range.minY; cellY <= range.maxY; cellY += 1) {
+                const bucket = dragCollisionIndex.get(spatialCellKey(cellX, cellY));
+                if (!bucket) continue;
+
+                for (const other of bucket) {
+                    if (checked.has(other.id)) continue;
+                    checked.add(other.id);
+                    if (rectanglesOverlap(x, y, other.x, other.y, NODE_GAP)) return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    function positionOverlapsTile(locationId, x, y, locations = data.locations) {
+        return locations.some(other =>
+            other.id !== locationId && rectanglesOverlap(x, y, other.x, other.y, NODE_GAP)
+        );
+    }
+
+    function rebuildRoutePointOwners() {
+        routePointOwners = new Map();
+
+        for (const [linkId, route] of linkRoutes) {
+            for (const point of route.gridPoints) {
+                routePointOwners.set(gridKey(point.x, point.y), linkId);
+            }
+        }
+    }
+
+    function tileTouchesRoute(x, y, ignoredLinkIds = new Set()) {
+        const minX = x;
+        const maxX = x + NODE_WIDTH;
+        const minY = y;
+        const maxY = y + NODE_HEIGHT;
+
+        for (let px = minX; px <= maxX; px += ROUTE_GRID) {
+            for (let py = minY; py <= maxY; py += ROUTE_GRID) {
+                const owner = routePointOwners.get(gridKey(px, py));
+                if (owner && !ignoredLinkIds.has(owner)) return true;
+            }
+        }
+
+        return false;
+    }
+
+    function isLocationPositionFree(locationId, x, y, locations = data.locations, ignoredLinkIds = new Set(), checkRoutes = true) {
+        if (positionOverlapsTile(locationId, x, y, locations)) return false;
+        if (checkRoutes && tileTouchesRoute(x, y, ignoredLinkIds)) return false;
+        return true;
+    }
+
+    function findNearestFreePosition(desiredX, desiredY, locationId = null, locations = data.locations, checkRoutes = true) {
+        const origin = { x: snap(desiredX), y: snap(desiredY) };
+        if (isLocationPositionFree(locationId, origin.x, origin.y, locations, new Set(), checkRoutes)) {
+            return origin;
+        }
+
+        for (let radius = 1; ; radius += 1) {
+            for (let dx = -radius; dx <= radius; dx += 1) {
+                const top = { x: origin.x + dx * TILE_GRID, y: origin.y - radius * TILE_GRID };
+                const bottom = { x: origin.x + dx * TILE_GRID, y: origin.y + radius * TILE_GRID };
+
+                if (isLocationPositionFree(locationId, top.x, top.y, locations, new Set(), checkRoutes)) return top;
+                if (isLocationPositionFree(locationId, bottom.x, bottom.y, locations, new Set(), checkRoutes)) return bottom;
+            }
+
+            for (let dy = -radius + 1; dy <= radius - 1; dy += 1) {
+                const left = { x: origin.x - radius * TILE_GRID, y: origin.y + dy * TILE_GRID };
+                const right = { x: origin.x + radius * TILE_GRID, y: origin.y + dy * TILE_GRID };
+
+                if (isLocationPositionFree(locationId, left.x, left.y, locations, new Set(), checkRoutes)) return left;
+                if (isLocationPositionFree(locationId, right.x, right.y, locations, new Set(), checkRoutes)) return right;
+            }
+        }
+    }
+
+    function resolveAllLocationOverlaps() {
+        const placed = [];
+
+        for (const location of data.locations) {
+            location.x = snap(location.x);
+            location.y = snap(location.y);
+
+            if (positionOverlapsTile(location.id, location.x, location.y, placed)) {
+                const repaired = findNearestFreePosition(
+                    location.x,
+                    location.y,
+                    location.id,
+                    placed,
+                    false
+                );
+                location.x = repaired.x;
+                location.y = repaired.y;
+            }
+
+            placed.push(location);
+        }
+    }
+
+    function buildTileBlockedPoints() {
+        const blocked = new Set();
+
+        for (const location of data.locations) {
+            for (let x = location.x; x <= location.x + NODE_WIDTH; x += ROUTE_GRID) {
+                for (let y = location.y; y <= location.y + NODE_HEIGHT; y += ROUTE_GRID) {
+                    blocked.add(gridKey(x, y));
+                }
+            }
+        }
+
+        return blocked;
+    }
+
+    function connectorPlacementCandidates(location, connector, targetLocation) {
+        const target = {
+            x: targetLocation.x + NODE_WIDTH / 2,
+            y: targetLocation.y + NODE_HEIGHT / 2
+        };
+        const currentPoint = connectorPoint(location, connector);
+        const candidates = [];
+
+        for (const side of ["top", "right", "bottom", "left"]) {
+            const length = sideLength(side);
+            for (let pixel = ROUTE_GRID; pixel <= length - ROUTE_GRID; pixel += ROUTE_GRID) {
+                const offset = pixel / length;
+                const testConnector = { side, offset };
+                const point = connectorPoint(location, testConnector);
+                let occupiedByConnector = false;
+
+                for (const other of location.connectors) {
+                    if (other.id === connector.id) continue;
+                    const otherPoint = connectorPoint(location, other);
+                    if (otherPoint.x === point.x && otherPoint.y === point.y) {
+                        occupiedByConnector = true;
+                        break;
+                    }
+                }
+
+                if (occupiedByConnector) continue;
+
+                const vector = sideVector(side);
+                const dx = target.x - point.x;
+                const dy = target.y - point.y;
+                const distance = Math.hypot(dx, dy) || 1;
+                const alignment = (vector.x * dx + vector.y * dy) / distance;
+                const movement = Math.hypot(point.x - currentPoint.x, point.y - currentPoint.y);
+                const score = distance + (1 - alignment) * 180 + movement * 0.08;
+
+                candidates.push({ side, offset, point, score });
+            }
+        }
+
+        candidates.sort((a, b) => a.score - b.score);
+        return candidates;
+    }
+
+    class MinHeap {
+        constructor() {
+            this.items = [];
+        }
+
+        get size() {
+            return this.items.length;
+        }
+
+        push(item) {
+            const items = this.items;
+            items.push(item);
+            let index = items.length - 1;
+
+            while (index > 0) {
+                const parent = Math.floor((index - 1) / 2);
+                if (items[parent].f <= item.f) break;
+                items[index] = items[parent];
+                index = parent;
+            }
+            items[index] = item;
+        }
+
+        pop() {
+            const items = this.items;
+            if (items.length === 0) return null;
+            const root = items[0];
+            const tail = items.pop();
+            if (items.length === 0) return root;
+
+            let index = 0;
+            while (true) {
+                const left = index * 2 + 1;
+                const right = left + 1;
+                if (left >= items.length) break;
+
+                let child = left;
+                if (right < items.length && items[right].f < items[left].f) child = right;
+                if (items[child].f >= tail.f) break;
+
+                items[index] = items[child];
+                index = child;
+            }
+            items[index] = tail;
+            return root;
+        }
+    }
+
+    function aStarRoute(start, goal, blockedTiles, occupiedPoints) {
+        const startGX = Math.round(start.x / ROUTE_GRID);
+        const startGY = Math.round(start.y / ROUTE_GRID);
+        const goalGX = Math.round(goal.x / ROUTE_GRID);
+        const goalGY = Math.round(goal.y / ROUTE_GRID);
+        const directions = [
+            { x: 1, y: 0 },
+            { x: 0, y: 1 },
+            { x: -1, y: 0 },
+            { x: 0, y: -1 }
+        ];
+        const heap = new MinHeap();
+        const best = new Map();
+        const parents = new Map();
+        const states = new Map();
+
+        const startKey = `${startGX}:${startGY}:-1`;
+        const initial = { gx: startGX, gy: startGY, dir: -1, g: 0, f: 0, key: startKey };
+        initial.f = Math.abs(goalGX - startGX) + Math.abs(goalGY - startGY);
+        heap.push(initial);
+        best.set(startKey, 0);
+        states.set(startKey, initial);
+
+        let expansions = 0;
+        let finalKey = null;
+
+        while (heap.size > 0 && expansions < MAX_ROUTE_EXPANSIONS) {
+            const current = heap.pop();
+            if (!current || current.g !== best.get(current.key)) continue;
+
+            if (current.gx === goalGX && current.gy === goalGY) {
+                finalKey = current.key;
+                break;
+            }
+
+            expansions += 1;
+
+            for (let dir = 0; dir < directions.length; dir += 1) {
+                if (current.dir >= 0 && dir === (current.dir + 2) % 4) continue;
+
+                const nextGX = current.gx + directions[dir].x;
+                const nextGY = current.gy + directions[dir].y;
+                const x = nextGX * ROUTE_GRID;
+                const y = nextGY * ROUTE_GRID;
+                const pointKey = gridKey(x, y);
+
+                if (blockedTiles.has(pointKey) || occupiedPoints.has(pointKey)) continue;
+
+                const turnCost = current.dir >= 0 && current.dir !== dir ? 0.32 : 0;
+                const nextG = current.g + 1 + turnCost;
+                const nextKey = `${nextGX}:${nextGY}:${dir}`;
+                if (nextG >= (best.get(nextKey) ?? Number.POSITIVE_INFINITY)) continue;
+
+                const heuristic = Math.abs(goalGX - nextGX) + Math.abs(goalGY - nextGY);
+                const state = {
+                    gx: nextGX,
+                    gy: nextGY,
+                    dir,
+                    g: nextG,
+                    f: nextG + heuristic,
+                    key: nextKey
+                };
+
+                best.set(nextKey, nextG);
+                parents.set(nextKey, current.key);
+                states.set(nextKey, state);
+                heap.push(state);
+            }
+        }
+
+        if (!finalKey) return null;
+
+        const reversed = [];
+        let key = finalKey;
+        while (key) {
+            const state = states.get(key);
+            if (!state) break;
+            reversed.push({ x: state.gx * ROUTE_GRID, y: state.gy * ROUTE_GRID });
+            key = parents.get(key) || null;
+        }
+
+        reversed.reverse();
+        return reversed;
+    }
+
+    function simplifyRoute(points) {
+        if (points.length <= 2) return points.slice();
+        const result = [points[0]];
+
+        for (let index = 1; index < points.length - 1; index += 1) {
+            const previous = result[result.length - 1];
+            const current = points[index];
+            const next = points[index + 1];
+            const sameX = previous.x === current.x && current.x === next.x;
+            const sameY = previous.y === current.y && current.y === next.y;
+            if (!sameX && !sameY) result.push(current);
+        }
+
+        result.push(points[points.length - 1]);
+        return result;
+    }
+
+    function routeOneLink(link, occupiedPoints, blockedTiles) {
+        const sourceLocation = getLocation(link.source);
+        const targetLocation = getLocation(link.target);
+        const sourceConnector = getConnector(link.source, link.source_connector);
+        const targetConnector = getConnector(link.target, link.target_connector);
+        if (!sourceLocation || !targetLocation || !sourceConnector || !targetConnector) return null;
+
+        const sourceCandidates = connectorPlacementCandidates(sourceLocation, sourceConnector, targetLocation).slice(0, 10);
+        const targetCandidates = connectorPlacementCandidates(targetLocation, targetConnector, sourceLocation).slice(0, 10);
+        const pairs = [];
+
+        for (const source of sourceCandidates) {
+            for (const target of targetCandidates) {
+                pairs.push({ source, target, score: source.score + target.score });
+            }
+        }
+
+        pairs.sort((a, b) => a.score - b.score);
+
+        for (const pair of pairs.slice(0, MAX_PORT_PAIRS)) {
+            const sourceVector = sideVector(pair.source.side);
+            const targetVector = sideVector(pair.target.side);
+            const sourceAnchor = {
+                x: pair.source.point.x + sourceVector.x * ROUTE_GRID,
+                y: pair.source.point.y + sourceVector.y * ROUTE_GRID
+            };
+            const targetAnchor = {
+                x: pair.target.point.x + targetVector.x * ROUTE_GRID,
+                y: pair.target.point.y + targetVector.y * ROUTE_GRID
+            };
+
+            const endpointKeys = [
+                gridKey(pair.source.point.x, pair.source.point.y),
+                gridKey(sourceAnchor.x, sourceAnchor.y),
+                gridKey(targetAnchor.x, targetAnchor.y),
+                gridKey(pair.target.point.x, pair.target.point.y)
+            ];
+
+            if (endpointKeys.some(key => occupiedPoints.has(key))) continue;
+            if (blockedTiles.has(gridKey(sourceAnchor.x, sourceAnchor.y))) continue;
+            if (blockedTiles.has(gridKey(targetAnchor.x, targetAnchor.y))) continue;
+
+            const middle = aStarRoute(sourceAnchor, targetAnchor, blockedTiles, occupiedPoints);
+            if (!middle) continue;
+
+            const dense = [pair.source.point, ...middle, pair.target.point];
+            const uniqueDense = dense.filter((point, index) =>
+                index === 0 || point.x !== dense[index - 1].x || point.y !== dense[index - 1].y
+            );
+
+            let conflict = false;
+            for (const point of uniqueDense) {
+                if (occupiedPoints.has(gridKey(point.x, point.y))) {
+                    conflict = true;
+                    break;
+                }
+            }
+            if (conflict) continue;
+
+            sourceConnector.side = pair.source.side;
+            sourceConnector.offset = pair.source.offset;
+            targetConnector.side = pair.target.side;
+            targetConnector.offset = pair.target.offset;
+
+            return {
+                gridPoints: uniqueDense,
+                drawPoints: simplifyRoute(uniqueDense)
+            };
+        }
+
+        return null;
+    }
+
+    function snapshotConnectorPlacements(linkIds) {
+        const snapshot = new Map();
+
+        for (const linkId of linkIds) {
+            const link = getLink(linkId);
+            if (!link) continue;
+
+            for (const [locationId, connectorId] of [
+                [link.source, link.source_connector],
+                [link.target, link.target_connector]
+            ]) {
+                const key = connectorKey(locationId, connectorId);
+                if (snapshot.has(key)) continue;
+                const connector = getConnector(locationId, connectorId);
+                if (connector) snapshot.set(key, { connector, side: connector.side, offset: connector.offset });
+            }
+        }
+
+        return snapshot;
+    }
+
+    function restoreConnectorPlacements(snapshot) {
+        for (const item of snapshot.values()) {
+            item.connector.side = item.side;
+            item.connector.offset = item.offset;
+        }
+    }
+
+    function routeOrderings(links) {
+        const distance = link => {
+            const a = getLocation(link.source);
+            const b = getLocation(link.target);
+            if (!a || !b) return 0;
+            return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+        };
+
+        return [
+            links.slice().sort((a, b) => distance(a) - distance(b)),
+            links.slice(),
+            links.slice().sort((a, b) => distance(b) - distance(a))
+        ];
+    }
+
+    function rerouteLinks(linkIds) {
+        const ids = [...new Set(linkIds)].filter(id => getLink(id));
+        if (ids.length === 0) {
+            rebuildRoutePointOwners();
+            return true;
+        }
+
+        const idSet = new Set(ids);
+        const oldRoutes = new Map(linkRoutes);
+        const connectorSnapshot = snapshotConnectorPlacements(ids);
+        const baseRoutes = new Map([...linkRoutes].filter(([id]) => !idSet.has(id)));
+        const links = ids.map(id => getLink(id)).filter(Boolean);
+        const blockedTiles = buildTileBlockedPoints();
+
+        for (const ordering of routeOrderings(links)) {
+            restoreConnectorPlacements(connectorSnapshot);
+            const trialRoutes = new Map(baseRoutes);
+            const occupied = new Set();
+
+            for (const route of trialRoutes.values()) {
+                for (const point of route.gridPoints) occupied.add(gridKey(point.x, point.y));
+            }
+
+            let success = true;
+
+            for (const link of ordering) {
+                const route = routeOneLink(link, occupied, blockedTiles);
+                if (!route) {
+                    success = false;
+                    break;
+                }
+
+                trialRoutes.set(link.id, route);
+                for (const point of route.gridPoints) occupied.add(gridKey(point.x, point.y));
+            }
+
+            if (success) {
+                linkRoutes = trialRoutes;
+                rebuildRoutePointOwners();
+                return true;
+            }
+        }
+
+        restoreConnectorPlacements(connectorSnapshot);
+        linkRoutes = oldRoutes;
+        rebuildRoutePointOwners();
+        return false;
+    }
+
+    function attemptRouteAllWithSpacingRepair() {
+        const ids = data.links.map(link => link.id);
+        linkRoutes = new Map();
+        rebuildRoutePointOwners();
+        if (rerouteLinks(ids)) return true;
+
+        const originalPositions = data.locations.map(location => ({ location, x: location.x, y: location.y }));
+        if (data.locations.length === 0) return true;
+
+        const centerX = data.locations.reduce((sum, location) => sum + location.x, 0) / data.locations.length;
+        const centerY = data.locations.reduce((sum, location) => sum + location.y, 0) / data.locations.length;
+
+        for (const factor of [1.35, 1.7, 2.2]) {
+            for (const item of originalPositions) {
+                item.location.x = snap(centerX + (item.x - centerX) * factor);
+                item.location.y = snap(centerY + (item.y - centerY) * factor);
+            }
+            resolveAllLocationOverlaps();
+            rebuildIndexes();
+            linkRoutes = new Map();
+            if (rerouteLinks(ids)) return true;
+        }
+
+        for (const item of originalPositions) {
+            item.location.x = item.x;
+            item.location.y = item.y;
+        }
+        resolveAllLocationOverlaps();
+        rebuildIndexes();
+        linkRoutes = new Map();
+        rebuildRoutePointOwners();
+        return false;
+    }
+
+    function routePath(link) {
+        const route = linkRoutes.get(link.id);
+        if (!route || route.drawPoints.length === 0) return "";
+        return route.drawPoints.map((point, index) =>
+            `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`
+        ).join(" ");
+    }
+
+    function save() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        updateStatus();
+    }
+
+    function load() {
+        let raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+            for (const key of LEGACY_STORAGE_KEYS) {
+                raw = localStorage.getItem(key);
+                if (raw) break;
+            }
+        }
+
+        if (!raw) {
+            data = migrateParsedData(JSON.parse(JSON.stringify(PRESET_MAP)));
+            splitSharedConnectors();
+            resolveAllLocationOverlaps();
+            rebuildIndexes();
+            linkRoutes = new Map();
+            rebuildRoutePointOwners();
+
+            if (!attemptRouteAllWithSpacingRepair()) {
+                throw new Error("Preset map contains links that cannot be routed without crossings.");
+            }
+
+            selectedLocationId = "loc_001";
+            view = { x: 740, y: 470, scale: 0.10 };
+            save();
+            renderAll();
+            return;
+        }
+
+        try {
+            data = migrateParsedData(JSON.parse(raw));
+            splitSharedConnectors();
+            resolveAllLocationOverlaps();
+            rebuildIndexes();
+
+            if (!attemptRouteAllWithSpacingRepair()) {
+                data.links = [];
+                linkRoutes = new Map();
+                rebuildIndexes();
+                rebuildRoutePointOwners();
+                showToast("legacy_links_removed_no_legal_route");
+            }
+
+            save();
+            renderAll();
+        } catch (error) {
+            console.error(error);
+            data = { locations: [], links: [] };
+            linkRoutes = new Map();
+            createInitialLocation();
+            showToast("saved_data_was_invalid");
+        }
+    }
+
+    function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    function updateStatus() {
+        const connectorCount = data.locations.reduce((sum, location) => sum + location.connectors.length, 0);
+        status.textContent = `${data.locations.length} locations · ${connectorCount} connectors · ${data.links.length} links`;
+    }
+
+    function createInitialLocation() {
+        const location = {
+            id: makeId("loc"),
+            name: "first_location",
+            description: "",
+            art: "",
+            x: 640,
+            y: 420,
+            connectors: defaultConnectors()
+        };
+
+        data.locations.push(location);
+        selectedLocationId = location.id;
+        rebuildIndexes();
+        save();
+        renderAll();
+    }
+
+    function screenToWorld(screenX, screenY) {
+        return {
+            x: (screenX - view.x) / view.scale,
+            y: (screenY - view.y) / view.scale
+        };
+    }
+
+    function applyView() {
+        workspace.style.transform = `translate(${view.x}px, ${view.y}px) scale(${view.scale})`;
+        linksWorld.setAttribute("transform", `translate(${view.x} ${view.y}) scale(${view.scale})`);
+        const gridSize = TILE_GRID * view.scale;
+        workspaceWrap.style.backgroundSize = `${gridSize}px ${gridSize}px`;
+        workspaceWrap.style.backgroundPosition = `${view.x}px ${view.y}px`;
+        zoomResetBtn.textContent = `${Math.round(view.scale * 100)}%`;
+    }
+
+    function renderAll() {
+        rebuildIndexes();
+        renderNodes();
+        renderLinks();
+        updateStatus();
+        applySelectionClasses();
+        applyView();
+    }
+
+    function renderNodes() {
+        nodesLayer.innerHTML = "";
+
+        for (const location of data.locations) {
+            const node = document.createElement("div");
+            node.className = "node";
+            node.dataset.id = location.id;
+            node.style.left = `${location.x}px`;
+            node.style.top = `${location.y}px`;
+
+            const art = document.createElement("div");
+            art.className = "node_art";
+            applyAutomaticArt(art, location);
+
+            const name = document.createElement("div");
+            name.className = "node_name";
+            name.textContent = location.name || "unnamed_location";
+
+            const hint = document.createElement("div");
+            hint.className = "node_hint";
+            hint.textContent = "double-click edge to add connector";
+
+            node.append(art, name, hint);
+
+            for (const connector of location.connectors) {
+                const localPoint = connectorPoint({ x: 0, y: 0 }, connector);
+                const connectorElement = document.createElement("div");
+                connectorElement.className = "connector";
+                connectorElement.dataset.connectorId = connector.id;
+                connectorElement.style.left = `${localPoint.x}px`;
+                connectorElement.style.top = `${localPoint.y}px`;
+                connectorElement.title = "drag to create link";
+                node.appendChild(connectorElement);
+            }
+
+            nodesLayer.appendChild(node);
+        }
+    }
+
+    function renderLinks() {
+        linkElementIndex = new Map();
+        for (const group of [...linksWorld.querySelectorAll(".link-group")]) group.remove();
+
+        for (const link of data.links) {
+            const path = routePath(link);
+            if (!path) continue;
+
+            const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            group.classList.add("link-group");
+            group.dataset.id = link.id;
+
+            const visible = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            visible.classList.add("link-line");
+            visible.setAttribute("d", path);
+
+            const hit = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            hit.classList.add("link-hit");
+            hit.setAttribute("d", path);
+
+            group.append(visible, hit);
+            linksWorld.insertBefore(group, tempLink);
+            linkElementIndex.set(link.id, group);
+        }
+
+        applySelectionClasses();
+    }
+
+    function applySelectionClasses() {
+        for (const node of nodesLayer.querySelectorAll(".node")) {
+            node.classList.toggle("selected", node.dataset.id === selectedLocationId);
+
+            for (const connectorElement of node.querySelectorAll(".connector")) {
+                const isSelected = selectedConnector &&
+                    selectedConnector.locationId === node.dataset.id &&
+                    selectedConnector.connectorId === connectorElement.dataset.connectorId;
+                connectorElement.classList.toggle("selected", Boolean(isSelected));
+            }
+        }
+
+        for (const group of linksWorld.querySelectorAll(".link-group")) {
+            group.classList.toggle("selected", group.dataset.id === selectedLinkId);
+        }
+    }
+
+    function selectLocation(id) {
+        selectedLocationId = id;
+        selectedConnector = null;
+        selectedLinkId = null;
+        updateEditor();
+        updateConnectorEditor();
+        updateLinkEditor();
+        applySelectionClasses();
+    }
+
+    function selectConnector(locationId, connectorId) {
+        selectedLocationId = locationId;
+        selectedConnector = { locationId, connectorId };
+        selectedLinkId = null;
+        updateEditor();
+        updateConnectorEditor();
+        updateLinkEditor();
+        applySelectionClasses();
+    }
+
+    function selectLink(id) {
+        selectedLinkId = id;
+        selectedLocationId = null;
+        selectedConnector = null;
+        updateEditor();
+        updateConnectorEditor();
+        updateLinkEditor();
+        applySelectionClasses();
+    }
+
+    function updateEditor() {
+        const location = getLocation(selectedLocationId);
+        if (!location) {
+            emptyEditor.hidden = false;
+            locationEditor.hidden = true;
+            return;
+        }
+
+        emptyEditor.hidden = true;
+        locationEditor.hidden = false;
+        nameInput.value = location.name;
+        descriptionInput.value = location.description || "";
+
+        updateAutomaticArtPreview(location);
+    }
+
+    function updateConnectorEditor() {
+        if (!selectedConnector) {
+            selectedConnectorPanel.style.display = "none";
+            return;
+        }
+
+        const location = getLocation(selectedConnector.locationId);
+        const connector = getConnector(selectedConnector.locationId, selectedConnector.connectorId);
+        if (!location || !connector) {
+            selectedConnector = null;
+            selectedConnectorPanel.style.display = "none";
+            return;
+        }
+
+        const linkCount = linksForConnector(location.id, connector.id).length;
+        connectorSummary.textContent = `${location.name} · ${connector.side} · ${linkCount} link${linkCount === 1 ? "" : "s"}`;
+        selectedConnectorPanel.style.display = "block";
+    }
+
+    function updateLinkEditor() {
+        const link = getLink(selectedLinkId);
+        if (!link) {
+            selectedLinkPanel.style.display = "none";
+            return;
+        }
+
+        const source = getLocation(link.source);
+        const target = getLocation(link.target);
+        selectedLinkPanel.style.display = "block";
+        linkSummary.textContent = `${source?.name || "missing"} ↔ ${target?.name || "missing"}`;
+    }
+
+    function updateSelectedLocation(mutator) {
+        const location = getLocation(selectedLocationId);
+        if (!location) return;
+        mutator(location);
+        save();
+
+        const node = nodesLayer.querySelector(`.node[data-id="${CSS.escape(location.id)}"]`);
+        if (!node) return;
+        node.querySelector(".node_name").textContent = location.name || "unnamed_location";
+
+        if (nameInput === document.activeElement) {
+            const artElement = node.querySelector(".node_art");
+            applyAutomaticArt(artElement, location);
+            updateAutomaticArtPreview(location);
+        }
+    }
+
+    function addLocation() {
+        const center = screenToWorld(workspaceWrap.clientWidth * 0.5, workspaceWrap.clientHeight * 0.5);
+        const placement = findNearestFreePosition(center.x - NODE_WIDTH / 2, center.y - NODE_HEIGHT / 2);
+        const location = {
+            id: makeId("loc"),
+            name: `Location ${data.locations.length + 1}`,
+            description: "",
+            art: "",
+            x: placement.x,
+            y: placement.y,
+            connectors: defaultConnectors()
+        };
+
+        data.locations.push(location);
+        selectedLocationId = location.id;
+        selectedConnector = null;
+        selectedLinkId = null;
+        rebuildIndexes();
+        save();
+        renderAll();
+        updateEditor();
+        updateConnectorEditor();
+        updateLinkEditor();
+        nameInput.focus();
+        nameInput.select();
+    }
+
+    function nearestEdgeConnectorPosition(location, worldX, worldY) {
+        const localX = clamp(worldX - location.x, 0, NODE_WIDTH);
+        const localY = clamp(worldY - location.y, 0, NODE_HEIGHT);
+        const distances = [
+            { side: "top", distance: localY },
+            { side: "right", distance: NODE_WIDTH - localX },
+            { side: "bottom", distance: NODE_HEIGHT - localY },
+            { side: "left", distance: localX }
+        ].sort((a, b) => a.distance - b.distance);
+        const side = distances[0].side;
+        const rawOffset = side === "top" || side === "bottom"
+            ? localX / NODE_WIDTH
+            : localY / NODE_HEIGHT;
+        return { side, offset: normalizeConnectorOffset(side, rawOffset) };
+    }
+
+    function addConnectorToLocation(locationId, side = "right", offset = 0.5, selectIt = true) {
+        const location = getLocation(locationId);
+        if (!location) return null;
+        const connector = createConnector(side, offset);
+        location.connectors.push(connector);
+        rebuildIndexes();
+
+        if (selectIt) {
+            selectedLocationId = locationId;
+            selectedConnector = { locationId, connectorId: connector.id };
+            selectedLinkId = null;
+        }
+
+        save();
+        renderNodes();
+        updateEditor();
+        updateConnectorEditor();
+        updateLinkEditor();
+        applySelectionClasses();
+        return connector;
+    }
+
+    function removeLinksByIds(ids) {
+        const idSet = new Set(ids);
+        data.links = data.links.filter(link => !idSet.has(link.id));
+        for (const id of idSet) linkRoutes.delete(id);
+        rebuildIndexes();
+        rebuildRoutePointOwners();
+    }
+
+    function deleteSelectedLocation() {
+        if (!selectedLocationId) return;
+        const id = selectedLocationId;
+        const linkIds = linksForLocation(id).map(link => link.id);
+        data.locations = data.locations.filter(location => location.id !== id);
+        removeLinksByIds(linkIds);
+        selectedLocationId = null;
+        selectedConnector = null;
+        selectedLinkId = null;
+        save();
+        renderAll();
+        updateEditor();
+        updateConnectorEditor();
+        updateLinkEditor();
+    }
+
+    function deleteSelectedConnector() {
+        if (!selectedConnector) return;
+        const { locationId, connectorId } = selectedConnector;
+        const location = getLocation(locationId);
+        if (!location) return;
+        const linkIds = linksForConnector(locationId, connectorId).map(link => link.id);
+        location.connectors = location.connectors.filter(connector => connector.id !== connectorId);
+        removeLinksByIds(linkIds);
+        selectedConnector = null;
+        save();
+        renderAll();
+        updateEditor();
+        updateConnectorEditor();
+        updateLinkEditor();
+    }
+
+    function deleteSelectedLink() {
+        if (!selectedLinkId) return;
+        removeLinksByIds([selectedLinkId]);
+        selectedLinkId = null;
+        save();
+        renderAll();
+        updateLinkEditor();
+    }
+
+    function ensureUnusedConnector(locationId, connectorId) {
+        const location = getLocation(locationId);
+        const connector = getConnector(locationId, connectorId);
+        if (!location || !connector) return null;
+        if (linksForConnector(locationId, connectorId).length === 0) {
+            return { connectorId, createdId: null };
+        }
+
+        const clone = createConnector(connector.side, connector.offset);
+        location.connectors.push(clone);
+        return { connectorId: clone.id, createdId: clone.id };
+    }
+
+    function createLink(sourceLocationId, sourceConnectorId, targetLocationId, targetConnectorId) {
+        if (!sourceLocationId || !sourceConnectorId || !targetLocationId || !targetConnectorId) return false;
+        if (sourceLocationId === targetLocationId && sourceConnectorId === targetConnectorId) return false;
+
+        const exists = data.links.some(link =>
+            (
+                link.source === sourceLocationId &&
+                link.source_connector === sourceConnectorId &&
+                link.target === targetLocationId &&
+                link.target_connector === targetConnectorId
+            ) ||
+            (
+                link.source === targetLocationId &&
+                link.source_connector === targetConnectorId &&
+                link.target === sourceLocationId &&
+                link.target_connector === sourceConnectorId
+            )
+        );
+        if (exists) {
+            showToast("link_already_exists");
+            return false;
+        }
+
+        const sourceReady = ensureUnusedConnector(sourceLocationId, sourceConnectorId);
+        rebuildIndexes();
+        const targetReady = ensureUnusedConnector(targetLocationId, targetConnectorId);
+        if (!sourceReady || !targetReady) return false;
+
+        const createdConnectorIds = [sourceReady.createdId, targetReady.createdId].filter(Boolean);
+        const link = {
+            id: makeId("link"),
+            source: sourceLocationId,
+            source_connector: sourceReady.connectorId,
+            target: targetLocationId,
+            target_connector: targetReady.connectorId
+        };
+
+        data.links.push(link);
+        rebuildIndexes();
+
+        if (!rerouteLinks([link.id])) {
+            data.links = data.links.filter(item => item.id !== link.id);
+            for (const location of data.locations) {
+                location.connectors = location.connectors.filter(connector => !createdConnectorIds.includes(connector.id));
+            }
+            rebuildIndexes();
+            rebuildRoutePointOwners();
+            showToast("link_rejected_no_non_overlapping_route");
+            renderAll();
+            return false;
+        }
+
+        selectedLinkId = link.id;
+        selectedLocationId = null;
+        selectedConnector = null;
+        save();
+        renderAll();
+        updateEditor();
+        updateConnectorEditor();
+        updateLinkEditor();
+        return true;
+    }
+
+    function hideLinks(linkIds, hidden) {
+        for (const id of linkIds) {
+            const group = linkElementIndex.get(id);
+            if (group) group.style.display = hidden ? "none" : "";
+        }
+    }
+
+    function beginNodeDrag(event, node) {
+        if (event.button !== 0 || event.target.classList.contains("connector")) return;
+        const location = getLocation(node.dataset.id);
+        if (!location) return;
+        selectLocation(location.id);
+
+        const rect = workspaceWrap.getBoundingClientRect();
+        const world = screenToWorld(event.clientX - rect.left, event.clientY - rect.top);
+        const connectedLinkIds = linksForLocation(location.id).map(link => link.id);
+
+        nodeDrag = {
+            locationId: location.id,
+            location,
+            offsetX: world.x - location.x,
+            offsetY: world.y - location.y,
+            originalX: location.x,
+            originalY: location.y,
+            connectedLinkIds,
+            lastX: location.x,
+            lastY: location.y
+        };
+        dragCollisionIndex = buildDragCollisionIndex(location.id);
+        hideLinks(connectedLinkIds, true);
+        event.preventDefault();
+    }
+
+    function moveNode(event) {
+        if (!nodeDrag) return;
+        const location = nodeDrag.location;
+        const rect = workspaceWrap.getBoundingClientRect();
+        const world = screenToWorld(event.clientX - rect.left, event.clientY - rect.top);
+        const desiredX = snap(world.x - nodeDrag.offsetX);
+        const desiredY = snap(world.y - nodeDrag.offsetY);
+
+        if (desiredX === nodeDrag.lastX && desiredY === nodeDrag.lastY) return;
+        if (dragPositionOverlapsTile(desiredX, desiredY)) return;
+        if (tileTouchesRoute(desiredX, desiredY, new Set(nodeDrag.connectedLinkIds))) return;
+
+        location.x = desiredX;
+        location.y = desiredY;
+        nodeDrag.lastX = desiredX;
+        nodeDrag.lastY = desiredY;
+
+        const node = nodesLayer.querySelector(`.node[data-id="${CSS.escape(location.id)}"]`);
+        if (node) {
+            node.style.left = `${location.x}px`;
+            node.style.top = `${location.y}px`;
+        }
+    }
+
+    function endNodeDrag() {
+        if (!nodeDrag) return;
+        const drag = nodeDrag;
+        nodeDrag = null;
+        dragCollisionIndex = null;
+
+        let success = true;
+        if (drag.connectedLinkIds.length > 0) {
+            success = rerouteLinks(drag.connectedLinkIds);
+        }
+
+        if (!success) {
+            drag.location.x = drag.originalX;
+            drag.location.y = drag.originalY;
+            showToast("move_rejected_no_non_overlapping_route");
+        }
+
+        save();
+        renderAll();
+    }
+
+    function beginLinkDrag(event, connectorElement) {
+        if (event.button !== 0) return;
+        const node = connectorElement.closest(".node");
+        const locationId = node?.dataset.id;
+        const connectorId = connectorElement.dataset.connectorId;
+        const location = getLocation(locationId);
+        const connector = getConnector(locationId, connectorId);
+        if (!location || !connector) return;
+
+        selectConnector(locationId, connectorId);
+        linkDrag = {
+            sourceLocationId: locationId,
+            sourceConnectorId: connectorId,
+            startClientX: event.clientX,
+            startClientY: event.clientY,
+            moved: false
+        };
+
+        const point = connectorPoint(location, connector);
+        tempLink.setAttribute("d", `M ${point.x} ${point.y} L ${point.x} ${point.y}`);
+        tempLink.style.display = "block";
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    function moveLink(event) {
+        if (!linkDrag) return;
+        if (Math.abs(event.clientX - linkDrag.startClientX) > 3 || Math.abs(event.clientY - linkDrag.startClientY) > 3) {
+            linkDrag.moved = true;
+        }
+
+        const sourceLocation = getLocation(linkDrag.sourceLocationId);
+        const sourceConnector = getConnector(linkDrag.sourceLocationId, linkDrag.sourceConnectorId);
+        if (!sourceLocation || !sourceConnector) return;
+
+        const rect = workspaceWrap.getBoundingClientRect();
+        const world = screenToWorld(event.clientX - rect.left, event.clientY - rect.top);
+        const point = connectorPoint(sourceLocation, sourceConnector);
+        tempLink.setAttribute("d", `M ${point.x} ${point.y} L ${world.x} ${world.y}`);
+    }
+
+    function endLinkDrag(event) {
+        if (!linkDrag) return;
+        const drag = linkDrag;
+        linkDrag = null;
+        tempLink.style.display = "none";
+
+        if (!drag.moved) {
+            selectConnector(drag.sourceLocationId, drag.sourceConnectorId);
+            return;
+        }
+
+        const element = document.elementFromPoint(event.clientX, event.clientY);
+        const targetConnectorElement = element?.closest?.(".connector");
+
+        if (targetConnectorElement) {
+            const targetNode = targetConnectorElement.closest(".node");
+            createLink(
+                drag.sourceLocationId,
+                drag.sourceConnectorId,
+                targetNode?.dataset.id,
+                targetConnectorElement.dataset.connectorId
+            );
+            return;
+        }
+
+        const targetNode = element?.closest?.(".node");
+        if (!targetNode) return;
+        const targetLocationId = targetNode.dataset.id;
+        if (targetLocationId === drag.sourceLocationId) return;
+        const targetLocation = getLocation(targetLocationId);
+        if (!targetLocation) return;
+
+        const rect = workspaceWrap.getBoundingClientRect();
+        const world = screenToWorld(event.clientX - rect.left, event.clientY - rect.top);
+        const placement = nearestEdgeConnectorPosition(targetLocation, world.x, world.y);
+        const connector = createAndAttachConnector(targetLocation, placement.side, placement.offset);
+        rebuildIndexes();
+
+        if (!createLink(drag.sourceLocationId, drag.sourceConnectorId, targetLocationId, connector.id)) {
+            targetLocation.connectors = targetLocation.connectors.filter(item => item.id !== connector.id);
+            rebuildIndexes();
+            renderAll();
+        }
+    }
+
+    function beginPan(event) {
+        if (event.button !== 0) return;
+        if (event.target.closest?.(".node") || event.target.closest?.(".link-group")) return;
+
+        selectedLocationId = null;
+        selectedConnector = null;
+        selectedLinkId = null;
+        updateEditor();
+        updateConnectorEditor();
+        updateLinkEditor();
+        applySelectionClasses();
+
+        panDrag = {
+            startClientX: event.clientX,
+            startClientY: event.clientY,
+            startViewX: view.x,
+            startViewY: view.y
+        };
+        event.preventDefault();
+    }
+
+    function movePan(event) {
+        if (!panDrag) return;
+        view.x = panDrag.startViewX + (event.clientX - panDrag.startClientX);
+        view.y = panDrag.startViewY + (event.clientY - panDrag.startClientY);
+        applyView();
+    }
+
+    function endPan() {
+        panDrag = null;
+    }
+
+    function setZoom(newScale, anchorX = workspaceWrap.clientWidth / 2, anchorY = workspaceWrap.clientHeight / 2) {
+        const oldScale = view.scale;
+        const clampedScale = clamp(newScale, 0.25, 2.5);
+        if (clampedScale === oldScale) return;
+
+        const worldX = (anchorX - view.x) / oldScale;
+        const worldY = (anchorY - view.y) / oldScale;
+        view.scale = clampedScale;
+        view.x = anchorX - worldX * clampedScale;
+        view.y = anchorY - worldY * clampedScale;
+        applyView();
+    }
+
+    function exportJson() {
+        const payload = {
+            version: 3,
+            exported_at: new Date().toISOString(),
+            locations: data.locations,
+            links: data.links
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = "location_map.json";
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+        URL.revokeObjectURL(url);
+        showToast("map_exported");
+    }
+
+    async function importJson(file) {
+        const previousData = data;
+        const previousRoutes = linkRoutes;
+
+        try {
+            const parsed = JSON.parse(await file.text());
+            if (!Array.isArray(parsed.locations) || !Array.isArray(parsed.links)) throw new Error("Invalid map file.");
+
+            data = migrateParsedData(parsed);
+            splitSharedConnectors();
+            resolveAllLocationOverlaps();
+            rebuildIndexes();
+            linkRoutes = new Map();
+            rebuildRoutePointOwners();
+
+            if (!attemptRouteAllWithSpacingRepair()) {
+                throw new Error("Map contains links that cannot be routed without crossings.");
+            }
+
+            selectedLocationId = null;
+            selectedConnector = null;
+            selectedLinkId = null;
+            save();
+            renderAll();
+            updateEditor();
+            updateConnectorEditor();
+            updateLinkEditor();
+            showToast("map_imported");
+        } catch (error) {
+            console.error(error);
+            data = previousData;
+            linkRoutes = previousRoutes;
+            rebuildIndexes();
+            rebuildRoutePointOwners();
+            renderAll();
+            showToast("import_rejected_non_overlapping_layout_required");
+        } finally {
+            importInput.value = "";
+        }
+    }
+
+    addBtn.addEventListener("click", addLocation);
+    exportBtn.addEventListener("click", exportJson);
+
+    importInput.addEventListener("change", () => {
+        const file = importInput.files?.[0];
+        if (file) importJson(file);
+    });
+
+    clearBtn.addEventListener("click", () => {
+        if (!confirm("Clear the entire map? This cannot be undone unless you exported it first.")) return;
+        data = { locations: [], links: [] };
+        linkRoutes = new Map();
+        routePointOwners = new Map();
+        selectedLocationId = null;
+        selectedConnector = null;
+        selectedLinkId = null;
+        rebuildIndexes();
+        save();
+        renderAll();
+        updateEditor();
+        updateConnectorEditor();
+        updateLinkEditor();
+        showToast("map_cleared");
+    });
+
+    nameInput.addEventListener("input", () => {
+        updateSelectedLocation(location => { location.name = nameInput.value; });
+        updateConnectorEditor();
+        updateLinkEditor();
+    });
+
+    descriptionInput.addEventListener("input", () => {
+        updateSelectedLocation(location => { location.description = descriptionInput.value; });
+    });
+
+    addConnectorBtn.addEventListener("click", () => {
+        if (!selectedLocationId) return;
+        const location = getLocation(selectedLocationId);
+        if (!location) return;
+        const sideOrder = ["right", "bottom", "left", "top"];
+        const side = sideOrder[location.connectors.length % sideOrder.length];
+        const sameSideCount = location.connectors.filter(connector => connector.side === side).length;
+        const length = sideLength(side);
+        const slots = Math.floor(length / ROUTE_GRID) - 1;
+        const pixel = ROUTE_GRID * ((sameSideCount % Math.max(1, slots)) + 1);
+        addConnectorToLocation(location.id, side, pixel / length, true);
+    });
+
+    deleteLocationBtn.addEventListener("click", deleteSelectedLocation);
+    deleteConnectorBtn.addEventListener("click", deleteSelectedConnector);
+    deleteLinkBtn.addEventListener("click", deleteSelectedLink);
+
+    nodesLayer.addEventListener("dblclick", event => {
+        if (event.target.closest(".connector")) return;
+        const node = event.target.closest(".node");
+        if (!node) return;
+        const location = getLocation(node.dataset.id);
+        if (!location) return;
+
+        const rect = workspaceWrap.getBoundingClientRect();
+        const world = screenToWorld(event.clientX - rect.left, event.clientY - rect.top);
+        const placement = nearestEdgeConnectorPosition(location, world.x, world.y);
+        addConnectorToLocation(location.id, placement.side, placement.offset, true);
+        event.preventDefault();
+        event.stopPropagation();
+    });
+
+    nodesLayer.addEventListener("pointerdown", event => {
+        const connectorElement = event.target.closest(".connector");
+        if (connectorElement) {
+            beginLinkDrag(event, connectorElement);
+            return;
+        }
+        const node = event.target.closest(".node");
+        if (node) beginNodeDrag(event, node);
+    });
+
+    linksSvg.addEventListener("pointerdown", event => {
+        const group = event.target.closest?.(".link-group");
+        if (!group) return;
+        selectLink(group.dataset.id);
+        event.preventDefault();
+        event.stopPropagation();
+    });
+
+    workspaceWrap.addEventListener("pointerdown", beginPan);
+
+    window.addEventListener("pointermove", event => {
+        moveNode(event);
+        moveLink(event);
+        movePan(event);
+    });
+
+    window.addEventListener("pointerup", event => {
+        endNodeDrag();
+        endLinkDrag(event);
+        endPan();
+    });
+
+    workspaceWrap.addEventListener("wheel", event => {
+        event.preventDefault();
+        const rect = workspaceWrap.getBoundingClientRect();
+        const anchorX = event.clientX - rect.left;
+        const anchorY = event.clientY - rect.top;
+        setZoom(view.scale * (event.deltaY < 0 ? 1.1 : 0.9), anchorX, anchorY);
+    }, { passive: false });
+
+    zoomInBtn.addEventListener("click", () => setZoom(view.scale * 1.15));
+    zoomOutBtn.addEventListener("click", () => setZoom(view.scale / 1.15));
+    zoomResetBtn.addEventListener("click", () => {
+        view = { x: 0, y: 0, scale: 1 };
+        applyView();
+    });
+
+    window.addEventListener("keydown", event => {
+        const activeTag = document.activeElement?.tagName;
+        if (activeTag === "INPUT" || activeTag === "TEXTAREA") return;
+
+        if (event.key === "Delete" || event.key === "Backspace") {
+            if (selectedLinkId) deleteSelectedLink();
+            else if (selectedConnector) deleteSelectedConnector();
+            else if (selectedLocationId) deleteSelectedLocation();
+        }
+
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "s") {
+            event.preventDefault();
+            exportJson();
+        }
+    });
+
+    load();
+    updateEditor();
+    updateConnectorEditor();
+    updateLinkEditor();
+    applyView();
+})();
+
+</script>
+</body>
+</html>
