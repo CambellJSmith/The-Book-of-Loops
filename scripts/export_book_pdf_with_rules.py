@@ -48,6 +48,7 @@ def draw_rule_panel(
     top: float,
     width: float,
     height: float,
+    body_size: float = 9.0,
 ) -> None:
     accent = colors.HexColor("#d8b36a")
     y = top - height
@@ -63,7 +64,7 @@ def draw_rule_panel(
     pdf.setFont(base.FONT_BOLD, 12)
     pdf.drawString(x + 35, top - 22, title)
 
-    item = base.paragraph(body, 9.0, base.MUTED, leading=12.2)
+    item = base.paragraph(body, body_size, base.MUTED, leading=body_size * 1.35)
     _, body_height = item.wrap(width - 24, height - 46)
     item.drawOn(pdf, x + 12, top - 39 - body_height)
 
@@ -164,10 +165,11 @@ def draw_rules_page(pdf: canvas.Canvas, starts: list[tuple[int, str, int]]) -> N
         right_x,
         second_top,
         left_width,
-        145,
+        170,
+        body_size=8.2,
     )
 
-    third_top = second_top - 157
+    third_top = second_top - 182
     draw_rule_panel(
         pdf,
         "6",
