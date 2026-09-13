@@ -1,6 +1,8 @@
 import { z } from "zod"; // validates cards at the application boundary.
 
 export const elements = ["fire", "water", "nature", "light", "dark"] as const; // defines the available monster types.
+export const difficulties = ["easy", "medium", "hard", "boss"] as const; // separates encounter strength from elemental identity.
+export type Difficulty = (typeof difficulties)[number]; // constrains the supported encounter groups.
 export type Element = (typeof elements)[number]; // restricts type selections to the supported elements.
 export const element_colors: Record<Element, string> = { fire: "#f29255", water: "#60bff5", nature: "#91c974", light: "#ead58a", dark: "#b49bea" }; // gives every element a distinct accent.
 const stat_schema = z.number().int().min(0).max(9999); // bounds whole-number card statistics.
@@ -10,6 +12,7 @@ export const card_schema = z.object({ // defines the complete monster record.
   species_id: z.string().trim().min(1, "enter a species id").max(20), // preserves leading zeros and custom numbering.
   species_name: z.string().trim().min(1, "enter a species name").max(40), // labels the monster on the card.
   type: z.enum(elements), // selects the card palette and elemental icon.
+  difficulty: z.enum(difficulties).default("easy"), // keeps legacy records readable while recording encounter strength.
   art: z.string().regex(/^(|\/sample_art\.webp|\/api\/art\/[a-f0-9-]{36})$/, "choose an uploaded image"), // permits only artwork hosted by this tool.
   art_prompt: z.string().max(6000).default(""), // preserves an optional self-contained artwork brief on every card.
   art_width: z.number().int().min(1).max(12000), // retains the original image width for precise framing.
@@ -25,10 +28,10 @@ export const card_schema = z.object({ // defines the complete monster record.
 export type MonsterCard = z.infer<typeof card_schema>; // shares the checked card shape across the editor and server.
 export type Move = MonsterCard["moves"][number]; // describes an individual editable move.
 export const example_card: MonsterCard = { // supplies an editable example without inserting records.
-  id: "00000000-0000-4000-8000-000000000001", species_id: "0001", species_name: "cindrel", type: "fire", // establishes the sample species.
+  id: "00000000-0000-4000-8000-000000000001", species_id: "0001", species_name: "cindrel", type: "fire", difficulty: "easy", // establishes the sample species.
   art_prompt: "", art: "/sample_art.webp", art_width: 1122, art_height: 1402, art_zoom: 1, art_x: 50, art_y: 35, // frames the original example artwork.
-  health: 120, speed: 45, revision: 0, // sets the example's editable statistics.
-  moves: [{ name: "ember flick", mana_cost: 1, damage: 20 }, { name: "flare spiral", mana_cost: 3, damage: 60 }], // demonstrates the two move slots.
+  health: 120, speed: 30, revision: 0, // sets the example's editable statistics.
+  moves: [{ name: "ember flick", mana_cost: 1, damage: 20 }, { name: "flare spiral", mana_cost: 2, damage: 40 }], // demonstrates the two move slots.
 };
 export function next_species_id(cards: MonsterCard[]): string { // finds an unused sequential species number.
   const taken: Set<string> = new Set(cards.map((card: MonsterCard) => card.species_id)); // collects existing identifiers.

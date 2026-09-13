@@ -20,7 +20,7 @@ export function CardPreview({ card, svg_ref }: { card: MonsterCard; svg_ref?: Re
   const width: number = card.art_width * scale; // calculates the framed artwork width.
   const height: number = card.art_height * scale; // preserves the source aspect ratio.
   return ( // renders a self-contained card without external styles or fonts.
-    <svg ref={svg_ref} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 1050" role="img" aria-label={`${name}, ${card.type}, health ${card.health}, speed ${card.speed}`} className="monster_card" fontFamily="Arial, Helvetica, sans-serif">
+    <svg ref={svg_ref} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 1050" role="img" aria-label={`${name}, ${card.type}, ${card.difficulty}, health ${card.health}, speed ${card.speed}`} className="monster_card" fontFamily="Arial, Helvetica, sans-serif">
       <defs>
         <linearGradient id={`${uid}frame`} x1="0" y1="0" x2="1" y2="1"><stop stopColor={color} /><stop offset=".42" stopColor="#4a4847" /><stop offset="1" stopColor={color} /></linearGradient>
         <linearGradient id={`${uid}shade`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#171a1f" stopOpacity="0" /><stop offset=".45" stopColor="#171a1f" stopOpacity=".35" /><stop offset="1" stopColor="#171a1f" /></linearGradient>
@@ -70,6 +70,7 @@ export function CardPreview({ card, svg_ref }: { card: MonsterCard; svg_ref?: Re
           <text x="696" y={y + 42} fill="#a6a8b2" fontSize="18" textAnchor="end">damage</text>
         </g>;
       })}
+      <g id="card_difficulty"><text x="48" y="1018" fill={color} fontSize="19" fontWeight="700" letterSpacing="2">{card.difficulty}</text></g>
       <path d="M651 1006H677L686 1015H701" fill="none" stroke={color} strokeWidth="2" />
     </svg>
   );
