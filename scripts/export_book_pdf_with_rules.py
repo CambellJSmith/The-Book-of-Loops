@@ -12,6 +12,7 @@ from reportlab.pdfgen import canvas
 import export_book_pdf as base
 import export_book_pdf_dense as dense
 import export_book_pdf_with_lore as lore
+import gameplay_rules as game
 
 PAGE_WIDTH, PAGE_HEIGHT = A4
 RULES_PAGE = 2
@@ -47,6 +48,7 @@ def draw_rule_panel(
     top: float,
     width: float,
     height: float,
+    body_size: float = 9.0,
 ) -> None:
     accent = colors.HexColor("#d8b36a")
     y = top - height
@@ -62,7 +64,7 @@ def draw_rule_panel(
     pdf.setFont(base.FONT_BOLD, 12)
     pdf.drawString(x + 35, top - 22, title)
 
-    item = base.paragraph(body, 9.0, base.MUTED, leading=12.2)
+    item = base.paragraph(body, body_size, base.MUTED, leading=body_size * 1.35)
     _, body_height = item.wrap(width - 24, height - 46)
     item.drawOn(pdf, x + 12, top - 39 - body_height)
 
@@ -158,15 +160,16 @@ def draw_rules_page(pdf: canvas.Canvas, starts: list[tuple[int, str, int]]) -> N
     draw_rule_panel(
         pdf,
         "5",
-        "Choose moves",
-        "On your monster's turn, choose which of its two moves to use. On the enemy's turn, roll the d6: 1-3 uses its first move, and 4-6 uses its second move. Subtract the move's listed damage from the target monster's current Health.",
+        "Moves and Mana",
+        f"Each monster starts a battle with {game.STARTING_MANA} Mana and gains {game.MANA_PER_TURN} Mana at the start of its turn. Mana carries between turns, is spent to use moves, and resets after battle. A monster can use only moves it can afford. You choose your monster's move. For an enemy, roll d6: 1-3 selects Move 1; 4-6 selects Move 2. If that move is unaffordable, use the other if affordable. If neither is affordable, it does not attack and keeps its Mana. Move 2 always costs more Mana and deals more damage than Move 1.",
         right_x,
         second_top,
         left_width,
-        112,
+        170,
+        body_size=8.2,
     )
 
-    third_top = second_top - 124
+    third_top = second_top - 182
     draw_rule_panel(
         pdf,
         "6",
@@ -208,6 +211,9 @@ def export_pdf(output_path: Path) -> None:
         raise RuntimeError(f"expected 100 locations, found {len(locations)}")
     if len(source_cards) != 400:
         raise RuntimeError(f"expected 400 monsters, found {len(source_cards)}")
+    invalid_move_order = [str(card.get("species_id", "")) for card in source_cards if not game.move_two_is_stronger(card)]
+    if invalid_move_order:
+        raise RuntimeError(f"move 2 must cost more mana and deal more damage than move 1 for every monster: {invalid_move_order[:8]}")
 
     encounter_metadata = dense.build_encounter_metadata(encounter_data)
     if len(encounter_metadata) != 400:

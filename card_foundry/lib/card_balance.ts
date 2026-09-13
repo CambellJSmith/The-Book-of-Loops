@@ -1,8 +1,8 @@
-import { difficulties, elements, type Difficulty, type Element, type MonsterCard } from "@/lib/card_model"; // shares the canonical card contract and five difficulty bands.
+import { difficulties, elements, move_two_is_stronger, type Difficulty, type Element, type MonsterCard } from "@/lib/card_model"; // shares the canonical card contract and internal progression bands.
 
-interface MoveBand { mana_cost: number; damage: number; } // describes one balanced attack slot inside a difficulty band.
-const stat_totals: Record<Difficulty, number> = { easy: 150, medium: 190, hard: 235, extra_hard: 285, ultra: 340 }; // increases the combined health-and-speed budget at every difficulty step.
-const move_bands: Record<Difficulty, readonly [MoveBand, MoveBand]> = { // gives harder monsters both larger attacks and better damage efficiency.
+interface MoveBand { mana_cost: number; damage: number; } // describes one balanced attack slot inside an internal progression band.
+const stat_totals: Record<Difficulty, number> = { easy: 150, medium: 190, hard: 235, extra_hard: 285, ultra: 340 }; // increases the combined health-and-speed budget at every internal progression step.
+const move_bands: Record<Difficulty, readonly [MoveBand, MoveBand]> = { // gives later encounters both larger attacks and better damage efficiency while preserving the strong-second-move rule.
   easy: [{ mana_cost: 1, damage: 20 }, { mana_cost: 2, damage: 40 }], // keeps introductory encounters readable and forgiving.
   medium: [{ mana_cost: 1, damage: 30 }, { mana_cost: 3, damage: 70 }], // introduces a noticeably stronger finishing move.
   hard: [{ mana_cost: 2, damage: 55 }, { mana_cost: 3, damage: 90 }], // raises sustained damage for established encounters.
@@ -32,17 +32,17 @@ function subject_text(card: MonsterCard): string { // isolates creature content 
   return marker_index >= 0 ? card.art_prompt.slice(marker_index + marker.length) : card.art_prompt; // falls back to the complete prompt for manually authored cards.
 }
 export function threat_score(card: MonsterCard): number { // estimates relative encounter threat from every monster's authored concept rather than its species number.
-  if (card.species_id === "0400") return 1_000_000; // guarantees the final game card occupies the strongest Ultra slot.
+  if (card.species_id === "0400") return 1_000_000; // guarantees the final game card occupies the strongest internal progression slot.
   const concept: string = `${card.species_name} ${subject_text(card)}`; // combines the name with physical and magical creature cues.
   const moves: string = `${card.moves[0].name} ${card.moves[1].name}`; // combines both authored attack names for combat-intensity cues.
   return weighted_score(concept, positive_terms) + weighted_score(concept, negative_terms) + weighted_score(moves, dangerous_move_terms) + weighted_score(moves, gentle_move_terms); // produces one deterministic content-aware ranking score.
 }
-export function classify_standalone_difficulties(cards: readonly MonsterCard[]): Map<string, Difficulty> { // divides every element evenly across the five encounter bands.
-  const result: Map<string, Difficulty> = new Map<string, Difficulty>(); // stores difficulty by durable card identity.
+export function classify_standalone_difficulties(cards: readonly MonsterCard[]): Map<string, Difficulty> { // divides every element evenly across the internal progression bands.
+  const result: Map<string, Difficulty> = new Map<string, Difficulty>(); // stores internal progression by durable card identity.
   for (const element of elements) { // classifies each element independently so every band keeps an even elemental mix.
     const ranked: MonsterCard[] = cards.filter((card: MonsterCard) => card.type === element).sort((left: MonsterCard, right: MonsterCard) => threat_score(left) - threat_score(right) || left.species_id.localeCompare(right.species_id)); // orders gentle concepts first and dangerous concepts last with a stable ID tiebreaker.
-    if (ranked.length !== 80) throw new Error(`expected 80 ${element} monsters before difficulty classification`); // rejects incomplete sets before assigning arbitrary bands.
-    ranked.forEach((card: MonsterCard, index: number) => result.set(card.id, difficulties[Math.min(difficulties.length - 1, Math.floor(index / 16))])); // assigns exactly sixteen cards of this element to each difficulty.
+    if (ranked.length !== 80) throw new Error(`expected 80 ${element} monsters before internal progression classification`); // rejects incomplete sets before assigning arbitrary bands.
+    ranked.forEach((card: MonsterCard, index: number) => result.set(card.id, difficulties[Math.min(difficulties.length - 1, Math.floor(index / 16))])); // assigns exactly sixteen cards of this element to each internal band.
   }
   return result; // returns all four hundred deterministic classifications.
 }
@@ -50,9 +50,9 @@ function round_to_five(value: number): number { return Math.round(value / 5) * 5
 function balanced_stats(card: MonsterCard, difficulty: Difficulty): { health: number; speed: number } { // scales total power while preserving each monster's tank-versus-speed identity.
   const original_total: number = Math.max(1, card.health + card.speed); // avoids division by zero for malformed historical source values.
   const health_ratio: number = card.health / original_total; // captures the authored durability share independently from total power.
-  const target_total: number = stat_totals[difficulty]; // selects the combined statistic budget for this encounter band.
+  const target_total: number = stat_totals[difficulty]; // selects the combined statistic budget for this internal encounter band.
   const health: number = Math.max(20, Math.min(target_total - 20, round_to_five(target_total * health_ratio))); // scales durability while retaining at least twenty points for speed.
-  return { health, speed: target_total - health }; // preserves the exact difficulty budget after health rounding.
+  return { health, speed: target_total - health }; // preserves the exact internal budget after health rounding.
 }
 function final_boss_prompt(card: MonsterCard): string { // replaces the modest original Duskervet concept with a true final-boss silhouette.
   const style: string = card.art_prompt.split("\n\nSUBJECT:")[0].trim(); // preserves the established shared watercolor style verbatim.
@@ -60,18 +60,21 @@ function final_boss_prompt(card: MonsterCard): string { // replaces the modest o
   return style ? `${style}\n\n${subject}` : subject; // keeps custom style prefixes when the source prompt contains one.
 }
 export function balance_standalone_cards(cards: readonly MonsterCard[]): MonsterCard[] { // applies classification and combat scaling to the canonical four-hundred-card set.
-  const classifications: Map<string, Difficulty> = classify_standalone_difficulties(cards); // establishes content-aware bands before changing any statistics.
-  return cards.map((card: MonsterCard) => { // returns fresh records without mutating the imported seed objects.
-    const difficulty: Difficulty = classifications.get(card.id) ?? "easy"; // reads the deterministic band for this canonical identity.
-    if (card.species_id === "0400") return { ...card, difficulty: "ultra", is_final_boss: true, art_prompt: final_boss_prompt(card), health: 540, speed: 160, moves: [{ name: "voidwhisker rend", mana_cost: 4, damage: 180 }, { name: "last eclipse", mana_cost: 7, damage: 360 }] }; // makes Duskervet substantially stronger than every normal Ultra monster.
-    const stats: { health: number; speed: number } = balanced_stats(card, difficulty); // scales the original combat archetype into its assigned band.
+  const classifications: Map<string, Difficulty> = classify_standalone_difficulties(cards); // establishes content-aware internal bands before changing any statistics.
+  const balanced: MonsterCard[] = cards.map((card: MonsterCard) => { // returns fresh records without mutating the imported seed objects.
+    const difficulty: Difficulty = classifications.get(card.id) ?? "easy"; // reads the deterministic internal band for this canonical identity.
+    if (card.species_id === "0400") return { ...card, difficulty: "ultra", is_final_boss: true, art_prompt: final_boss_prompt(card), health: 540, speed: 160, moves: [{ name: "voidwhisker rend", mana_cost: 4, damage: 180 }, { name: "last eclipse", mana_cost: 7, damage: 360 }] }; // gives Duskervet a unique high-cost, high-damage move pair while keeping Move 2 stronger.
+    const stats: { health: number; speed: number } = balanced_stats(card, difficulty); // scales the original combat archetype into its assigned internal band.
     const attacks: readonly [MoveBand, MoveBand] = move_bands[difficulty]; // selects the two standard attack profiles for the band.
     return { ...card, difficulty, is_final_boss: false, health: stats.health, speed: stats.speed, moves: [{ ...card.moves[0], mana_cost: attacks[0].mana_cost, damage: attacks[0].damage }, { ...card.moves[1], mana_cost: attacks[1].mana_cost, damage: attacks[1].damage }] }; // preserves names and artwork while replacing only progression-sensitive combat values.
   });
+  const invalid: MonsterCard | undefined = balanced.find((card: MonsterCard) => !move_two_is_stronger(card.moves)); // verifies the turn-based Mana design survives every canonical balancing path.
+  if (invalid) throw new Error(`move 2 must cost more mana and deal more damage than move 1 for species ${invalid.species_id}`); // prevents a future balance-table edit from creating an inverted move pair.
+  return balanced; // returns only a canonically ordered move set.
 }
 
-export function difficulty_counts(cards: readonly MonsterCard[]): Record<Difficulty, number> { // summarizes the distribution for validation and documentation checks.
-  return cards.reduce((counts: Record<Difficulty, number>, card: MonsterCard) => ({ ...counts, [card.difficulty]: counts[card.difficulty] + 1 }), { easy: 0, medium: 0, hard: 0, extra_hard: 0, ultra: 0 }); // counts every card exactly once by its stored band.
+export function difficulty_counts(cards: readonly MonsterCard[]): Record<Difficulty, number> { // summarizes internal progression distribution for validation logic.
+  return cards.reduce((counts: Record<Difficulty, number>, card: MonsterCard) => ({ ...counts, [card.difficulty]: counts[card.difficulty] + 1 }), { easy: 0, medium: 0, hard: 0, extra_hard: 0, ultra: 0 }); // counts every card exactly once by its stored internal band.
 }
 
-export function element_difficulty_count(cards: readonly MonsterCard[], element: Element, difficulty: Difficulty): number { return cards.filter((card: MonsterCard) => card.type === element && card.difficulty === difficulty).length; } // supports strict sixteen-per-element-per-band validation.
+export function element_difficulty_count(cards: readonly MonsterCard[], element: Element, difficulty: Difficulty): number { return cards.filter((card: MonsterCard) => card.type === element && card.difficulty === difficulty).length; } // supports strict internal distribution validation without exposing progression metadata to players.

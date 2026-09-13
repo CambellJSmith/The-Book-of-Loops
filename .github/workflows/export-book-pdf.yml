@@ -8,10 +8,15 @@ on:
       - "scripts/export_book_pdf_dense.py"
       - "scripts/export_book_pdf_with_lore.py"
       - "scripts/export_book_pdf_with_rules.py"
+      - "scripts/gameplay_rules.py"
       - ".github/workflows/export-book-pdf.yml"
       - "location_map.json"
       - "monster_encounters.json"
       - "card_foundry/data/card_objects.json"
+      - "card_foundry/data/standalone_400.json"
+      - "card_foundry/lib/card_model.ts"
+      - "card_foundry/lib/card_balance.ts"
+      - "card_foundry/scripts/build_card_set.py"
       - "*.png"
   push:
     branches:
@@ -21,10 +26,15 @@ on:
       - "scripts/export_book_pdf_dense.py"
       - "scripts/export_book_pdf_with_lore.py"
       - "scripts/export_book_pdf_with_rules.py"
+      - "scripts/gameplay_rules.py"
       - ".github/workflows/export-book-pdf.yml"
       - "location_map.json"
       - "monster_encounters.json"
       - "card_foundry/data/card_objects.json"
+      - "card_foundry/data/standalone_400.json"
+      - "card_foundry/lib/card_model.ts"
+      - "card_foundry/lib/card_balance.ts"
+      - "card_foundry/scripts/build_card_set.py"
       - "*.png"
 
 permissions:
@@ -40,6 +50,42 @@ jobs:
           python-version: "3.13"
       - name: install pdf dependencies
         run: python -m pip install --disable-pip-version-check reportlab pillow pypdf
+      - name: validate canonical combat data
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import sys
+
+          sys.path.insert(0, str(Path("scripts").resolve()))
+          import gameplay_rules as rules
+
+          portable = json.loads(Path("card_foundry/data/card_objects.json").read_text(encoding="utf-8"))["cards"]
+          generated = json.loads(Path("card_foundry/data/standalone_400.json").read_text(encoding="utf-8"))
+          assert len(portable) == 400, len(portable)
+          assert len(generated) == 400, len(generated)
+          for collection in (portable, generated):
+              invalid = [card.get("species_id") for card in collection if not rules.move_two_is_stronger(card)]
+              assert not invalid, invalid[:10]
+          assert rules.STARTING_MANA == 0
+          assert rules.MANA_PER_TURN == 1
+          assert rules.gain_turn_mana(0) == 1
+          assert rules.gain_turn_mana(4) == 5
+          assert rules.enemy_move_index(4, 1, [{"mana_cost": 1}, {"mana_cost": 3}]) == 0
+          assert rules.enemy_move_index(4, 0, [{"mana_cost": 1}, {"mana_cost": 3}]) is None
+          print("validated_combat_rules=400+400")
+          PY
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.19.0"
+      - name: enable pnpm
+        run: corepack enable && corepack prepare pnpm@11.25.0 --activate
+      - name: install card foundry dependencies
+        working-directory: card_foundry
+        run: pnpm install --frozen-lockfile
+      - name: build card foundry
+        working-directory: card_foundry
+        run: pnpm build
       - name: export book
         run: python scripts/export_book_pdf_with_rules.py --output book_of_loops.pdf
       - name: validate pdf
@@ -51,6 +97,7 @@ jobs:
           assert len(reader.pages) == 122, len(reader.pages)
           lore = reader.pages[0].extract_text() or ""
           rules = reader.pages[1].extract_text() or ""
+          rules_flat = " ".join(rules.split())
           first_location = reader.pages[2].extract_text() or ""
           monsters = reader.pages[102].extract_text() or ""
           final = reader.pages[121].extract_text() or ""
@@ -60,9 +107,13 @@ jobs:
           assert "Gameplay Rules" in rules
           assert "Confluence village" in rules and "p. 3" in rules
           assert "Shower hill village" in rules and "p. 8" in rules
-          assert "1-3" in rules and "first move" in rules
-          assert "4-6" in rules and "second move" in rules
-          assert "5-6" in rules and "full Health" in rules
+          assert "0 Mana" in rules_flat
+          assert "gains 1 Mana" in rules_flat
+          assert "Move 2 always costs more Mana" in rules_flat
+          assert "deals more damage than Move 1" in rules_flat
+          assert "1-3" in rules_flat and "Move 1" in rules_flat
+          assert "4-6" in rules_flat and "Move 2" in rules_flat
+          assert "5-6" in rules_flat and "full Health" in rules_flat
           assert "monster_encounters" in first_location
           assert "To go to Saffron prairie, go to page 16." in first_location
           assert "monster_reference" in monsters
