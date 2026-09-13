@@ -5,6 +5,7 @@ on:
   pull_request:
     paths:
       - "scripts/export_book_pdf.py"
+      - "scripts/export_book_pdf_dense.py"
       - ".github/workflows/export-book-pdf.yml"
       - "location_map.json"
       - "monster_encounters.json"
@@ -15,6 +16,7 @@ on:
       - main
     paths:
       - "scripts/export_book_pdf.py"
+      - "scripts/export_book_pdf_dense.py"
       - ".github/workflows/export-book-pdf.yml"
       - "location_map.json"
       - "monster_encounters.json"
@@ -35,18 +37,23 @@ jobs:
       - name: install pdf dependencies
         run: python -m pip install --disable-pip-version-check reportlab pillow pypdf
       - name: export book
-        run: python scripts/export_book_pdf.py --output book_of_loops.pdf
+        run: python scripts/export_book_pdf_dense.py --output book_of_loops.pdf
       - name: validate pdf
         run: |
           python - <<'PY'
           from pypdf import PdfReader
 
           reader = PdfReader("book_of_loops.pdf")
-          assert len(reader.pages) == 200, len(reader.pages)
+          assert len(reader.pages) == 120, len(reader.pages)
           first = reader.pages[0].extract_text() or ""
-          cards = reader.pages[100].extract_text() or ""
+          monsters = reader.pages[100].extract_text() or ""
+          final = reader.pages[119].extract_text() or ""
           assert "monster_encounters" in first
-          assert "monster_cards" in cards
+          assert "monster_reference" in monsters
+          assert "#0001" in monsters
+          assert "#0400" in final
+          assert "FINAL BOSS" in final
+          assert "ULTRA" in final
           print(f"validated_pages={len(reader.pages)}")
           PY
       - name: upload pdf
