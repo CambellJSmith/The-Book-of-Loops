@@ -8,14 +8,14 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"; // exp
 import { Slider } from "@/components/ui/slider"; // provides artwork framing controls.
 import { ArtPromptField } from "./art_prompt_field"; // keeps prompt editing separate from upload and crop controls.
 import { ElementIcon } from "./element_icon"; // renders the five elemental symbols.
-import { difficulties, difficulty_labels, elements, element_colors, type Difficulty, type MonsterCard, type Move, type Element } from "@/lib/card_model"; // shares field types, progression labels and palette rules.
+import { elements, element_colors, type MonsterCard, type Move, type Element } from "@/lib/card_model"; // shares visible field types and palette rules while keeping encounter difficulty internal.
 
 interface FieldsProps { card: MonsterCard; disabled: boolean; uploading: boolean; update: (patch: Partial<MonsterCard>) => void; upload: (file: File) => Promise<void>; } // limits field access to controlled editor actions.
 
 function NumberField({ id, label, value, change }: { id: string; label: string; value: number; change: (value: number) => void }) { // standardizes whole-number statistic inputs.
   return <label className="field_label" htmlFor={id}><span>{label}</span><Input id={id} type="number" min="0" max="9999" step="1" value={value} onChange={(event: ChangeEvent<HTMLInputElement>) => change(Math.max(0, Math.min(9999, Math.trunc(Number(event.target.value) || 0))))} className="number_input" /></label>; // keeps statistics within supported whole-number bounds.
 }
-export function CardFields({ card, disabled, uploading, update, upload }: FieldsProps) { // edits all requested card attributes.
+export function CardFields({ card, disabled, uploading, update, upload }: FieldsProps) { // edits player-facing card attributes while internal encounter metadata remains hidden.
   const file_ref = useRef<HTMLInputElement>(null); // opens the native artwork picker.
   const [dragging, set_dragging] = useState<boolean>(false); // highlights the artwork drop target.
   const update_move = (index: 0 | 1, patch: Partial<Move>): void => { // edits a move while preserving its sibling.
@@ -28,7 +28,7 @@ export function CardFields({ card, disabled, uploading, update, upload }: Fields
         <h3><ChevronDown size={14} /><span>identity</span><span className="section_index">01</span></h3>
         <div className="identity_fields"><label className="field_label" htmlFor="species_id"><span>species_id</span><Input id="species_id" value={card.species_id} maxLength={20} onChange={(event: ChangeEvent<HTMLInputElement>) => update({ species_id: event.target.value })} placeholder="0001" /></label><label className="field_label" htmlFor="species_name"><span>species_name</span><Input id="species_name" value={card.species_name} maxLength={40} onChange={(event: ChangeEvent<HTMLInputElement>) => update({ species_name: event.target.value })} placeholder="name your monster" /></label></div>
         <div className="field_label"><span id="type_label">type</span><RadioGroup className="type_picker" value={card.type} onValueChange={(value: string) => update({ type: value as Element })} aria-labelledby="type_label" disabled={disabled}>{elements.map((element: Element) => <label key={element} className={`type_option ${card.type === element ? "selected" : ""}`} style={{ "--element": element_colors[element] } as CSSProperties}><RadioGroupItem value={element} className="sr-only" aria-label={element} /><ElementIcon element={element} size={20} /><span>{element}</span></label>)}</RadioGroup></div>
-        <div className="two_fields mt-[15px]"><label className="field_label" htmlFor="difficulty"><span>difficulty</span><select id="difficulty" value={card.difficulty} onChange={(event: ChangeEvent<HTMLSelectElement>) => update({ difficulty: event.target.value as Difficulty })} className="h-[34px] w-full rounded-[4px] border border-[#454851] bg-[#202226] px-[9px] text-[0.875rem] text-[#e2e3e8] outline-none focus:border-[#e7a16c] focus:shadow-[0_0_0_1px_#e7a16c60]">{difficulties.map((difficulty: Difficulty) => <option key={difficulty} value={difficulty}>{difficulty_labels[difficulty]}</option>)}</select></label><div className="field_label"><span>encounter_role</span><div className="flex h-[34px] items-center rounded-[4px] border border-[#454851] bg-[#202226] px-[9px] text-[0.875rem] text-[#bcbfc8]">{card.is_final_boss ? "final boss" : "standard"}</div></div></div>
+        <div className="field_label mt-[15px]"><span>encounter_role</span><div className="flex h-[34px] items-center rounded-[4px] border border-[#454851] bg-[#202226] px-[9px] text-[0.875rem] text-[#bcbfc8]">{card.is_final_boss ? "final boss" : "standard"}</div></div>
       </section>
       <section className="property_section">
         <h3><ChevronDown size={14} /><span>artwork</span><span className="section_index">02</span></h3>
