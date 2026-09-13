@@ -52,6 +52,8 @@ jobs:
           assert "monster_reference" in monsters
           assert "#0001" in monsters
           assert "#0400" in final
+          assert "FINAL BOSS" in final
+          assert "ULTRA" in final
           print(f"validated_pages={len(reader.pages)}")
           PY
       - name: upload pdf
