@@ -16,6 +16,7 @@ PAGE_WIDTH, PAGE_HEIGHT = A4
 MONSTERS_PER_PAGE = 20
 MONSTER_COLUMNS = 2
 MONSTER_ROWS = 10
+ENCOUNTER_PATH = base.ROOT / "monster_encounters.json"
 
 
 def fit_text_size(text: str, font_name: str, preferred: float, minimum: float, max_width: float) -> float:
@@ -25,12 +26,31 @@ def fit_text_size(text: str, font_name: str, preferred: float, minimum: float, m
     return max(minimum, size)
 
 
+def build_encounter_metadata(encounter_data: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    metadata: dict[str, dict[str, Any]] = {}
+    final_boss_id = str(encounter_data.get("rules", {}).get("final_boss", {}).get("species_id", "0400"))
+    for location in encounter_data.get("locations", []):
+        for monster in location.get("unique_monsters", []):
+            species_id = str(monster.get("species_id", ""))
+            if not species_id:
+                continue
+            difficulty = str(monster.get("difficulty", "")).strip()
+            existing = metadata.get(species_id)
+            if existing is not None and existing["difficulty"] != difficulty:
+                raise RuntimeError(f"conflicting difficulty for species {species_id}: {existing['difficulty']} vs {difficulty}")
+            metadata[species_id] = {
+                "difficulty": difficulty,
+                "is_final_boss": bool(monster.get("is_final_boss", False)) or species_id == final_boss_id,
+            }
+    return metadata
+
+
 def draw_monster_entry(pdf: canvas.Canvas, card: dict[str, Any], x: float, y: float, width: float, height: float) -> None:
     element = str(card.get("type", "dark"))
     accent = base.ELEMENT_COLORS.get(element, base.ELEMENT_COLORS["dark"])
     species_id = str(card.get("species_id", "0000"))
     species_name = str(card.get("species_name", "unnamed"))
-    difficulty = str(card.get("difficulty", "easy")).replace("_", " ")
+    difficulty = str(card.get("difficulty", "unknown")).replace("_", " ")
     health = str(card.get("health", 0))
     speed = str(card.get("speed", 0))
     is_final_boss = bool(card.get("is_final_boss", False))
@@ -74,6 +94,10 @@ def draw_monster_entry(pdf: canvas.Canvas, card: dict[str, Any], x: float, y: fl
     pdf.setFont(base.FONT_REGULAR, 6.8)
     pdf.drawString(x + pad + 76, meta_y, f"HP {health}")
     pdf.drawString(x + pad + 122, meta_y, f"SPD {speed}")
+    if is_final_boss:
+        pdf.setFillColor(accent)
+        pdf.setFont(base.FONT_BOLD, 6.2)
+        pdf.drawRightString(x + width - pad, meta_y, difficulty.upper())
 
     move_start = meta_y - 14
     for index in range(2):
@@ -141,12 +165,27 @@ def export_pdf(output_path: Path) -> None:
     base.register_fonts()
     map_data = json.loads(base.MAP_PATH.read_text(encoding="utf-8"))
     card_data = json.loads(base.CARD_PATH.read_text(encoding="utf-8"))
+    encounter_data = json.loads(ENCOUNTER_PATH.read_text(encoding="utf-8"))
     locations = list(map_data.get("locations", []))
-    cards = sorted(list(card_data.get("cards", [])), key=lambda card: str(card.get("species_id", "")))
+    source_cards = sorted(list(card_data.get("cards", [])), key=lambda card: str(card.get("species_id", "")))
     if len(locations) != 100:
         raise RuntimeError(f"expected 100 locations, found {len(locations)}")
-    if len(cards) != 400:
-        raise RuntimeError(f"expected 400 monsters, found {len(cards)}")
+    if len(source_cards) != 400:
+        raise RuntimeError(f"expected 400 monsters, found {len(source_cards)}")
+
+    encounter_metadata = build_encounter_metadata(encounter_data)
+    if len(encounter_metadata) != 400:
+        raise RuntimeError(f"expected encounter metadata for 400 monsters, found {len(encounter_metadata)}")
+
+    cards: list[dict[str, Any]] = []
+    for source_card in source_cards:
+        species_id = str(source_card.get("species_id", ""))
+        metadata = encounter_metadata.get(species_id)
+        if metadata is None:
+            raise RuntimeError(f"missing encounter metadata for species {species_id}")
+        card = dict(source_card)
+        card.update(metadata)
+        cards.append(card)
 
     location_by_id = {str(location.get("id")): location for location in locations}
     page_by_id = {str(location.get("id")): index + 1 for index, location in enumerate(locations)}
