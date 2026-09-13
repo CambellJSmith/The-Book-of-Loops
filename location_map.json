@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "exported_at": "2026-09-11T02:52:47.259Z",
   "locations": [
     {
@@ -14,6 +14,64 @@
           "id": "loc_001_link_094",
           "side": "top",
           "offset": 0.9166666666666666
+        }
+      ],
+      "encounter_progress": 0.0,
+      "encounter_type_bias": {
+        "water": 14,
+        "light": 9,
+        "dark": 1,
+        "fire": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0159",
+          "species_name": "glassnail",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0059",
+          "species_name": "opticorn",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0004",
+          "species_name": "aurellux",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0059",
+          "species_name": "opticorn",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0004",
+          "species_name": "aurellux",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0159",
+          "species_name": "glassnail",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
         }
       ]
     },
@@ -30,6 +88,64 @@
           "side": "top",
           "offset": 0.08333333333333333
         }
+      ],
+      "encounter_progress": 0.0,
+      "encounter_type_bias": {
+        "nature": 12,
+        "water": 8,
+        "dark": 1,
+        "fire": 1,
+        "light": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0083",
+          "species_name": "saplume",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0048",
+          "species_name": "lichenell",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0248",
+          "species_name": "sproutique",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0083",
+          "species_name": "saplume",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0048",
+          "species_name": "lichenell",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0248",
+          "species_name": "sproutique",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -44,6 +160,64 @@
           "id": "loc_003_link_096",
           "side": "top",
           "offset": 0.9166666666666666
+        }
+      ],
+      "encounter_progress": 0.0,
+      "encounter_type_bias": {
+        "water": 17,
+        "dark": 12,
+        "fire": 6,
+        "light": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0015",
+          "species_name": "velvraith",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0032",
+          "species_name": "glacipuff",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0067",
+          "species_name": "puddlevet",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0032",
+          "species_name": "glacipuff",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0015",
+          "species_name": "velvraith",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0067",
+          "species_name": "puddlevet",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
         }
       ]
     },
@@ -60,6 +234,64 @@
           "side": "top",
           "offset": 0.08333333333333333
         }
+      ],
+      "encounter_progress": 0.0,
+      "encounter_type_bias": {
+        "nature": 17,
+        "dark": 16,
+        "fire": 1,
+        "light": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0265",
+          "species_name": "noctettle",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0065",
+          "species_name": "hushmoth",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0130",
+          "species_name": "velvowl",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0265",
+          "species_name": "noctettle",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0065",
+          "species_name": "hushmoth",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0130",
+          "species_name": "velvowl",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -75,6 +307,64 @@
           "side": "top",
           "offset": 0.9166666666666666
         }
+      ],
+      "encounter_progress": 0.0,
+      "encounter_type_bias": {
+        "fire": 14,
+        "water": 12,
+        "dark": 9,
+        "light": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0131",
+          "species_name": "charquill",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0001",
+          "species_name": "cindrel",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0171",
+          "species_name": "hearthare",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0001",
+          "species_name": "cindrel",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0171",
+          "species_name": "hearthare",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0131",
+          "species_name": "charquill",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -89,6 +379,64 @@
           "id": "loc_006_link_099",
           "side": "top",
           "offset": 0.08333333333333333
+        }
+      ],
+      "encounter_progress": 0.0,
+      "encounter_type_bias": {
+        "water": 11,
+        "fire": 5,
+        "nature": 4,
+        "dark": 1,
+        "light": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0207",
+          "species_name": "sorbetti",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0207",
+          "species_name": "sorbetti",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0236",
+          "species_name": "censoryx",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0157",
+          "species_name": "caperill",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0236",
+          "species_name": "censoryx",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0157",
+          "species_name": "caperill",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
         }
       ]
     },
@@ -115,6 +463,64 @@
           "side": "right",
           "offset": 0.5555555555555556
         }
+      ],
+      "encounter_progress": 0.13,
+      "encounter_type_bias": {
+        "dark": 13,
+        "light": 7,
+        "nature": 7,
+        "water": 6,
+        "fire": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0040",
+          "species_name": "noctelope",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0305",
+          "species_name": "gloamink",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0110",
+          "species_name": "umbrafawn",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0305",
+          "species_name": "gloamink",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0040",
+          "species_name": "noctelope",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0110",
+          "species_name": "umbrafawn",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -139,6 +545,64 @@
           "id": "loc_008_link_001",
           "side": "left",
           "offset": 0.5555555555555556
+        }
+      ],
+      "encounter_progress": 0.174,
+      "encounter_type_bias": {
+        "water": 17,
+        "dark": 1,
+        "fire": 1,
+        "light": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0232",
+          "species_name": "iceolotl",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0022",
+          "species_name": "coralume",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0377",
+          "species_name": "brumball",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0232",
+          "species_name": "iceolotl",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0377",
+          "species_name": "brumball",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0022",
+          "species_name": "coralume",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
         }
       ]
     },
@@ -165,6 +629,64 @@
           "side": "left",
           "offset": 0.5555555555555556
         }
+      ],
+      "encounter_progress": 0.167,
+      "encounter_type_bias": {
+        "light": 14,
+        "dark": 5,
+        "nature": 5,
+        "fire": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0024",
+          "species_name": "chandelisk",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0189",
+          "species_name": "sunscallop",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0024",
+          "species_name": "chandelisk",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0189",
+          "species_name": "sunscallop",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0074",
+          "species_name": "citrilume",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0074",
+          "species_name": "citrilume",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -184,6 +706,64 @@
           "id": "loc_010_link_003",
           "side": "left",
           "offset": 0.5555555555555556
+        }
+      ],
+      "encounter_progress": 0.125,
+      "encounter_type_bias": {
+        "fire": 9,
+        "nature": 7,
+        "dark": 6,
+        "light": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0226",
+          "species_name": "pumigull",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0136",
+          "species_name": "coppyrtle",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0291",
+          "species_name": "scoriaffe",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0226",
+          "species_name": "pumigull",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0291",
+          "species_name": "scoriaffe",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0136",
+          "species_name": "coppyrtle",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
         }
       ]
     },
@@ -210,6 +790,64 @@
           "side": "bottom",
           "offset": 0.9166666666666666
         }
+      ],
+      "encounter_progress": 0.083,
+      "encounter_type_bias": {
+        "dark": 18,
+        "nature": 8,
+        "light": 6,
+        "water": 6,
+        "fire": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0105",
+          "species_name": "inkarnet",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0160",
+          "species_name": "inkipede",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0150",
+          "species_name": "hushkin",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0150",
+          "species_name": "hushkin",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0160",
+          "species_name": "inkipede",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0105",
+          "species_name": "inkarnet",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -234,6 +872,64 @@
           "id": "loc_012_link_006",
           "side": "left",
           "offset": 0.5555555555555556
+        }
+      ],
+      "encounter_progress": 0.042,
+      "encounter_type_bias": {
+        "water": 16,
+        "nature": 11,
+        "dark": 1,
+        "fire": 1,
+        "light": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0357",
+          "species_name": "mistrelle",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0357",
+          "species_name": "mistrelle",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0182",
+          "species_name": "faucetusk",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0182",
+          "species_name": "faucetusk",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0262",
+          "species_name": "cobblotide",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0262",
+          "species_name": "cobblotide",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
         }
       ]
     },
@@ -260,6 +956,64 @@
           "side": "left",
           "offset": 0.1111111111111111
         }
+      ],
+      "encounter_progress": 0.083,
+      "encounter_type_bias": {
+        "light": 5,
+        "dark": 1,
+        "fire": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0174",
+          "species_name": "helionaut",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0364",
+          "species_name": "lustrabbit",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0174",
+          "species_name": "helionaut",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0129",
+          "species_name": "sundapple",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0364",
+          "species_name": "lustrabbit",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0129",
+          "species_name": "sundapple",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -284,6 +1038,64 @@
           "id": "loc_014_link_094",
           "side": "bottom",
           "offset": 0.08333333333333333
+        }
+      ],
+      "encounter_progress": 0.043,
+      "encounter_type_bias": {
+        "nature": 18,
+        "dark": 9,
+        "light": 7,
+        "fire": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0273",
+          "species_name": "maizelet",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0273",
+          "species_name": "maizelet",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0023",
+          "species_name": "petalisk",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0328",
+          "species_name": "ivoroot",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0023",
+          "species_name": "petalisk",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0328",
+          "species_name": "ivoroot",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
         }
       ]
     },
@@ -310,6 +1122,64 @@
           "side": "right",
           "offset": 0.8888888888888888
         }
+      ],
+      "encounter_progress": 0.087,
+      "encounter_type_bias": {
+        "light": 15,
+        "dark": 1,
+        "fire": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0224",
+          "species_name": "azurora",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0094",
+          "species_name": "opalora",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0269",
+          "species_name": "suncog",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0094",
+          "species_name": "opalora",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0224",
+          "species_name": "azurora",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0269",
+          "species_name": "suncog",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -334,6 +1204,64 @@
           "id": "loc_016_link_116",
           "side": "right",
           "offset": 0.5555555555555556
+        }
+      ],
+      "encounter_progress": 0.125,
+      "encounter_type_bias": {
+        "light": 7,
+        "fire": 6,
+        "dark": 5,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0294",
+          "species_name": "luciplume",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0389",
+          "species_name": "pharowl",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0139",
+          "species_name": "lanthalo",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0139",
+          "species_name": "lanthalo",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0294",
+          "species_name": "luciplume",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0389",
+          "species_name": "pharowl",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
         }
       ]
     },
@@ -360,6 +1288,64 @@
           "side": "bottom",
           "offset": 0.08333333333333333
         }
+      ],
+      "encounter_progress": 0.167,
+      "encounter_type_bias": {
+        "nature": 18,
+        "dark": 13,
+        "water": 6,
+        "fire": 1,
+        "light": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0093",
+          "species_name": "orchimera",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0298",
+          "species_name": "plumalch",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0138",
+          "species_name": "brambletch",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0093",
+          "species_name": "orchimera",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0138",
+          "species_name": "brambletch",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0298",
+          "species_name": "plumalch",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -384,6 +1370,64 @@
           "id": "loc_018_link_116",
           "side": "left",
           "offset": 0.6666666666666666
+        }
+      ],
+      "encounter_progress": 0.16,
+      "encounter_type_bias": {
+        "water": 17,
+        "light": 12,
+        "dark": 7,
+        "nature": 7,
+        "fire": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0234",
+          "species_name": "dawnimbus",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0084",
+          "species_name": "mirravel",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0234",
+          "species_name": "dawnimbus",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0084",
+          "species_name": "mirravel",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0124",
+          "species_name": "lucibell",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0124",
+          "species_name": "lucibell",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
         }
       ]
     },
@@ -410,6 +1454,64 @@
           "side": "bottom",
           "offset": 0.08333333333333333
         }
+      ],
+      "encounter_progress": 0.12,
+      "encounter_type_bias": {
+        "nature": 13,
+        "water": 11,
+        "dark": 10,
+        "fire": 1,
+        "light": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0008",
+          "species_name": "mycello",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0008",
+          "species_name": "mycello",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0198",
+          "species_name": "mimossum",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0158",
+          "species_name": "marrowisp",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0158",
+          "species_name": "marrowisp",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0198",
+          "species_name": "mimossum",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -434,6 +1536,64 @@
           "id": "loc_020_link_014",
           "side": "bottom",
           "offset": 0.08333333333333333
+        }
+      ],
+      "encounter_progress": 0.087,
+      "encounter_type_bias": {
+        "nature": 21,
+        "dark": 5,
+        "fire": 1,
+        "light": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0193",
+          "species_name": "sprigoyle",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0063",
+          "species_name": "ivyatrix",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0063",
+          "species_name": "ivyatrix",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0193",
+          "species_name": "sprigoyle",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0218",
+          "species_name": "bryophyx",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0218",
+          "species_name": "bryophyx",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
         }
       ]
     },
@@ -460,6 +1620,64 @@
           "side": "left",
           "offset": 0.5555555555555556
         }
+      ],
+      "encounter_progress": 0.043,
+      "encounter_type_bias": {
+        "light": 14,
+        "fire": 6,
+        "dark": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0104",
+          "species_name": "phosphene",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0244",
+          "species_name": "luminova",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0219",
+          "species_name": "lumenlace",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0104",
+          "species_name": "phosphene",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0219",
+          "species_name": "lumenlace",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0244",
+          "species_name": "luminova",
+          "type": "light",
+          "difficulty": "easy",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -484,6 +1702,64 @@
           "id": "loc_022_link_126",
           "side": "top",
           "offset": 0.9166666666666666
+        }
+      ],
+      "encounter_progress": 0.08,
+      "encounter_type_bias": {
+        "water": 24,
+        "dark": 9,
+        "nature": 7,
+        "light": 6,
+        "fire": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0017",
+          "species_name": "bubbastion",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0222",
+          "species_name": "sealestine",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0222",
+          "species_name": "sealestine",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0012",
+          "species_name": "brinoodle",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0012",
+          "species_name": "brinoodle",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0017",
+          "species_name": "bubbastion",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
         }
       ]
     },
@@ -510,6 +1786,64 @@
           "side": "bottom",
           "offset": 0.08333333333333333
         }
+      ],
+      "encounter_progress": 0.042,
+      "encounter_type_bias": {
+        "nature": 20,
+        "fire": 6,
+        "water": 6,
+        "dark": 5,
+        "light": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0168",
+          "species_name": "trellisect",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0053",
+          "species_name": "bamboogle",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0168",
+          "species_name": "trellisect",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0053",
+          "species_name": "bamboogle",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0108",
+          "species_name": "pistachiope",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0108",
+          "species_name": "pistachiope",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -534,6 +1868,64 @@
           "id": "loc_024_link_017",
           "side": "bottom",
           "offset": 0.9166666666666666
+        }
+      ],
+      "encounter_progress": 0.083,
+      "encounter_type_bias": {
+        "nature": 14,
+        "dark": 7,
+        "water": 5,
+        "fire": 1,
+        "light": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0243",
+          "species_name": "fungavel",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0073",
+          "species_name": "clovaron",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0253",
+          "species_name": "burrapin",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0073",
+          "species_name": "clovaron",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0253",
+          "species_name": "burrapin",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0243",
+          "species_name": "fungavel",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
         }
       ]
     },
@@ -560,6 +1952,64 @@
           "side": "bottom",
           "offset": 0.9166666666666666
         }
+      ],
+      "encounter_progress": 0.136,
+      "encounter_type_bias": {
+        "nature": 14,
+        "dark": 9,
+        "fire": 1,
+        "light": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0213",
+          "species_name": "tamarawl",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0378",
+          "species_name": "willowispin",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0078",
+          "species_name": "hazelurk",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0378",
+          "species_name": "willowispin",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0213",
+          "species_name": "tamarawl",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0078",
+          "species_name": "hazelurk",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -584,6 +2034,64 @@
           "id": "loc_026_link_104",
           "side": "left",
           "offset": 0.1111111111111111
+        }
+      ],
+      "encounter_progress": 0.182,
+      "encounter_type_bias": {
+        "water": 24,
+        "light": 12,
+        "nature": 8,
+        "dark": 5,
+        "fire": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0282",
+          "species_name": "tubulisk",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0092",
+          "species_name": "abysscribe",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0282",
+          "species_name": "tubulisk",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0272",
+          "species_name": "liquibra",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0272",
+          "species_name": "liquibra",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0092",
+          "species_name": "abysscribe",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
         }
       ]
     },
@@ -610,6 +2118,64 @@
           "side": "bottom",
           "offset": 0.9166666666666666
         }
+      ],
+      "encounter_progress": 0.136,
+      "encounter_type_bias": {
+        "water": 18,
+        "dark": 1,
+        "fire": 1,
+        "light": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0277",
+          "species_name": "musselune",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0392",
+          "species_name": "cressurge",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0302",
+          "species_name": "sprinkoi",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0277",
+          "species_name": "musselune",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0392",
+          "species_name": "cressurge",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0302",
+          "species_name": "sprinkoi",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -629,6 +2195,64 @@
           "id": "loc_028_link_021",
           "side": "left",
           "offset": 0.5555555555555556
+        }
+      ],
+      "encounter_progress": 0.13,
+      "encounter_type_bias": {
+        "water": 12,
+        "dark": 5,
+        "nature": 5,
+        "fire": 1,
+        "light": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0287",
+          "species_name": "meltip",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0127",
+          "species_name": "pearlop",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0127",
+          "species_name": "pearlop",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0118",
+          "species_name": "pollenaut",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0287",
+          "species_name": "meltip",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0118",
+          "species_name": "pollenaut",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
         }
       ]
     },
@@ -655,6 +2279,64 @@
           "side": "top",
           "offset": 0.08333333333333333
         }
+      ],
+      "encounter_progress": 0.091,
+      "encounter_type_bias": {
+        "water": 13,
+        "nature": 10,
+        "dark": 7,
+        "light": 7,
+        "fire": 6
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0122",
+          "species_name": "sleetle",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0122",
+          "species_name": "sleetle",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0187",
+          "species_name": "nimbushell",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0317",
+          "species_name": "wispwell",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0317",
+          "species_name": "wispwell",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0187",
+          "species_name": "nimbushell",
+          "type": "water",
+          "difficulty": "easy",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -679,6 +2361,64 @@
           "id": "loc_030_link_024",
           "side": "left",
           "offset": 0.5555555555555556
+        }
+      ],
+      "encounter_progress": 0.045,
+      "encounter_type_bias": {
+        "water": 18,
+        "dark": 16,
+        "fire": 6,
+        "light": 6,
+        "nature": 5
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0010",
+          "species_name": "nocturnip",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0060",
+          "species_name": "murkoi",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0010",
+          "species_name": "nocturnip",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0135",
+          "species_name": "shadequill",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0060",
+          "species_name": "murkoi",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0135",
+          "species_name": "shadequill",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
         }
       ]
     },
@@ -705,6 +2445,64 @@
           "side": "top",
           "offset": 0.08333333333333333
         }
+      ],
+      "encounter_progress": 0.091,
+      "encounter_type_bias": {
+        "nature": 18,
+        "dark": 15,
+        "fire": 10,
+        "light": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0235",
+          "species_name": "noxglider",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0028",
+          "species_name": "mossquill",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0028",
+          "species_name": "mossquill",
+          "type": "nature",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0080",
+          "species_name": "penumbrat",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0235",
+          "species_name": "noxglider",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0080",
+          "species_name": "penumbrat",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -729,6 +2527,64 @@
           "id": "loc_032_link_098",
           "side": "bottom",
           "offset": 0.08333333333333333
+        }
+      ],
+      "encounter_progress": 0.045,
+      "encounter_type_bias": {
+        "fire": 21,
+        "dark": 15,
+        "light": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0206",
+          "species_name": "flintelope",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0246",
+          "species_name": "sparkoni",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0156",
+          "species_name": "flarequin",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0206",
+          "species_name": "flintelope",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0246",
+          "species_name": "sparkoni",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0156",
+          "species_name": "flarequin",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
         }
       ]
     },
@@ -755,6 +2611,64 @@
           "side": "bottom",
           "offset": 0.08333333333333333
         }
+      ],
+      "encounter_progress": 0.091,
+      "encounter_type_bias": {
+        "fire": 19,
+        "light": 19,
+        "nature": 5,
+        "dark": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0301",
+          "species_name": "cinnarch",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0306",
+          "species_name": "coalibri",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0306",
+          "species_name": "coalibri",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0201",
+          "species_name": "sizzlume",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0201",
+          "species_name": "sizzlume",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0301",
+          "species_name": "cinnarch",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -779,6 +2693,64 @@
           "id": "loc_034_link_037",
           "side": "bottom",
           "offset": 0.5
+        }
+      ],
+      "encounter_progress": 0.304,
+      "encounter_type_bias": {
+        "water": 17,
+        "nature": 5,
+        "dark": 1,
+        "fire": 1,
+        "light": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0242",
+          "species_name": "poolter",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0123",
+          "species_name": "nettlesk",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0057",
+          "species_name": "marimask",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0057",
+          "species_name": "marimask",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0242",
+          "species_name": "poolter",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0208",
+          "species_name": "wickerant",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
         }
       ]
     },
@@ -805,6 +2777,64 @@
           "side": "bottom",
           "offset": 0.08333333333333333
         }
+      ],
+      "encounter_progress": 0.292,
+      "encounter_type_bias": {
+        "nature": 15,
+        "water": 6,
+        "dark": 1,
+        "fire": 1,
+        "light": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0128",
+          "species_name": "drupelet",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0173",
+          "species_name": "capervine",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0288",
+          "species_name": "leaflute",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0173",
+          "species_name": "capervine",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0128",
+          "species_name": "drupelet",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0228",
+          "species_name": "loamander",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -829,6 +2859,64 @@
           "id": "loc_036_link_128",
           "side": "bottom",
           "offset": 0.9166666666666666
+        }
+      ],
+      "encounter_progress": 0.304,
+      "encounter_type_bias": {
+        "water": 12,
+        "nature": 8,
+        "dark": 1,
+        "fire": 1,
+        "light": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0068",
+          "species_name": "seedrill",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0148",
+          "species_name": "sequoiant",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0363",
+          "species_name": "podragon",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0343",
+          "species_name": "bryotoad",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0148",
+          "species_name": "sequoiant",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0068",
+          "species_name": "seedrill",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
         }
       ]
     },
@@ -855,6 +2943,64 @@
           "side": "left",
           "offset": 0.5555555555555556
         }
+      ],
+      "encounter_progress": 0.318,
+      "encounter_type_bias": {
+        "dark": 7,
+        "fire": 6,
+        "light": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0191",
+          "species_name": "pyrograph",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0116",
+          "species_name": "vitramber",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0145",
+          "species_name": "obsiray",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0075",
+          "species_name": "obscurail",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0145",
+          "species_name": "obsiray",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0075",
+          "species_name": "obscurail",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -879,6 +3025,64 @@
           "id": "loc_038_link_128",
           "side": "top",
           "offset": 0.08333333333333333
+        }
+      ],
+      "encounter_progress": 0.273,
+      "encounter_type_bias": {
+        "water": 5,
+        "dark": 1,
+        "fire": 1,
+        "light": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0154",
+          "species_name": "solfeather",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0144",
+          "species_name": "photolisk",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0144",
+          "species_name": "photolisk",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0204",
+          "species_name": "lucirope",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0279",
+          "species_name": "luxafold",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0154",
+          "species_name": "solfeather",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
         }
       ]
     },
@@ -905,6 +3109,64 @@
           "side": "left",
           "offset": 0.5555555555555556
         }
+      ],
+      "encounter_progress": 0.227,
+      "encounter_type_bias": {
+        "dark": 5,
+        "nature": 4,
+        "fire": 1,
+        "light": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0178",
+          "species_name": "humust",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0119",
+          "species_name": "glimmora",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0119",
+          "species_name": "glimmora",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0064",
+          "species_name": "vellucian",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0178",
+          "species_name": "humust",
+          "type": "nature",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0064",
+          "species_name": "vellucian",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -924,6 +3186,64 @@
           "id": "loc_040_link_034",
           "side": "left",
           "offset": 0.5555555555555556
+        }
+      ],
+      "encounter_progress": 0.25,
+      "encounter_type_bias": {
+        "dark": 9,
+        "fire": 1,
+        "light": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0095",
+          "species_name": "ravellock",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0095",
+          "species_name": "ravellock",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0290",
+          "species_name": "cryptillow",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0155",
+          "species_name": "mirequill",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0290",
+          "species_name": "cryptillow",
+          "type": "dark",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0225",
+          "species_name": "inkwellor",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
         }
       ]
     },
@@ -950,6 +3270,64 @@
           "side": "left",
           "offset": 0.5555555555555556
         }
+      ],
+      "encounter_progress": 0.208,
+      "encounter_type_bias": {
+        "fire": 23,
+        "dark": 16,
+        "light": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0186",
+          "species_name": "sootindle",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0121",
+          "species_name": "bricket",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0186",
+          "species_name": "sootindle",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0121",
+          "species_name": "bricket",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0076",
+          "species_name": "fumarill",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0076",
+          "species_name": "fumarill",
+          "type": "fire",
+          "difficulty": "easy",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -974,6 +3352,64 @@
           "id": "loc_042_link_102",
           "side": "left",
           "offset": 0.8888888888888888
+        }
+      ],
+      "encounter_progress": 0.217,
+      "encounter_type_bias": {
+        "fire": 6,
+        "nature": 5,
+        "dark": 1,
+        "light": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0096",
+          "species_name": "coaltopus",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0391",
+          "species_name": "pyrothim",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0391",
+          "species_name": "pyrothim",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0346",
+          "species_name": "ignifolio",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0096",
+          "species_name": "coaltopus",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0346",
+          "species_name": "ignifolio",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
         }
       ]
     },
@@ -1000,6 +3436,64 @@
           "side": "top",
           "offset": 0.9166666666666666
         }
+      ],
+      "encounter_progress": 0.261,
+      "encounter_type_bias": {
+        "water": 11,
+        "dark": 5,
+        "fire": 1,
+        "light": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0142",
+          "species_name": "wellwhorl",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0347",
+          "species_name": "lochnymph",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0002",
+          "species_name": "nautiquill",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0327",
+          "species_name": "glacigong",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0002",
+          "species_name": "nautiquill",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0142",
+          "species_name": "wellwhorl",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1019,6 +3513,64 @@
           "id": "loc_044_link_046",
           "side": "bottom",
           "offset": 0.5
+        }
+      ],
+      "encounter_progress": 0.462,
+      "encounter_type_bias": {
+        "fire": 10,
+        "water": 6,
+        "nature": 5,
+        "dark": 1,
+        "light": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0051",
+          "species_name": "emberdillo",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0081",
+          "species_name": "lantherge",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0051",
+          "species_name": "emberdillo",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0161",
+          "species_name": "thermoth",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0081",
+          "species_name": "lantherge",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0341",
+          "species_name": "charmite",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
         }
       ]
     },
@@ -1045,6 +3597,64 @@
           "side": "bottom",
           "offset": 0.08333333333333333
         }
+      ],
+      "encounter_progress": 0.48,
+      "encounter_type_bias": {
+        "dark": 1,
+        "fire": 1,
+        "light": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0016",
+          "species_name": "pyrelace",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0183",
+          "species_name": "blossquid",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0361",
+          "species_name": "thermote",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0031",
+          "species_name": "tindervane",
+          "type": "fire",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0183",
+          "species_name": "blossquid",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0016",
+          "species_name": "pyrelace",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1070,6 +3680,64 @@
           "side": "left",
           "offset": 0.5555555555555556
         }
+      ],
+      "encounter_progress": 0.478,
+      "encounter_type_bias": {
+        "fire": 6,
+        "dark": 5,
+        "light": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0181",
+          "species_name": "carmelisk",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0056",
+          "species_name": "safflare",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0251",
+          "species_name": "cinderette",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0296",
+          "species_name": "flambasin",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0056",
+          "species_name": "safflare",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0181",
+          "species_name": "carmelisk",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1089,6 +3757,64 @@
           "id": "loc_047_link_040",
           "side": "left",
           "offset": 0.5555555555555556
+        }
+      ],
+      "encounter_progress": 0.435,
+      "encounter_type_bias": {
+        "nature": 17,
+        "dark": 9,
+        "fire": 1,
+        "light": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0133",
+          "species_name": "quercora",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0263",
+          "species_name": "verdigourd",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0133",
+          "species_name": "quercora",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0368",
+          "species_name": "mossuary",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0033",
+          "species_name": "vellich",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0033",
+          "species_name": "vellich",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
         }
       ]
     },
@@ -1115,6 +3841,64 @@
           "side": "left",
           "offset": 0.8888888888888888
         }
+      ],
+      "encounter_progress": 0.391,
+      "encounter_type_bias": {
+        "dark": 15,
+        "water": 13,
+        "fire": 6,
+        "light": 6,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0115",
+          "species_name": "morbloom",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0165",
+          "species_name": "noxolotl",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0115",
+          "species_name": "morbloom",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0325",
+          "species_name": "sabletch",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0165",
+          "species_name": "noxolotl",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0335",
+          "species_name": "velvursa",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1139,6 +3923,64 @@
           "id": "loc_049_link_043",
           "side": "left",
           "offset": 0.5555555555555556
+        }
+      ],
+      "encounter_progress": 0.348,
+      "encounter_type_bias": {
+        "water": 12,
+        "fire": 7,
+        "dark": 1,
+        "light": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0396",
+          "species_name": "ashmorrow",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0011",
+          "species_name": "kettlisk",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0101",
+          "species_name": "pyrosette",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0071",
+          "species_name": "torquember",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0071",
+          "species_name": "torquember",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0011",
+          "species_name": "kettlisk",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
         }
       ]
     },
@@ -1165,6 +4007,64 @@
           "side": "right",
           "offset": 0.1111111111111111
         }
+      ],
+      "encounter_progress": 0.375,
+      "encounter_type_bias": {
+        "dark": 16,
+        "fire": 6,
+        "light": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0200",
+          "species_name": "gloamplum",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0025",
+          "species_name": "inkraven",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0070",
+          "species_name": "nightjarrow",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0070",
+          "species_name": "nightjarrow",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0365",
+          "species_name": "gloambray",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0025",
+          "species_name": "inkraven",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1184,6 +4084,64 @@
           "id": "loc_051_link_044",
           "side": "right",
           "offset": 0.5555555555555556
+        }
+      ],
+      "encounter_progress": 0.4,
+      "encounter_type_bias": {
+        "dark": 8,
+        "fire": 1,
+        "light": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0285",
+          "species_name": "murkshell",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0285",
+          "species_name": "murkshell",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0250",
+          "species_name": "sablefin",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0330",
+          "species_name": "hushreed",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0250",
+          "species_name": "sablefin",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0310",
+          "species_name": "umbracress",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
         }
       ]
     },
@@ -1210,6 +4168,64 @@
           "side": "top",
           "offset": 0.9166666666666666
         }
+      ],
+      "encounter_progress": 0.44,
+      "encounter_type_bias": {
+        "dark": 11,
+        "fire": 9,
+        "light": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0180",
+          "species_name": "noctifern",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0195",
+          "species_name": "lacunelle",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0195",
+          "species_name": "lacunelle",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0295",
+          "species_name": "noxamander",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0220",
+          "species_name": "nightelope",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0180",
+          "species_name": "noctifern",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1229,6 +4245,64 @@
           "id": "loc_053_link_055",
           "side": "bottom",
           "offset": 0.5
+        }
+      ],
+      "encounter_progress": 0.409,
+      "encounter_type_bias": {
+        "fire": 14,
+        "light": 10,
+        "dark": 9,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0221",
+          "species_name": "burnuette",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0091",
+          "species_name": "ashtronaut",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0091",
+          "species_name": "ashtronaut",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0221",
+          "species_name": "burnuette",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0351",
+          "species_name": "rosemelt",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0331",
+          "species_name": "pyrotile",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
         }
       ]
     },
@@ -1255,6 +4329,64 @@
           "side": "left",
           "offset": 0.5555555555555556
         }
+      ],
+      "encounter_progress": 0.455,
+      "encounter_type_bias": {
+        "dark": 8,
+        "water": 8,
+        "nature": 4,
+        "fire": 1,
+        "light": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0268",
+          "species_name": "rootisserie",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0018",
+          "species_name": "acornyx",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0203",
+          "species_name": "asterope",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0018",
+          "species_name": "acornyx",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0223",
+          "species_name": "rhubaroom",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0203",
+          "species_name": "asterope",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1280,6 +4412,64 @@
           "side": "bottom",
           "offset": 0.9166666666666666
         }
+      ],
+      "encounter_progress": 0.458,
+      "encounter_type_bias": {
+        "fire": 24,
+        "dark": 19,
+        "light": 7,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0021",
+          "species_name": "scorovel",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0036",
+          "species_name": "flambrel",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0036",
+          "species_name": "flambrel",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0021",
+          "species_name": "scorovel",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0061",
+          "species_name": "crockle",
+          "type": "fire",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0321",
+          "species_name": "cinderlock",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1299,6 +4489,64 @@
           "id": "loc_056_link_049",
           "side": "left",
           "offset": 0.5555555555555556
+        }
+      ],
+      "encounter_progress": 0.462,
+      "encounter_type_bias": {
+        "fire": 19,
+        "dark": 1,
+        "light": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0271",
+          "species_name": "emberloom",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0271",
+          "species_name": "emberloom",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0261",
+          "species_name": "flaracet",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0261",
+          "species_name": "flaracet",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0146",
+          "species_name": "roastrel",
+          "type": "fire",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0356",
+          "species_name": "emberkip",
+          "type": "fire",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
         }
       ]
     },
@@ -1325,6 +4573,64 @@
           "side": "top",
           "offset": 0.08333333333333333
         }
+      ],
+      "encounter_progress": 0.44,
+      "encounter_type_bias": {
+        "water": 22,
+        "dark": 13,
+        "light": 6,
+        "fire": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0037",
+          "species_name": "siphonaut",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0082",
+          "species_name": "kelparade",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0202",
+          "species_name": "cavernacle",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0037",
+          "species_name": "siphonaut",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0082",
+          "species_name": "kelparade",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0107",
+          "species_name": "floephant",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1350,6 +4656,64 @@
           "side": "left",
           "offset": 0.5555555555555556
         }
+      ],
+      "encounter_progress": 0.4,
+      "encounter_type_bias": {
+        "water": 19,
+        "dark": 7,
+        "fire": 1,
+        "light": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0297",
+          "species_name": "hydroveil",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0062",
+          "species_name": "frostitch",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0162",
+          "species_name": "shiverail",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0117",
+          "species_name": "waverune",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0062",
+          "species_name": "frostitch",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0117",
+          "species_name": "waverune",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1369,6 +4733,64 @@
           "id": "loc_059_link_053",
           "side": "left",
           "offset": 0.5555555555555556
+        }
+      ],
+      "encounter_progress": 0.385,
+      "encounter_type_bias": {
+        "water": 13,
+        "light": 6,
+        "dark": 5,
+        "nature": 5,
+        "fire": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0349",
+          "species_name": "halowisp",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0249",
+          "species_name": "saffronel",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0179",
+          "species_name": "lumequill",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0249",
+          "species_name": "saffronel",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0179",
+          "species_name": "lumequill",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0339",
+          "species_name": "lumisoothe",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
         }
       ]
     },
@@ -1395,6 +4817,64 @@
           "side": "right",
           "offset": 0.6666666666666666
         }
+      ],
+      "encounter_progress": 0.375,
+      "encounter_type_bias": {
+        "water": 25,
+        "light": 7,
+        "dark": 1,
+        "fire": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0072",
+          "species_name": "semaphorel",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0072",
+          "species_name": "semaphorel",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0307",
+          "species_name": "nautibolt",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0172",
+          "species_name": "anemot",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0172",
+          "species_name": "anemot",
+          "type": "water",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0047",
+          "species_name": "dewquartz",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1419,6 +4899,64 @@
           "id": "loc_061_link_106",
           "side": "bottom",
           "offset": 0.08333333333333333
+        }
+      ],
+      "encounter_progress": 0.364,
+      "encounter_type_bias": {
+        "dark": 11,
+        "water": 8,
+        "fire": 1,
+        "light": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0390",
+          "species_name": "inkadorn",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0055",
+          "species_name": "cryptettle",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0125",
+          "species_name": "gloamure",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0055",
+          "species_name": "cryptettle",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0380",
+          "species_name": "hushnail",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0125",
+          "species_name": "gloamure",
+          "type": "dark",
+          "difficulty": "medium",
+          "is_final_boss": false
         }
       ]
     },
@@ -1445,6 +4983,64 @@
           "side": "bottom",
           "offset": 0.5
         }
+      ],
+      "encounter_progress": 0.609,
+      "encounter_type_bias": {
+        "water": 27,
+        "dark": 26,
+        "fire": 26,
+        "light": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0281",
+          "species_name": "crucibell",
+          "type": "fire",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0366",
+          "species_name": "pyroknell",
+          "type": "fire",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0126",
+          "species_name": "scaldron",
+          "type": "fire",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0381",
+          "species_name": "melttern",
+          "type": "fire",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0086",
+          "species_name": "peppyrant",
+          "type": "fire",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0086",
+          "species_name": "peppyrant",
+          "type": "fire",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1469,6 +5065,64 @@
           "id": "loc_063_link_121",
           "side": "bottom",
           "offset": 0.08333333333333333
+        }
+      ],
+      "encounter_progress": 0.583,
+      "encounter_type_bias": {
+        "light": 18,
+        "dark": 1,
+        "fire": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0134",
+          "species_name": "iridell",
+          "type": "light",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0304",
+          "species_name": "candivane",
+          "type": "light",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0079",
+          "species_name": "heliotter",
+          "type": "light",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0014",
+          "species_name": "lucentail",
+          "type": "light",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0014",
+          "species_name": "lucentail",
+          "type": "light",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0039",
+          "species_name": "prismantis",
+          "type": "light",
+          "difficulty": "hard",
+          "is_final_boss": false
         }
       ]
     },
@@ -1495,6 +5149,64 @@
           "side": "bottom",
           "offset": 0.9166666666666666
         }
+      ],
+      "encounter_progress": 0.565,
+      "encounter_type_bias": {
+        "light": 6,
+        "water": 6,
+        "dark": 1,
+        "fire": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0099",
+          "species_name": "suncleft",
+          "type": "light",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0354",
+          "species_name": "rayvern",
+          "type": "light",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0019",
+          "species_name": "solivane",
+          "type": "light",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0044",
+          "species_name": "sunspindle",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0394",
+          "species_name": "daygliss",
+          "type": "light",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0044",
+          "species_name": "sunspindle",
+          "type": "light",
+          "difficulty": "medium",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1519,6 +5231,64 @@
           "id": "loc_065_link_058",
           "side": "left",
           "offset": 0.5555555555555556
+        }
+      ],
+      "encounter_progress": 0.591,
+      "encounter_type_bias": {
+        "water": 27,
+        "dark": 1,
+        "fire": 1,
+        "light": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0322",
+          "species_name": "rillocel",
+          "type": "water",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0292",
+          "species_name": "currantide",
+          "type": "water",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0397",
+          "species_name": "aqualoom",
+          "type": "water",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0227",
+          "species_name": "pluviola",
+          "type": "water",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0097",
+          "species_name": "mistrillo",
+          "type": "water",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0097",
+          "species_name": "mistrillo",
+          "type": "water",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
         }
       ]
     },
@@ -1545,6 +5315,64 @@
           "side": "top",
           "offset": 0.08333333333333333
         }
+      ],
+      "encounter_progress": 0.545,
+      "encounter_type_bias": {
+        "water": 8,
+        "dark": 6,
+        "fire": 1,
+        "light": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0102",
+          "species_name": "tealith",
+          "type": "water",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0247",
+          "species_name": "drizzloom",
+          "type": "water",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0042",
+          "species_name": "lagunelle",
+          "type": "water",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0042",
+          "species_name": "lagunelle",
+          "type": "water",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0387",
+          "species_name": "velouray",
+          "type": "water",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0188",
+          "species_name": "corkadon",
+          "type": "nature",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1570,6 +5398,64 @@
           "side": "left",
           "offset": 0.5555555555555556
         }
+      ],
+      "encounter_progress": 0.5,
+      "encounter_type_bias": {
+        "water": 28,
+        "dark": 15,
+        "nature": 14,
+        "fire": 1,
+        "light": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0252",
+          "species_name": "brinespire",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0137",
+          "species_name": "ceruleech",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0087",
+          "species_name": "rinsetrel",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0212",
+          "species_name": "jetsprite",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0152",
+          "species_name": "fathomoth",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0087",
+          "species_name": "rinsetrel",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1590,6 +5476,64 @@
           "side": "left",
           "offset": 0.5555555555555556
         }
+      ],
+      "encounter_progress": 0.5,
+      "encounter_type_bias": {
+        "dark": 8,
+        "fire": 6,
+        "light": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0270",
+          "species_name": "umbroscope",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0311",
+          "species_name": "cauterpede",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0376",
+          "species_name": "coalsmith",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0276",
+          "species_name": "brimlot",
+          "type": "fire",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0175",
+          "species_name": "shadimble",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0175",
+          "species_name": "shadimble",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1609,6 +5553,64 @@
           "id": "loc_069_link_063",
           "side": "left",
           "offset": 0.5555555555555556
+        }
+      ],
+      "encounter_progress": 0.52,
+      "encounter_type_bias": {
+        "nature": 20,
+        "fire": 10,
+        "light": 9,
+        "dark": 5,
+        "water": 5
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0323",
+          "species_name": "peonimbus",
+          "type": "nature",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0303",
+          "species_name": "sylvaseer",
+          "type": "nature",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0143",
+          "species_name": "sporellan",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0013",
+          "species_name": "fernograff",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0358",
+          "species_name": "hyphacorn",
+          "type": "nature",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0013",
+          "species_name": "fernograff",
+          "type": "nature",
+          "difficulty": "hard",
+          "is_final_boss": false
         }
       ]
     },
@@ -1635,6 +5637,64 @@
           "side": "left",
           "offset": 0.8888888888888888
         }
+      ],
+      "encounter_progress": 0.522,
+      "encounter_type_bias": {
+        "water": 21,
+        "dark": 16,
+        "light": 7,
+        "fire": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0237",
+          "species_name": "maelstork",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0052",
+          "species_name": "gutterwisp",
+          "type": "water",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0352",
+          "species_name": "scullfin",
+          "type": "water",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0167",
+          "species_name": "balsquall",
+          "type": "water",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0237",
+          "species_name": "maelstork",
+          "type": "water",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0112",
+          "species_name": "bracine",
+          "type": "water",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1660,6 +5720,64 @@
           "side": "top",
           "offset": 0.9166666666666666
         }
+      ],
+      "encounter_progress": 0.565,
+      "encounter_type_bias": {
+        "fire": 21,
+        "dark": 17,
+        "water": 16,
+        "light": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0286",
+          "species_name": "pyrexin",
+          "type": "fire",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0006",
+          "species_name": "brassalam",
+          "type": "fire",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0266",
+          "species_name": "scorchnut",
+          "type": "fire",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0166",
+          "species_name": "slagmant",
+          "type": "fire",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0231",
+          "species_name": "thermalo",
+          "type": "fire",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0006",
+          "species_name": "brassalam",
+          "type": "fire",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1679,6 +5797,64 @@
           "id": "loc_072_link_074",
           "side": "bottom",
           "offset": 0.5
+        }
+      ],
+      "encounter_progress": 0.731,
+      "encounter_type_bias": {
+        "dark": 13,
+        "water": 11,
+        "fire": 1,
+        "light": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0355",
+          "species_name": "noxspindle",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0030",
+          "species_name": "mournacle",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0370",
+          "species_name": "obscurona",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0020",
+          "species_name": "obsidillo",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0020",
+          "species_name": "obsidillo",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0350",
+          "species_name": "cryptibex",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
         }
       ]
     },
@@ -1705,6 +5881,64 @@
           "side": "bottom",
           "offset": 0.08333333333333333
         }
+      ],
+      "encounter_progress": 0.76,
+      "encounter_type_bias": {
+        "light": 18,
+        "water": 18,
+        "dark": 8,
+        "fire": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0374",
+          "species_name": "solstitch",
+          "type": "light",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0089",
+          "species_name": "lucidrum",
+          "type": "light",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0367",
+          "species_name": "sluicera",
+          "type": "water",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0299",
+          "species_name": "sungravel",
+          "type": "light",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0229",
+          "species_name": "luxotaur",
+          "type": "light",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0399",
+          "species_name": "solarium",
+          "type": "light",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1729,6 +5963,64 @@
           "id": "loc_074_link_067",
           "side": "left",
           "offset": 0.5555555555555556
+        }
+      ],
+      "encounter_progress": 0.783,
+      "encounter_type_bias": {
+        "water": 19,
+        "dark": 10,
+        "fire": 9,
+        "light": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0077",
+          "species_name": "cascadore",
+          "type": "water",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0007",
+          "species_name": "pluvoceros",
+          "type": "water",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0312",
+          "species_name": "shoardin",
+          "type": "water",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0342",
+          "species_name": "batholith",
+          "type": "water",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0362",
+          "species_name": "crystern",
+          "type": "water",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0177",
+          "species_name": "riftfin",
+          "type": "water",
+          "difficulty": "ultra",
+          "is_final_boss": false
         }
       ]
     },
@@ -1755,6 +6047,64 @@
           "side": "bottom",
           "offset": 0.08333333333333333
         }
+      ],
+      "encounter_progress": 0.739,
+      "encounter_type_bias": {
+        "light": 40,
+        "fire": 10,
+        "nature": 8,
+        "dark": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0284",
+          "species_name": "halomure",
+          "type": "light",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0369",
+          "species_name": "clarigon",
+          "type": "light",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0054",
+          "species_name": "luminettle",
+          "type": "light",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0054",
+          "species_name": "luminettle",
+          "type": "light",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0209",
+          "species_name": "solpaca",
+          "type": "light",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0149",
+          "species_name": "lustrarch",
+          "type": "light",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1779,6 +6129,64 @@
           "id": "loc_076_link_070",
           "side": "bottom",
           "offset": 0.08333333333333333
+        }
+      ],
+      "encounter_progress": 0.696,
+      "encounter_type_bias": {
+        "water": 18,
+        "light": 8,
+        "dark": 7,
+        "fire": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0147",
+          "species_name": "prismarineer",
+          "type": "water",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0132",
+          "species_name": "splashforge",
+          "type": "water",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0192",
+          "species_name": "barricoral",
+          "type": "water",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0257",
+          "species_name": "glaquill",
+          "type": "water",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0197",
+          "species_name": "rainswell",
+          "type": "water",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0147",
+          "species_name": "prismarineer",
+          "type": "water",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
         }
       ]
     },
@@ -1805,6 +6213,64 @@
           "side": "left",
           "offset": 0.5555555555555556
         }
+      ],
+      "encounter_progress": 0.652,
+      "encounter_type_bias": {
+        "water": 26,
+        "dark": 6,
+        "nature": 4,
+        "fire": 1,
+        "light": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0027",
+          "species_name": "rillipede",
+          "type": "water",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0217",
+          "species_name": "opalunge",
+          "type": "water",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0267",
+          "species_name": "flotillae",
+          "type": "water",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0267",
+          "species_name": "flotillae",
+          "type": "water",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0332",
+          "species_name": "foamur",
+          "type": "water",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0382",
+          "species_name": "rivetide",
+          "type": "water",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1830,6 +6296,64 @@
           "side": "top",
           "offset": 0.9166666666666666
         }
+      ],
+      "encounter_progress": 0.696,
+      "encounter_type_bias": {
+        "light": 17,
+        "nature": 11,
+        "water": 8,
+        "dark": 6,
+        "fire": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0058",
+          "species_name": "morcheval",
+          "type": "nature",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0163",
+          "species_name": "firridian",
+          "type": "nature",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0184",
+          "species_name": "clarivox",
+          "type": "light",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0324",
+          "species_name": "luxibex",
+          "type": "light",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0184",
+          "species_name": "clarivox",
+          "type": "light",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0353",
+          "species_name": "lignocrest",
+          "type": "nature",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1849,6 +6373,64 @@
           "id": "loc_079_link_072",
           "side": "right",
           "offset": 0.5555555555555556
+        }
+      ],
+      "encounter_progress": 0.68,
+      "encounter_type_bias": {
+        "light": 8,
+        "dark": 1,
+        "fire": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0309",
+          "species_name": "solopod",
+          "type": "light",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0274",
+          "species_name": "orielith",
+          "type": "light",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0289",
+          "species_name": "daymora",
+          "type": "light",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0109",
+          "species_name": "daylilyth",
+          "type": "light",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0109",
+          "species_name": "daylilyth",
+          "type": "light",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0319",
+          "species_name": "beacorn",
+          "type": "light",
+          "difficulty": "hard",
+          "is_final_boss": false
         }
       ]
     },
@@ -1875,6 +6457,64 @@
           "side": "top",
           "offset": 0.9166666666666666
         }
+      ],
+      "encounter_progress": 0.72,
+      "encounter_type_bias": {
+        "dark": 17,
+        "fire": 13,
+        "light": 7,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0241",
+          "species_name": "magmuffle",
+          "type": "fire",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0066",
+          "species_name": "blazebloom",
+          "type": "fire",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0026",
+          "species_name": "magmaestro",
+          "type": "fire",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0041",
+          "species_name": "cauteroot",
+          "type": "fire",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0026",
+          "species_name": "magmaestro",
+          "type": "fire",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0371",
+          "species_name": "calderook",
+          "type": "fire",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1899,6 +6539,64 @@
           "id": "loc_081_link_133",
           "side": "bottom",
           "offset": 0.9166666666666666
+        }
+      ],
+      "encounter_progress": 0.727,
+      "encounter_type_bias": {
+        "dark": 6,
+        "fire": 5,
+        "light": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0318",
+          "species_name": "coppiclaw",
+          "type": "nature",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0393",
+          "species_name": "loambray",
+          "type": "nature",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0333",
+          "species_name": "truffalo",
+          "type": "nature",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0088",
+          "species_name": "reedox",
+          "type": "nature",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0258",
+          "species_name": "cattalune",
+          "type": "nature",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0088",
+          "species_name": "reedox",
+          "type": "nature",
+          "difficulty": "ultra",
+          "is_final_boss": false
         }
       ]
     },
@@ -1925,6 +6623,64 @@
           "side": "left",
           "offset": 0.8888888888888888
         }
+      ],
+      "encounter_progress": 0.773,
+      "encounter_type_bias": {
+        "nature": 21,
+        "dark": 10,
+        "water": 6,
+        "fire": 5,
+        "light": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0293",
+          "species_name": "burracuda",
+          "type": "nature",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0113",
+          "species_name": "virelion",
+          "type": "nature",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0043",
+          "species_name": "rootunda",
+          "type": "nature",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0313",
+          "species_name": "sassafang",
+          "type": "nature",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0038",
+          "species_name": "thistalon",
+          "type": "nature",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0153",
+          "species_name": "mangrovel",
+          "type": "nature",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1950,6 +6706,64 @@
           "side": "bottom",
           "offset": 0.9166666666666666
         }
+      ],
+      "encounter_progress": 0.75,
+      "encounter_type_bias": {
+        "light": 20,
+        "dark": 19,
+        "fire": 11,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0344",
+          "species_name": "prismora",
+          "type": "light",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0199",
+          "species_name": "fresnell",
+          "type": "light",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0214",
+          "species_name": "pearliant",
+          "type": "light",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0114",
+          "species_name": "spectrill",
+          "type": "light",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0384",
+          "species_name": "luminacre",
+          "type": "light",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0334",
+          "species_name": "solacant",
+          "type": "light",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -1969,6 +6783,64 @@
           "id": "loc_084_link_077",
           "side": "left",
           "offset": 0.2222222222222222
+        }
+      ],
+      "encounter_progress": 0.72,
+      "encounter_type_bias": {
+        "water": 6,
+        "nature": 5,
+        "dark": 1,
+        "fire": 1,
+        "light": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0398",
+          "species_name": "verdigrip",
+          "type": "nature",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0337",
+          "species_name": "torrentyx",
+          "type": "water",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0283",
+          "species_name": "mirelisk",
+          "type": "nature",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0337",
+          "species_name": "torrentyx",
+          "type": "water",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0233",
+          "species_name": "cedarcog",
+          "type": "nature",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0372",
+          "species_name": "amphoracle",
+          "type": "water",
+          "difficulty": "ultra",
+          "is_final_boss": false
         }
       ]
     },
@@ -1995,6 +6867,64 @@
           "side": "top",
           "offset": 0.08333333333333333
         }
+      ],
+      "encounter_progress": 0.708,
+      "encounter_type_bias": {
+        "light": 15,
+        "fire": 6,
+        "dark": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0239",
+          "species_name": "refractyl",
+          "type": "light",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0264",
+          "species_name": "gleamander",
+          "type": "light",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0329",
+          "species_name": "vesperlite",
+          "type": "light",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0359",
+          "species_name": "glimmurn",
+          "type": "light",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0239",
+          "species_name": "refractyl",
+          "type": "light",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0254",
+          "species_name": "prismule",
+          "type": "light",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -2014,6 +6944,64 @@
           "id": "loc_086_link_080",
           "side": "left",
           "offset": 0.5555555555555556
+        }
+      ],
+      "encounter_progress": 0.667,
+      "encounter_type_bias": {
+        "dark": 12,
+        "light": 8,
+        "fire": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0049",
+          "species_name": "aurorook",
+          "type": "light",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0029",
+          "species_name": "beamlark",
+          "type": "light",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0029",
+          "species_name": "beamlark",
+          "type": "light",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0050",
+          "species_name": "gloamox",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0314",
+          "species_name": "iridawn",
+          "type": "light",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0090",
+          "species_name": "duskettle",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
         }
       ]
     },
@@ -2040,6 +7028,64 @@
           "side": "top",
           "offset": 0.08333333333333333
         }
+      ],
+      "encounter_progress": 0.682,
+      "encounter_type_bias": {
+        "nature": 18,
+        "water": 13,
+        "light": 7,
+        "dark": 1,
+        "fire": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0348",
+          "species_name": "zestrel",
+          "type": "nature",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0373",
+          "species_name": "brackenth",
+          "type": "nature",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0098",
+          "species_name": "burrowan",
+          "type": "nature",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0388",
+          "species_name": "pistillon",
+          "type": "nature",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0238",
+          "species_name": "petunox",
+          "type": "nature",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0098",
+          "species_name": "burrowan",
+          "type": "nature",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -2064,6 +7110,64 @@
           "id": "loc_088_link_110",
           "side": "left",
           "offset": 0.8888888888888888
+        }
+      ],
+      "encounter_progress": 0.636,
+      "encounter_type_bias": {
+        "dark": 12,
+        "water": 12,
+        "light": 7,
+        "fire": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0300",
+          "species_name": "shadefolio",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0185",
+          "species_name": "sablemaw",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0230",
+          "species_name": "umbracord",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0240",
+          "species_name": "caverook",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0185",
+          "species_name": "sablemaw",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0205",
+          "species_name": "murkmant",
+          "type": "dark",
+          "difficulty": "hard",
+          "is_final_boss": false
         }
       ]
     },
@@ -2090,6 +7194,64 @@
           "side": "left",
           "offset": 0.1111111111111111
         }
+      ],
+      "encounter_progress": 0.682,
+      "encounter_type_bias": {
+        "nature": 13,
+        "light": 6,
+        "dark": 1,
+        "fire": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0278",
+          "species_name": "balsamoth",
+          "type": "nature",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0308",
+          "species_name": "barkhive",
+          "type": "nature",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0338",
+          "species_name": "arborbit",
+          "type": "nature",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0003",
+          "species_name": "bourrel",
+          "type": "nature",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0003",
+          "species_name": "bourrel",
+          "type": "nature",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0103",
+          "species_name": "mulchmant",
+          "type": "nature",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -2109,6 +7271,64 @@
           "id": "loc_090_link_093",
           "side": "bottom",
           "offset": 0.5
+        }
+      ],
+      "encounter_progress": 0.913,
+      "encounter_type_bias": {
+        "dark": 21,
+        "fire": 15,
+        "light": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0216",
+          "species_name": "volcairn",
+          "type": "fire",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0141",
+          "species_name": "solcinder",
+          "type": "fire",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0386",
+          "species_name": "flarelium",
+          "type": "fire",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0046",
+          "species_name": "ignivault",
+          "type": "fire",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0326",
+          "species_name": "emberskein",
+          "type": "fire",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0151",
+          "species_name": "kilnopal",
+          "type": "fire",
+          "difficulty": "ultra",
+          "is_final_boss": false
         }
       ]
     },
@@ -2135,6 +7355,64 @@
           "side": "left",
           "offset": 0.5555555555555556
         }
+      ],
+      "encounter_progress": 0.955,
+      "encounter_type_bias": {
+        "dark": 17,
+        "fire": 10,
+        "light": 6,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0111",
+          "species_name": "cindersail",
+          "type": "fire",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0260",
+          "species_name": "obsidianth",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0245",
+          "species_name": "hushalo",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0256",
+          "species_name": "pyroklast",
+          "type": "fire",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0215",
+          "species_name": "obsiclaw",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0255",
+          "species_name": "gloamask",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -2160,6 +7438,64 @@
           "side": "bottom",
           "offset": 0.9166666666666666
         }
+      ],
+      "encounter_progress": 0.909,
+      "encounter_type_bias": {
+        "dark": 21,
+        "fire": 5,
+        "light": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0395",
+          "species_name": "noctivault",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0395",
+          "species_name": "noctivault",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0140",
+          "species_name": "noctiloom",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0005",
+          "species_name": "umbrindle",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0140",
+          "species_name": "noctiloom",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0005",
+          "species_name": "umbrindle",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -2179,6 +7515,64 @@
           "id": "loc_093_link_086",
           "side": "left",
           "offset": 0.5555555555555556
+        }
+      ],
+      "encounter_progress": 0.87,
+      "encounter_type_bias": {
+        "dark": 9,
+        "light": 8,
+        "fire": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0379",
+          "species_name": "aurelope",
+          "type": "light",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0360",
+          "species_name": "umbrafold",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0375",
+          "species_name": "sablespool",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0069",
+          "species_name": "solmothic",
+          "type": "light",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0190",
+          "species_name": "cryptalon",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0120",
+          "species_name": "cobalurk",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
         }
       ]
     },
@@ -2205,6 +7599,64 @@
           "side": "top",
           "offset": 0.08333333333333333
         }
+      ],
+      "encounter_progress": 0.864,
+      "encounter_type_bias": {
+        "dark": 15,
+        "light": 14,
+        "fire": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0315",
+          "species_name": "obsibell",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0085",
+          "species_name": "sabletine",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0280",
+          "species_name": "inkhornet",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0340",
+          "species_name": "inkubell",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0259",
+          "species_name": "hologruff",
+          "type": "light",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0085",
+          "species_name": "sabletine",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -2230,6 +7682,64 @@
           "side": "left",
           "offset": 0.5555555555555556
         }
+      ],
+      "encounter_progress": 0.818,
+      "encounter_type_bias": {
+        "dark": 26,
+        "light": 9,
+        "fire": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0045",
+          "species_name": "shadeloom",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0320",
+          "species_name": "nocturnyx",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0100",
+          "species_name": "noctivane",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0045",
+          "species_name": "shadeloom",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0100",
+          "species_name": "noctivane",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0320",
+          "species_name": "nocturnyx",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -2249,6 +7759,64 @@
           "id": "loc_096_link_090",
           "side": "left",
           "offset": 0.5555555555555556
+        }
+      ],
+      "encounter_progress": 0.792,
+      "encounter_type_bias": {
+        "fire": 10,
+        "dark": 4,
+        "nature": 4,
+        "light": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0196",
+          "species_name": "brazhound",
+          "type": "fire",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0211",
+          "species_name": "charclasp",
+          "type": "fire",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0176",
+          "species_name": "axignis",
+          "type": "fire",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0316",
+          "species_name": "solstoke",
+          "type": "fire",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0106",
+          "species_name": "smeltusk",
+          "type": "fire",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0336",
+          "species_name": "slagoon",
+          "type": "fire",
+          "difficulty": "ultra",
+          "is_final_boss": false
         }
       ]
     },
@@ -2275,6 +7843,64 @@
           "side": "top",
           "offset": 0.08333333333333333
         }
+      ],
+      "encounter_progress": 0.833,
+      "encounter_type_bias": {
+        "light": 8,
+        "dark": 5,
+        "fire": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0194",
+          "species_name": "alabright",
+          "type": "light",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0034",
+          "species_name": "luxodile",
+          "type": "light",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0383",
+          "species_name": "graftaur",
+          "type": "nature",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0169",
+          "species_name": "chromalyn",
+          "type": "light",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0164",
+          "species_name": "raydillo",
+          "type": "light",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0009",
+          "species_name": "haloceros",
+          "type": "light",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -2299,6 +7925,64 @@
           "id": "loc_098_link_112",
           "side": "left",
           "offset": 0.8888888888888888
+        }
+      ],
+      "encounter_progress": 0.826,
+      "encounter_type_bias": {
+        "dark": 20,
+        "fire": 1,
+        "light": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0170",
+          "species_name": "umbryx",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0275",
+          "species_name": "velvotine",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0275",
+          "species_name": "velvotine",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0170",
+          "species_name": "umbryx",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0210",
+          "species_name": "velourge",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0210",
+          "species_name": "velourge",
+          "type": "dark",
+          "difficulty": "extra_hard",
+          "is_final_boss": false
         }
       ]
     },
@@ -2325,6 +8009,64 @@
           "side": "bottom",
           "offset": 0.9166666666666666
         }
+      ],
+      "encounter_progress": 0.87,
+      "encounter_type_bias": {
+        "dark": 23,
+        "fire": 5,
+        "light": 1,
+        "nature": 1,
+        "water": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0345",
+          "species_name": "murkettle",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 2,
+          "species_id": "0385",
+          "species_name": "velviper",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 3,
+          "species_id": "0035",
+          "species_name": "umbrellisk",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 4,
+          "species_id": "0385",
+          "species_name": "velviper",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 5,
+          "species_id": "0345",
+          "species_name": "murkettle",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
+          "roll": 6,
+          "species_id": "0035",
+          "species_name": "umbrellisk",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        }
       ]
     },
     {
@@ -2339,6 +8081,64 @@
           "id": "loc_100_link_114",
           "side": "bottom",
           "offset": 0.08333333333333333
+        }
+      ],
+      "encounter_progress": 1.0,
+      "encounter_type_bias": {
+        "dark": 18,
+        "light": 17,
+        "water": 11,
+        "fire": 1,
+        "nature": 1
+      },
+      "encounters": [
+        {
+          "roll": 1,
+          "species_id": "0400",
+          "species_name": "duskervet",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": true
+        },
+        {
+          "roll": 2,
+          "species_id": "0400",
+          "species_name": "duskervet",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": true
+        },
+        {
+          "roll": 3,
+          "species_id": "0400",
+          "species_name": "duskervet",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": true
+        },
+        {
+          "roll": 4,
+          "species_id": "0400",
+          "species_name": "duskervet",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": true
+        },
+        {
+          "roll": 5,
+          "species_id": "0400",
+          "species_name": "duskervet",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": true
+        },
+        {
+          "roll": 6,
+          "species_id": "0400",
+          "species_name": "duskervet",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": true
         }
       ]
     }
@@ -3282,5 +9082,11 @@
       "target": "loc_099",
       "target_connector": "loc_099_link_134"
     }
-  ]
+  ],
+  "encounter_system": {
+    "schema_version": 1,
+    "die": "d6",
+    "final_boss_location": "loc_100",
+    "final_boss_species_id": "0400"
+  }
 }
