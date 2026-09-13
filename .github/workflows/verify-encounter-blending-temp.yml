@@ -1,0 +1,42 @@
+name: verify encounter blending
+
+on:
+  push:
+    branches:
+      - encounter-blending
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: audit encounter coverage and recurrence
+        run: |
+          python - <<'PY'
+          from collections import Counter
+          import json
+
+          data = json.load(open("monster_encounters.json", encoding="utf-8"))
+          appearances = Counter()
+          for location in data["locations"]:
+              for monster in location["unique_monsters"]:
+                  appearances[monster["species_id"]] += 1
+          expected = {str(index).zfill(4) for index in range(1, 401)}
+          missing = sorted(expected - set(appearances))
+          repeated = {species_id: count for species_id, count in appearances.items() if count > 1}
+          triples = {species_id: count for species_id, count in repeated.items() if count > 2}
+          print(f"covered_species={len(appearances)}")
+          print(f"missing_species={missing}")
+          print(f"repeated_species={len(repeated)}")
+          print(f"extra_location_appearances={sum(count - 1 for count in appearances.values())}")
+          print(f"max_locations_per_species={max(appearances.values())}")
+          print(f"species_in_three_locations={len(triples)}")
+          print(f"boss_locations={appearances['0400']}")
+          assert len(appearances) == 400
+          assert not missing
+          assert appearances["0400"] == 1
+          assert max(appearances.values()) <= 3
+          PY
