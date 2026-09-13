@@ -7450,8 +7450,8 @@
       "encounters": [
         {
           "roll": 1,
-          "species_id": "0395",
-          "species_name": "noctivault",
+          "species_id": "0035",
+          "species_name": "umbrellisk",
           "type": "dark",
           "difficulty": "ultra",
           "is_final_boss": false
@@ -7466,16 +7466,16 @@
         },
         {
           "roll": 3,
-          "species_id": "0140",
-          "species_name": "noctiloom",
+          "species_id": "0385",
+          "species_name": "velviper",
           "type": "dark",
           "difficulty": "ultra",
           "is_final_boss": false
         },
         {
           "roll": 4,
-          "species_id": "0005",
-          "species_name": "umbrindle",
+          "species_id": "0345",
+          "species_name": "murkettle",
           "type": "dark",
           "difficulty": "ultra",
           "is_final_boss": false
@@ -7619,16 +7619,16 @@
         },
         {
           "roll": 2,
-          "species_id": "0085",
-          "species_name": "sabletine",
+          "species_id": "0280",
+          "species_name": "inkhornet",
           "type": "dark",
-          "difficulty": "extra_hard",
+          "difficulty": "ultra",
           "is_final_boss": false
         },
         {
           "roll": 3,
-          "species_id": "0280",
-          "species_name": "inkhornet",
+          "species_id": "0245",
+          "species_name": "hushalo",
           "type": "dark",
           "difficulty": "ultra",
           "is_final_boss": false
@@ -7694,16 +7694,16 @@
       "encounters": [
         {
           "roll": 1,
-          "species_id": "0045",
-          "species_name": "shadeloom",
+          "species_id": "0005",
+          "species_name": "umbrindle",
           "type": "dark",
-          "difficulty": "extra_hard",
+          "difficulty": "ultra",
           "is_final_boss": false
         },
         {
           "roll": 2,
-          "species_id": "0320",
-          "species_name": "nocturnyx",
+          "species_id": "0045",
+          "species_name": "shadeloom",
           "type": "dark",
           "difficulty": "extra_hard",
           "is_final_boss": false
@@ -7718,16 +7718,16 @@
         },
         {
           "roll": 4,
-          "species_id": "0045",
-          "species_name": "shadeloom",
+          "species_id": "0385",
+          "species_name": "velviper",
           "type": "dark",
-          "difficulty": "extra_hard",
+          "difficulty": "ultra",
           "is_final_boss": false
         },
         {
           "roll": 5,
-          "species_id": "0100",
-          "species_name": "noctivane",
+          "species_id": "0210",
+          "species_name": "velourge",
           "type": "dark",
           "difficulty": "extra_hard",
           "is_final_boss": false
@@ -7938,40 +7938,40 @@
       "encounters": [
         {
           "roll": 1,
-          "species_id": "0170",
-          "species_name": "umbryx",
+          "species_id": "0275",
+          "species_name": "velvotine",
           "type": "dark",
           "difficulty": "extra_hard",
           "is_final_boss": false
         },
         {
           "roll": 2,
-          "species_id": "0275",
-          "species_name": "velvotine",
+          "species_id": "0020",
+          "species_name": "obsidillo",
           "type": "dark",
           "difficulty": "extra_hard",
           "is_final_boss": false
         },
         {
           "roll": 3,
-          "species_id": "0275",
-          "species_name": "velvotine",
+          "species_id": "0340",
+          "species_name": "inkubell",
           "type": "dark",
           "difficulty": "extra_hard",
           "is_final_boss": false
         },
         {
           "roll": 4,
-          "species_id": "0170",
-          "species_name": "umbryx",
+          "species_id": "0190",
+          "species_name": "cryptalon",
           "type": "dark",
-          "difficulty": "extra_hard",
+          "difficulty": "ultra",
           "is_final_boss": false
         },
         {
           "roll": 5,
-          "species_id": "0210",
-          "species_name": "velourge",
+          "species_id": "0170",
+          "species_name": "umbryx",
           "type": "dark",
           "difficulty": "extra_hard",
           "is_final_boss": false
@@ -8029,22 +8029,14 @@
         },
         {
           "roll": 2,
-          "species_id": "0385",
-          "species_name": "velviper",
+          "species_id": "0035",
+          "species_name": "umbrellisk",
           "type": "dark",
           "difficulty": "ultra",
           "is_final_boss": false
         },
         {
           "roll": 3,
-          "species_id": "0035",
-          "species_name": "umbrellisk",
-          "type": "dark",
-          "difficulty": "ultra",
-          "is_final_boss": false
-        },
-        {
-          "roll": 4,
           "species_id": "0385",
           "species_name": "velviper",
           "type": "dark",
@@ -8052,17 +8044,25 @@
           "is_final_boss": false
         },
         {
+          "roll": 4,
+          "species_id": "0215",
+          "species_name": "obsiclaw",
+          "type": "dark",
+          "difficulty": "ultra",
+          "is_final_boss": false
+        },
+        {
           "roll": 5,
-          "species_id": "0345",
-          "species_name": "murkettle",
+          "species_id": "0395",
+          "species_name": "noctivault",
           "type": "dark",
           "difficulty": "ultra",
           "is_final_boss": false
         },
         {
           "roll": 6,
-          "species_id": "0035",
-          "species_name": "umbrellisk",
+          "species_id": "0140",
+          "species_name": "noctiloom",
           "type": "dark",
           "difficulty": "ultra",
           "is_final_boss": false
