@@ -44,6 +44,22 @@ Hard layout/routing rules remain enabled:
 
 The embedded preset is also supplied as `location_map.json`.
 
+## Monster encounters
+
+Every location has a deterministic six-sided-die encounter table. Select a location in `index.html` to see the six results; roll a d6 and use the monster shown for that face.
+
+- Ordinary locations contain 3–6 different monsters. When a location has fewer than six unique monsters, some repeat on multiple die faces.
+- All 399 non-boss monsters receive exactly one canonical home location, so the complete collection appears somewhere in the world.
+- Encounter strength is based on graph progression rather than location number: shortest distance from any of the six starting villages is blended with shortest distance to `Stillwater sanctum`.
+- The six starting locations contain Easy monsters only. Difficulty bands increasingly overlap as routes move inward, progressing through Medium, Hard, Extra Hard and Ultra encounters.
+- Monster type is heavily biased toward the location's ecology and theme rather than hard-locked. Rivers, marshes and coasts favor Water; woods, farms and orchards favor Nature; foundries, kilns and volcanic/industrial areas favor Fire; shrines, open heights and luminous ceremonial places favor Light; caves, ruins, tombs and occult late-game spaces favor Dark.
+- Mixed-theme locations deliberately retain some off-type encounters so the die table is not completely predictable.
+- `Stillwater sanctum` contains only species `0400`, Duskervet. Every d6 result there resolves to the final boss.
+
+`monster_encounters.json` is the readable encounter manifest for all 100 locations. `location_map.json` and the embedded preset in `index.html` contain the same encounter data. Existing v4 browser saves migrate to the v5 storage key and inherit the canonical encounter table for matching location IDs without discarding their saved map layout.
+
+The encounter distribution is reproducible with `python scripts/build_location_encounters.py`. The generator reconstructs the same five monster difficulty bands used by Card Foundry, computes map progression and location type bias, assigns all ordinary monsters, globally swaps placements to improve ecological fit, validates the village/final-boss rules, and regenerates the map/manifest data.
+
 ## monster card editor
 
 The complete [card_foundry source](card_foundry/README.md) is included in this repository. [Open the hosted editor](https://card-foundry-cambell.cambellsmith.chatgpt.site) with its existing owner access.
