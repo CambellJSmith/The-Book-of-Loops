@@ -75,6 +75,19 @@ jobs:
           assert rules.enemy_move_index(4, 0, [{"mana_cost": 1}, {"mana_cost": 3}]) is None
           print("validated_combat_rules=400+400")
           PY
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.19.0"
+          cache: "pnpm"
+          cache-dependency-path: card_foundry/pnpm-lock.yaml
+      - name: enable pnpm
+        run: corepack enable && corepack prepare pnpm@11.25.0 --activate
+      - name: install card foundry dependencies
+        working-directory: card_foundry
+        run: pnpm install --frozen-lockfile
+      - name: build card foundry
+        working-directory: card_foundry
+        run: pnpm build
       - name: export book
         run: python scripts/export_book_pdf_with_rules.py --output book_of_loops.pdf
       - name: validate pdf
@@ -86,6 +99,7 @@ jobs:
           assert len(reader.pages) == 122, len(reader.pages)
           lore = reader.pages[0].extract_text() or ""
           rules = reader.pages[1].extract_text() or ""
+          rules_flat = " ".join(rules.split())
           first_location = reader.pages[2].extract_text() or ""
           monsters = reader.pages[102].extract_text() or ""
           final = reader.pages[121].extract_text() or ""
@@ -95,12 +109,13 @@ jobs:
           assert "Gameplay Rules" in rules
           assert "Confluence village" in rules and "p. 3" in rules
           assert "Shower hill village" in rules and "p. 8" in rules
-          assert "0 Mana" in rules
-          assert "gains 1 Mana" in rules
-          assert "Move 2 always costs more Mana" in rules
-          assert "1-3" in rules and "Move 1" in rules
-          assert "4-6" in rules and "Move 2" in rules
-          assert "5-6" in rules and "full Health" in rules
+          assert "0 Mana" in rules_flat
+          assert "gains 1 Mana" in rules_flat
+          assert "Move 2 always costs more Mana" in rules_flat
+          assert "deals more damage than Move 1" in rules_flat
+          assert "1-3" in rules_flat and "Move 1" in rules_flat
+          assert "4-6" in rules_flat and "Move 2" in rules_flat
+          assert "5-6" in rules_flat and "full Health" in rules_flat
           assert "monster_encounters" in first_location
           assert "To go to Saffron prairie, go to page 16." in first_location
           assert "monster_reference" in monsters
