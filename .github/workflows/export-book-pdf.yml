@@ -48,12 +48,15 @@ jobs:
           first = reader.pages[0].extract_text() or ""
           monsters = reader.pages[100].extract_text() or ""
           final = reader.pages[119].extract_text() or ""
+          visible_text = "\n".join((first, monsters, final)).upper()
           assert "monster_encounters" in first
           assert "monster_reference" in monsters
           assert "#0001" in monsters
           assert "#0400" in final
           assert "FINAL BOSS" in final
-          assert "ULTRA" in final
+          assert "DIFFICULTY" not in visible_text
+          assert "EXTRA HARD" not in visible_text
+          assert "ULTRA" not in visible_text
           print(f"validated_pages={len(reader.pages)}")
           PY
       - name: upload pdf
