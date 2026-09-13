@@ -3,25 +3,41 @@
 An original monster trading-card editor with a graphite studio interface.
 
 - Fire, Water, Nature, Light, and Dark types.
-- Easy, Medium, Hard, Extra Hard, and Ultra encounter difficulties.
-- Species ID, species name, difficulty, artwork, health, speed, and exactly two moves with name, mana cost, and damage.
+- Species ID, species name, artwork, Health, Speed, and exactly two moves with name, Mana cost, and damage.
+- Move 2 must always cost more Mana and deal more damage than Move 1.
 - Durable card collection, raster artwork uploads, crop positioning, and unsaved-change protection.
 - PNG export at 1500 × 2100 pixels from the same SVG used for the preview.
 - Unique species IDs and optimistic revision checks protect saved data.
 
+## Gameplay contract
+
+Card Foundry stores the combat values printed on the cards. The current battle rules are:
+
+- Every monster starts each battle with `0 Mana`.
+- At the start of each of its turns, that monster gains exactly `1 Mana`.
+- Mana accumulates until spent and resets when the battle ends.
+- A move can only be used if the monster can pay its printed Mana cost; using it spends that amount.
+- Move 1 is the cheaper, weaker move. Move 2 is always strictly more expensive and strictly more damaging.
+- The player chooses an affordable move.
+- The enemy rolls a d6: `1–3` selects Move 1 and `4–6` selects Move 2. If that move is unaffordable, it uses the other move if affordable; if neither is affordable, it makes no attack and keeps its Mana.
+
+The canonical executable version of these rules lives in the repository root at `scripts/gameplay_rules.py`. The PDF build validates both retained 400-monster datasets against the Move 1 / Move 2 ordering invariant.
+
 ## Project structure
 
-`components/editor` contains separate collection, property form, card artwork, and workspace components. `hooks` owns editor actions. `lib/card_model.ts` validates the complete card record. `lib/card_balance.ts` owns concept-aware difficulty classification and canonical combat scaling. `lib/server` isolates the database and file storage. `app/api` exposes checked request boundaries. `db/schema.ts` and `drizzle` own the database schema and generated migrations.
+`components/editor` contains separate collection, property form, card artwork, and workspace components. `hooks` owns editor actions. `lib/card_model.ts` validates the complete card record, including the requirement that Move 2 has both a higher Mana cost and higher damage than Move 1. `lib/card_balance.ts` owns internal encounter progression and canonical combat scaling. `lib/server` isolates the database and file storage. `app/api` exposes checked request boundaries. `db/schema.ts` and `drizzle` own the database schema and generated migrations.
+
+Internal encounter-progression metadata remains part of the canonical implementation, but it is not exposed by the card editor UI, printable book, browser map UI, accessibility labels, or portable player JSON.
 
 ## Development
 
-Use the declared pnpm version and retained lockfile. The original hosted studio remains owner-private. This source copy contains logical storage bindings without the original hosted project identity. Generate a new migration after a database schema change. Difficulty does not require a database-column migration because complete card data is stored inside the existing validated JSON payload.
+Use the declared pnpm version and retained lockfile. The original hosted studio remains owner-private. This source copy contains logical storage bindings without the original hosted project identity. Generate a new migration after a database schema change.
 
 ## Artwork and exports
 
 Upload PNG, JPEG, or WebP images. Images are normalized in the browser while retaining their aspect ratio, then stored separately from card records. Save the card after changing its artwork or framing. The editable Cindrel example contains original generated artwork and is not inserted into the saved collection automatically.
 
-Exports include the current draft. Required names and supported statistic ranges are checked before save or export. Card dimensions are pixel dimensions, with no implied print bleed or embedded print-resolution setting.
+Exports include the current draft. Required names, supported statistic ranges, and the Move 1 / Move 2 ordering rule are checked before save or export. Card dimensions are pixel dimensions, with no implied print bleed or embedded print-resolution setting.
 
 ## Portable exports
 
@@ -32,10 +48,10 @@ SVG preserves named groups for the card frame, artwork, species identifier, type
 JSON files use this contract:
 
 - `format`: `card_foundry`.
-- `schema_version`: `2` for difficulty-aware exports.
+- `schema_version`: `3`.
 - `cards`: an array of card objects, even for a single-card export.
-- Each card has `species_id` (string, preserving leading zeros), `species_name`, `type`, `difficulty`, `is_final_boss`, `health`, `speed`, `moves`, `art`, and `art_prompt`.
-- `difficulty` is one of `easy`, `medium`, `hard`, `extra_hard`, or `ultra`.
+- Each exported card has `species_id`, `species_name`, `type`, `is_final_boss`, `health`, `speed`, `moves`, `art`, and `art_prompt`.
+- Implementation-only progression metadata is excluded from portable exports.
 - `is_final_boss` is normally `false`; canonical species `0400` is the single `true` record.
 - `moves` contains exactly two objects with `name`, `mana_cost`, and `damage`. Numeric fields remain JSON numbers.
 - `art_prompt` is the editable, self-contained artwork generation brief. It is empty for cards without a brief and is not printed on the card.
@@ -49,31 +65,29 @@ Load the complete JSON document with the target language's JSON parser. Card dat
 
 The authored set contains exactly 400 unique species numbered `0001` through `0400`, interleaving 80 cards of each type. Every card has two unique move names and an empty artwork reference. Each saved `art_prompt` includes the complete shared watercolor style and a species-specific subject brief. Open `art_prompt` under artwork to edit or copy it; the prompt is included in both JSON exports. No evolution or family fields are used.
 
-The 400 monsters are divided into five content-aware encounter bands: Easy, Medium, Hard, Extra Hard, and Ultra. Each band contains exactly 80 monsters, with exactly 16 Fire, 16 Water, 16 Nature, 16 Light, and 16 Dark monsters. Classification is performed independently inside each element by scoring the authored creature description and move language for threat cues such as physical scale, armour, dangerous creature archetypes, magical intensity, destructive attacks, and deliberately gentle or diminutive traits. Species number is only a stable tiebreaker and does not determine normal difficulty.
+The canonical normal move profiles are:
 
-Normal difficulty scaling preserves each monster's original durability-versus-speed identity while increasing its total combat budget:
+| internal combat profile | Move 1 | Move 2 |
+| --- | ---: | ---: |
+| profile 1 | 1 Mana / 20 damage | 2 Mana / 40 damage |
+| profile 2 | 1 Mana / 30 damage | 3 Mana / 70 damage |
+| profile 3 | 2 Mana / 55 damage | 3 Mana / 90 damage |
+| profile 4 | 2 Mana / 70 damage | 4 Mana / 125 damage |
+| profile 5 | 3 Mana / 100 damage | 5 Mana / 180 damage |
 
-| difficulty | health + speed | move 1 | move 2 |
-| --- | ---: | ---: | ---: |
-| Easy | 150 | 1 mana / 20 damage | 2 mana / 40 damage |
-| Medium | 190 | 1 mana / 30 damage | 3 mana / 70 damage |
-| Hard | 235 | 2 mana / 55 damage | 3 mana / 90 damage |
-| Extra Hard | 285 | 2 mana / 70 damage | 4 mana / 125 damage |
-| Ultra | 340 | 3 mana / 100 damage | 5 mana / 180 damage |
+These profiles are implementation data rather than player-facing classifications. In every profile, Move 2 is deliberately slower to unlock under the one-Mana-per-turn system and deals more damage when it becomes available.
 
-Species `0400`, Duskervet, is the sole final boss. It remains in the Ultra group but deliberately exceeds the normal Ultra envelope at 540 health and 160 speed. Its canonical attacks are `voidwhisker rend` at 4 mana / 180 damage and `last eclipse` at 7 mana / 360 damage. Its generated artwork prompt replaces the original compact Duskervet presentation with a colossal nine-tailed eclipse sovereign designed to read as the climactic opponent.
+Species `0400`, Duskervet, is the sole final boss. Its canonical attacks are `voidwhisker rend` at 4 Mana / 180 damage and `last eclipse` at 7 Mana / 360 damage, preserving the same stronger-second-move rule.
 
-The editor groups the saved collection by difficulty and exposes difficulty as an editable card property. The final-boss role is stored separately through `is_final_boss`, so Ultra can still contain ordinary endgame monsters.
+## Collection installation and canonical balance
 
-## Collection installation and rebalance
+The editor calls the idempotent `POST /api/card_sets/standalone_400` before loading its collection. Fresh databases install the canonical records directly. Existing databases use retained content-migration logic to bring surviving canonical records forward without restoring user-deleted cards or replacing uploaded artwork.
 
-The editor calls the idempotent `POST /api/card_sets/standalone_400` before loading its collection. Fresh databases install the difficulty-balanced records directly. Databases that already completed the original `standalone_400_v1` installation receive one `standalone_400_v2_difficulty` content migration.
+Canonical updates preserve uploaded artwork, crop/framing values, species names, unrelated editable fields, and user-deleted cards where the migration logic specifies. Card revisions are incremented where required so stale open editors cannot overwrite newer records.
 
-The v2 migration updates difficulty, final-boss metadata, health, speed, and move balance only on surviving canonical card identities. Uploaded artwork, crop/framing values, species names, unrelated editable fields, and user-deleted cards are preserved. The final boss also receives its new canonical artwork prompt. Card revisions are incremented so stale open editors cannot overwrite the rebalance. Once the v2 completion marker exists, later user edits remain authoritative and are not repeatedly rebalanced.
+Authored concepts live in `data/card_sets`; `scripts/build_card_set.py` validates and regenerates `data/standalone_400.json` reproducibly. The server applies the same canonical balancer to the bundled seed in memory when needed. The illustrated Cindrel starting-point button is an unsaved example, separate from the 400 blank-art collection records.
 
-Authored concepts live in `data/card_sets`; `scripts/build_card_set.py` validates and regenerates `data/standalone_400.json` reproducibly with all five difficulty bands and the final-boss record materialized. The server also applies the same balancer to the bundled seed in memory, allowing existing v1 seed data to migrate safely. The illustrated Cindrel starting-point button is an unsaved Easy example, separate from the 400 blank-art collection records.
-
-## local setup
+## Local setup
 
 The editor uses Node.js, pnpm, React/Vinext and Cloudflare D1/R2. It is not a static HTML page and cannot run directly on GitHub Pages. The root location-map tool remains independent.
 
@@ -89,4 +103,4 @@ pnpm start
 
 Apply the two SQL files only once to a fresh local database. They create the schema; the application installs the 400 cards when the editor first loads. Open the localhost URL printed by Wrangler. Local data and uploaded artwork stay under `.wrangler/state`, which is ignored by Git. Production hosting must provide D1/R2 bindings and apply the schema migrations; the repository contains no production credentials.
 
-`data/card_objects.json` is the retained pre-difficulty portable snapshot. New exports from the editor use portable schema version 2 and include difficulty/final-boss metadata. `data/standalone_400.json` is the generator target; running `scripts/build_card_set.py` rematerializes it with the v2 progression fields. Attach generated artwork through the editor and save each card; the initial dataset deliberately leaves every artwork field empty.
+`data/card_objects.json` is the retained portable source snapshot used by the printable book. `data/standalone_400.json` is the reproducible canonical generator target. New player-facing JSON exports use portable schema version 3 and exclude implementation-only progression metadata. Attach generated artwork through the editor and save each card; the initial dataset deliberately leaves every artwork field empty.
