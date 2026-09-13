@@ -25,7 +25,7 @@ def add_blended_guest_encounters(locations: list[dict], monsters: list[dict], pr
     home_by_species = {monster["species_id"]: location["id"] for location in locations for monster in assignments[location["id"]]}  # Records each monster's one guaranteed canonical home.
     if len(home_by_species) != 399:  # Protects the canonical coverage guarantee before any blending is added.
         raise RuntimeError("canonical monster homes are incomplete before encounter blending")  # Rejects a malformed base distribution.
-    appearance_counts: Counter[str] = Counter(home_by_species)  # Starts every ordinary monster at exactly one location appearance.
+    appearance_counts: Counter[str] = Counter(home_by_species.keys())  # Starts every ordinary monster at exactly one location appearance.
     open_slots: list[tuple[int, str]] = []  # Collects optional fourth-to-sixth slots without forcing all of them to be used.
     for location in locations:  # Scores every spare location slot independently.
         location_id = str(location["id"])  # Normalizes the location id once per location.
