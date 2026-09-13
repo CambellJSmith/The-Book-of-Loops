@@ -43,3 +43,14 @@ Hard layout/routing rules remain enabled:
 - links cannot pass through tiles
 
 The embedded preset is also supplied as `location_map.json`.
+
+## monster card editor
+
+The complete [card_foundry source](card_foundry/README.md) is included in this repository. [Open the hosted editor](https://card-foundry-cambell.cambellsmith.chatgpt.site) with its existing owner access.
+
+- 400 standalone monsters, numbered `0001`–`0400`; exactly 80 each of fire, water, nature, light and dark.
+- Empty artwork fields with a complete generation prompt on every card; no evolutions.
+- Editable species details, health, speed and two moves with mana cost and damage.
+- Durable saves, artwork uploads, crop controls, PNG/SVG export and portable JSON objects with prompts.
+
+The card editor is a separate server-backed application; the location map still opens from the root `index.html`. See [local setup](card_foundry/README.md#local-setup) to run the editor. The authored data is in [standalone_400.json](card_foundry/data/standalone_400.json), and [portable card objects](card_foundry/data/card_objects.json) are ready for other programs.
