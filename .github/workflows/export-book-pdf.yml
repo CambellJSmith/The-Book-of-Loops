@@ -2,6 +2,14 @@ name: export book pdf
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - "scripts/export_book_pdf.py"
+      - ".github/workflows/export-book-pdf.yml"
+      - "location_map.json"
+      - "monster_encounters.json"
+      - "card_foundry/data/card_objects.json"
+      - "*.png"
   push:
     branches:
       - main
