@@ -50,6 +50,7 @@ Every location has a deterministic six-sided-die encounter table. Select a locat
 
 - Ordinary locations contain 3–6 different monsters. When a location has fewer than six unique monsters, some repeat on multiple die faces.
 - All 399 non-boss monsters receive exactly one canonical home location, so the complete collection appears somewhere in the world.
+- A small irregular subset of monsters also appears as guest encounters in one or two additional progression- and ecology-relevant locations, creating regional overlap without making recurrence universal.
 - Encounter strength is based on graph progression rather than location number: shortest distance from any of the six starting villages is blended with shortest distance to `Stillwater sanctum`.
 - The six starting locations contain Easy monsters only. Difficulty bands increasingly overlap as routes move inward, progressing through Medium, Hard, Extra Hard and Ultra encounters.
 - Monster type is heavily biased toward the location's ecology and theme rather than hard-locked. Rivers, marshes and coasts favor Water; woods, farms and orchards favor Nature; foundries, kilns and volcanic/industrial areas favor Fire; shrines, open heights and luminous ceremonial places favor Light; caves, ruins, tombs and occult late-game spaces favor Dark.
@@ -58,7 +59,7 @@ Every location has a deterministic six-sided-die encounter table. Select a locat
 
 `monster_encounters.json` is the readable encounter manifest for all 100 locations. `location_map.json` and the embedded preset in `index.html` contain the same encounter data. Existing v4 browser saves migrate to the v5 storage key and inherit the canonical encounter table for matching location IDs without discarding their saved map layout.
 
-The encounter distribution is reproducible with `python scripts/build_location_encounters.py`. The generator reconstructs the same five monster difficulty bands used by Card Foundry, computes map progression and location type bias, assigns all ordinary monsters, globally swaps placements to improve ecological fit, validates the village/final-boss rules, and regenerates the map/manifest data.
+The encounter distribution is reproducible with `python scripts/build_location_encounters.py`. The generator reconstructs the same five monster difficulty bands used by Card Foundry, computes map progression and location type bias, assigns all ordinary monsters, globally swaps placements to improve ecological fit, adds sparse relevant guest appearances into remaining encounter capacity, validates the village/final-boss rules, and regenerates the map/manifest data.
 
 ## monster card editor
 
