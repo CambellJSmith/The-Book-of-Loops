@@ -49,6 +49,7 @@ The embedded preset is also supplied as `location_map.json`.
 The complete [card_foundry source](card_foundry/README.md) is included in this repository. [Open the hosted editor](https://card-foundry-cambell.cambellsmith.chatgpt.site) with its existing owner access.
 
 - 400 standalone monsters, numbered `0001`–`0400`; exactly 80 each of fire, water, nature, light and dark.
+- 133 easy, 133 medium and 133 hard monsters with interchangeable combat stats within each group, plus chronourobor, the time-loop boss at species 0400.
 - Empty artwork fields with a complete generation prompt on every card; no evolutions.
 - Editable species details, health, speed and two moves with mana cost and damage.
 - Durable saves, artwork uploads, crop controls, PNG/SVG export and portable JSON objects with prompts.

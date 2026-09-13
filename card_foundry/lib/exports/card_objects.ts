@@ -1,9 +1,9 @@
-import { card_schema, type Element, type MonsterCard, type Move } from "@/lib/card_model"; // shares validated monster fields with the editor.
+import { card_schema, type Difficulty, type Element, type MonsterCard, type Move } from "@/lib/card_model"; // shares validated monster fields with the editor.
 import { embed_artwork, type EmbeddedArtwork } from "./artwork"; // makes every referenced image portable.
 import { download_blob } from "./download"; // invokes the standard file download action.
 
 export interface ObjectArtwork { asset_id: string; width: number; height: number; zoom: number; position_x: number; position_y: number; } // retains both artwork identity and card framing.
-export interface CardObject { species_id: string; species_name: string; type: Element; art: ObjectArtwork | null; art_prompt: string; health: number; speed: number; moves: [Move, Move]; } // exports program-friendly fields without editor-only database state.
+export interface CardObject { species_id: string; species_name: string; type: Element; difficulty: Difficulty; art: ObjectArtwork | null; art_prompt: string; health: number; speed: number; moves: [Move, Move]; } // exports program-friendly fields without editor-only database state.
 export interface CardObjectDocument { format: "card_foundry"; schema_version: 1; cards: CardObject[]; assets: Record<string, EmbeddedArtwork>; } // versions the portable file format for other programs.
 export type ExportProgress = (completed: number, total: number) => void; // reports progress while embedding a saved collection.
 export type ArtworkLoader = (source: string) => Promise<EmbeddedArtwork>; // isolates image loading from the portable object conversion.
@@ -21,7 +21,7 @@ export async function create_card_objects(records: readonly MonsterCard[], progr
     completed += 1; progress?.(completed, sources.size); // advances progress only after an image is included.
   }
   const objects: CardObject[] = cards.map((card: MonsterCard) => ({ // preserves game data independently from the current editor implementation.
-    species_id: card.species_id, species_name: card.species_name, type: card.type, // keeps identifiers as strings and preserves the selected element.
+    species_id: card.species_id, species_name: card.species_name, type: card.type, difficulty: card.difficulty, // keeps identifiers as strings and preserves the selected element.
     art: card.art ? { asset_id: sources.get(card.art)!, width: card.art_width, height: card.art_height, zoom: card.art_zoom, position_x: card.art_x, position_y: card.art_y } : null, // retains artwork framing without inventing missing images.
     art_prompt: card.art_prompt, // keeps the future generation brief available to other programs.
     health: card.health, speed: card.speed, moves: [{ ...card.moves[0] }, { ...card.moves[1] }], // preserves numeric statistics and complete independent move objects.

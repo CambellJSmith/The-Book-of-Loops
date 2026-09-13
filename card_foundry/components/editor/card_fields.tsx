@@ -5,10 +5,11 @@ import { ImagePlus, Upload, RotateCcw, X, Heart, Zap, ChevronDown } from "lucide
 import { Button } from "@/components/ui/button"; // reuses accessible action controls.
 import { Input } from "@/components/ui/input"; // reuses the shared text-input primitive.
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"; // exposes keyboard-accessible type selection.
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"; // reuses the accessible encounter-group selector.
 import { Slider } from "@/components/ui/slider"; // provides artwork framing controls.
 import { ArtPromptField } from "./art_prompt_field"; // keeps prompt editing separate from upload and crop controls.
 import { ElementIcon } from "./element_icon"; // renders the five elemental symbols.
-import { elements, element_colors, type MonsterCard, type Move, type Element } from "@/lib/card_model"; // shares field types and palette rules.
+import { difficulties, type Difficulty, elements, element_colors, type MonsterCard, type Move, type Element } from "@/lib/card_model"; // shares field types and palette rules.
 
 interface FieldsProps { card: MonsterCard; disabled: boolean; uploading: boolean; update: (patch: Partial<MonsterCard>) => void; upload: (file: File) => Promise<void>; } // limits field access to controlled editor actions.
 
@@ -27,6 +28,7 @@ export function CardFields({ card, disabled, uploading, update, upload }: Fields
       <section className="property_section">
         <h3><ChevronDown size={14} /><span>identity</span><span className="section_index">01</span></h3>
         <div className="identity_fields"><label className="field_label" htmlFor="species_id"><span>species_id</span><Input id="species_id" value={card.species_id} maxLength={20} onChange={(event: ChangeEvent<HTMLInputElement>) => update({ species_id: event.target.value })} placeholder="0001" /></label><label className="field_label" htmlFor="species_name"><span>species_name</span><Input id="species_name" value={card.species_name} maxLength={40} onChange={(event: ChangeEvent<HTMLInputElement>) => update({ species_name: event.target.value })} placeholder="name your monster" /></label></div>
+        <div className="field_label"><span id="difficulty_label">difficulty</span><Select value={card.difficulty} onValueChange={(value: string) => update({ difficulty: value as Difficulty })} disabled={disabled}><SelectTrigger aria-labelledby="difficulty_label"><SelectValue /></SelectTrigger><SelectContent>{difficulties.map((difficulty: Difficulty) => <SelectItem key={difficulty} value={difficulty}>{difficulty}</SelectItem>)}</SelectContent></Select></div>
         <div className="field_label"><span id="type_label">type</span><RadioGroup className="type_picker" value={card.type} onValueChange={(value: string) => update({ type: value as Element })} aria-labelledby="type_label" disabled={disabled}>{elements.map((element: Element) => <label key={element} className={`type_option ${card.type === element ? "selected" : ""}`} style={{ "--element": element_colors[element] } as CSSProperties}><RadioGroupItem value={element} className="sr-only" aria-label={element} /><ElementIcon element={element} size={20} /><span>{element}</span></label>)}</RadioGroup></div>
       </section>
       <section className="property_section">

@@ -33,7 +33,7 @@ JSON files use this contract:
 - `format`: `card_foundry`.
 - `schema_version`: the portable format version, initially `1`.
 - `cards`: an array of card objects, even for a single-card export.
-- Each card has `species_id` (string, preserving leading zeros), `species_name`, `type`, `health`, `speed`, `moves`, `art`, and `art_prompt`.
+- Each card has `species_id` (string, preserving leading zeros), `species_name`, `type`, `difficulty`, `health`, `speed`, `moves`, `art`, and `art_prompt`.
 - `moves` contains exactly two objects with `name`, `mana_cost`, and `damage`. Numeric fields remain JSON numbers.
 - `art_prompt` is the editable, self-contained artwork generation brief. It is empty for cards without a brief and is not printed on the card.
 - `art` is `null` for no artwork, or an object with `asset_id`, original pixel `width` and `height`, `zoom`, `position_x`, and `position_y`.
@@ -46,11 +46,11 @@ Load the complete JSON document with the target language's JSON parser. Card dat
 
 The authored set contains exactly 400 unique species numbered `0001` through `0400`, interleaving 80 cards of each type. Every card has two unique move names and an empty artwork reference. Each saved `art_prompt` includes the complete shared watercolor style and a species-specific subject brief. Open `art_prompt` under artwork to edit or copy it; the prompt is included in both JSON exports. No evolution or family fields are used.
 
-Each type has the same health/speed profile distribution and mana-cost distribution. Health plus speed shares a fixed budget; move damage is proportional to mana cost. These are consistent starting statistics, not a claim of playtested game balance.
+There are 133 easy, 133 medium and 133 hard monsters with identical statistics inside each group, plus chronourobor, the dark time-loop boss at species 0400. See [encounter balance](docs/card_balance.md) for the exact statistics and the four-hard-monster reference encounter.
 
-The editor calls the idempotent `POST /api/card_sets/standalone_400` before loading its collection. The application installs all records and a completion marker in one D1 transaction. Reopening preserves edits and deletions. A conflicting existing species identifier rolls the whole import back without overwriting existing cards. Schema migrations contain only schema changes.
+The editor calls the idempotent `POST /api/card_sets/standalone_400` before loading its collection. The application installs all records and a completion marker in one D1 transaction. A separate one-time balance update upgrades existing records while preserving artwork, ordinary names and prompts, manual cards, and deletions. Reopening preserves edits and deletions. A conflicting existing species identifier rolls the whole import back without overwriting existing cards. Schema migrations contain only schema changes.
 
-Authored concepts live in `data/card_sets`; `scripts/build_card_set.py` validates and regenerates `data/standalone_400.json` reproducibly. The bundled dataset stays on the server. The illustrated Cindrel starting-point button is an unsaved example, separate from the 400 blank-art collection records.
+Authored concepts live in `data/card_sets`; `scripts/build_card_set.py` validates and regenerates `data/standalone_400.json` and portable `data/card_objects.json` reproducibly. The bundled dataset stays on the server. The illustrated Cindrel starting-point button is an unsaved example, separate from the 400 blank-art collection records.
 
 ## local setup
 
