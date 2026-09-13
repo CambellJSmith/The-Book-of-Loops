@@ -12,6 +12,7 @@ from reportlab.pdfgen import canvas
 import export_book_pdf as base
 import export_book_pdf_dense as dense
 import export_book_pdf_with_lore as lore
+import gameplay_rules as game
 
 PAGE_WIDTH, PAGE_HEIGHT = A4
 RULES_PAGE = 2
@@ -158,15 +159,15 @@ def draw_rules_page(pdf: canvas.Canvas, starts: list[tuple[int, str, int]]) -> N
     draw_rule_panel(
         pdf,
         "5",
-        "Choose moves",
-        "On your monster's turn, choose which of its two moves to use. On the enemy's turn, roll the d6: 1-3 uses its first move, and 4-6 uses its second move. Subtract the move's listed damage from the target monster's current Health.",
+        "Moves and Mana",
+        f"Every monster starts each battle with {game.STARTING_MANA} Mana and gains {game.MANA_PER_TURN} Mana at the start of each of its turns. Mana accumulates until spent and resets when the battle ends. A move may only be used when the monster can pay its printed Mana cost; using it spends that Mana. On your turn, choose an affordable move. On the enemy's turn, roll the d6: 1-3 selects Move 1 and 4-6 selects Move 2. If the selected move cannot be afforded, use the other move if it can be afforded; if neither can be afforded, the enemy makes no attack and keeps its Mana. Move 2 always costs more Mana and deals more damage than Move 1.",
         right_x,
         second_top,
         left_width,
-        112,
+        145,
     )
 
-    third_top = second_top - 124
+    third_top = second_top - 157
     draw_rule_panel(
         pdf,
         "6",
@@ -208,6 +209,9 @@ def export_pdf(output_path: Path) -> None:
         raise RuntimeError(f"expected 100 locations, found {len(locations)}")
     if len(source_cards) != 400:
         raise RuntimeError(f"expected 400 monsters, found {len(source_cards)}")
+    invalid_move_order = [str(card.get("species_id", "")) for card in source_cards if not game.move_two_is_stronger(card)]
+    if invalid_move_order:
+        raise RuntimeError(f"move 2 must cost more mana and deal more damage than move 1 for every monster: {invalid_move_order[:8]}")
 
     encounter_metadata = dense.build_encounter_metadata(encounter_data)
     if len(encounter_metadata) != 400:
