@@ -4,6 +4,7 @@ from typing import Any  # Describes portable move and card dictionaries.
 
 STARTING_MANA = 0  # Every monster enters each battle with no stored mana.
 MANA_PER_TURN = 1  # Every monster gains exactly one mana at the start of each of its turns.
+TEAM_SIZE_LIMIT = 6  # The player can carry at most six monsters and has no reserve storage.
 ENEMY_FIRST_MOVE_ROLLS = range(1, 4)  # Enemy d6 results 1-3 select move one first.
 ENEMY_SECOND_MOVE_ROLLS = range(4, 7)  # Enemy d6 results 4-6 select move two first.
 
@@ -34,6 +35,10 @@ def enemy_move_index(roll: int, current_mana: int, moves: list[dict[str, Any]]) 
     if can_afford_move(current_mana, moves[alternate]):  # Falls back when only the other move is currently affordable.
         return alternate  # Prevents the enemy from wasting a turn while a legal attack exists.
     return None  # The enemy takes no attack and keeps its accumulated mana when neither move is affordable.
+
+
+def recruitment_requires_discard(current_team_size: int) -> bool:  # Checks whether accepting a recruited monster forces a discard choice.
+    return max(0, int(current_team_size)) >= TEAM_SIZE_LIMIT  # A full six-monster team must discard either the recruit or one carried monster.
 
 
 def move_two_is_stronger(card: dict[str, Any]) -> bool:  # Checks the canonical ordering of every monster's two attacks.

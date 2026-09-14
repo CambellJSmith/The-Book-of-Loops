@@ -12,6 +12,7 @@ from reportlab.pdfgen import canvas
 
 import export_book_pdf as base
 import export_book_pdf_dense as dense
+import healing_locations as healing
 
 PAGE_WIDTH, PAGE_HEIGHT = A4
 LOCATION_PAGE_START = 2
@@ -190,6 +191,21 @@ def draw_location_page(
         pdf.drawString(col_x[3] + 5, y + 6, element)
 
     exits_y = row_top - 7 * row_height - 18
+    if location_id in healing.HEALING_LOCATION_IDS:
+        panel_height = 45
+        panel_bottom = exits_y - panel_height
+        pdf.setFillColor(base.PANEL)
+        pdf.setStrokeColor(base.BORDER)
+        pdf.setLineWidth(0.8)
+        pdf.roundRect(base.MARGIN, panel_bottom, desc_width, panel_height, 7, fill=1, stroke=1)
+        pdf.setFillColor(accent)
+        pdf.setFont(base.FONT_BOLD, 8)
+        pdf.drawString(base.MARGIN + 12, exits_y - 16, "HEALING")
+        pdf.setFillColor(base.TEXT)
+        pdf.setFont(base.FONT_REGULAR, 9)
+        pdf.drawString(base.MARGIN + 12, exits_y - 32, healing.HEALING_NOTE)
+        exits_y = panel_bottom - 16
+
     pdf.setFillColor(base.TEXT)
     pdf.setFont(base.FONT_BOLD, 10)
     pdf.drawString(base.MARGIN, exits_y, "travel")

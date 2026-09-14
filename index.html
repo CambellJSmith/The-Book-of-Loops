@@ -432,6 +432,27 @@
     .encounter_row[data-type="dark"] { border-left: 3px solid #b49bea; }
     .encounter_row.final_boss { border-color: #b49bea; box-shadow: inset 0 0 0 1px #b49bea55; }
 
+
+    /* healing location note */
+    #healing_note {
+        margin-top: 12px;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+    }
+
+    #healing_note[hidden] {
+        display: none;
+    }
+
+    #healing_note .healing_note_text {
+        margin-top: 5px;
+        color: var(--text);
+        font-size: 12px;
+        line-height: 1.45;
+    }
+
 </style>
 </head>
 <body>
@@ -467,6 +488,12 @@
                     <label>monster_encounters · roll_d6</label>
                     <div id="encounter_meta"></div>
                     <div id="encounter_table"></div>
+
+
+                    <section id="healing_note" hidden>
+                        <label>healing</label>
+                        <div class="healing_note_text">You can choose to fully heal one of your monsters.</div>
+                    </section>
 
                     <label>connectors</label>
                     <div class="button-row">
@@ -562,6 +589,7 @@
     const artFilename = document.getElementById("art_filename");
     const encounterMeta = document.getElementById("encounter_meta");
     const encounterTable = document.getElementById("encounter_table");
+    const healingNote = document.getElementById("healing_note");
     const addConnectorBtn = document.getElementById("add_connector_btn");
     const deleteLocationBtn = document.getElementById("delete_location_btn");
 
@@ -1745,6 +1773,13 @@
         }
     }
 
+
+    const HEALING_LOCATION_IDS = new Set(["loc_007", "loc_011", "loc_015", "loc_018", "loc_022", "loc_026", "loc_030", "loc_034", "loc_038", "loc_042", "loc_045", "loc_049", "loc_053", "loc_057", "loc_061", "loc_064", "loc_068", "loc_072", "loc_076", "loc_080", "loc_084", "loc_088", "loc_091", "loc_095", "loc_099"]);
+
+    function renderHealingNote(location) {
+        healingNote.hidden = !HEALING_LOCATION_IDS.has(String(location.id));
+    }
+
     function updateEditor() {
         const location = getLocation(selectedLocationId);
         if (!location) {
@@ -1760,6 +1795,7 @@
 
         updateAutomaticArtPreview(location);
         renderEncounterTable(location);
+        renderHealingNote(location);
     }
 
     function updateConnectorEditor() {
