@@ -17,7 +17,7 @@ _original_paragraph = base.paragraph
 
 
 def paragraph_with_healing_markup(text: str, size: float, color=base.MUTED, leading: float | None = None) -> Paragraph:
-    if not str(text).startswith("<b>healing</b>"):
+    if not str(text).lower().startswith("<b>healing</b>"):
         return _original_paragraph(text, size, color, leading)
     style = ParagraphStyle(
         "healing_location_body",
