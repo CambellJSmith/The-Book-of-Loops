@@ -6,6 +6,10 @@ export function rollD6(random = Math.random) {
   return Math.floor(random() * 6) + 1;
 }
 
+export function isValidD6Roll(roll) {
+  return Number.isInteger(Number(roll)) && Number(roll) >= 1 && Number(roll) <= 6;
+}
+
 export function buildAdjacency(mapData) {
   const adjacency = new Map((mapData.locations || []).map((location) => [String(location.id), []]));
   for (const link of mapData.links || []) {
@@ -30,6 +34,7 @@ export function buildCardIndex(cardData) {
 }
 
 export function encounterForRoll(location, roll) {
+  if (!isValidD6Roll(roll)) return null;
   const encounters = Array.isArray(location?.encounters) ? location.encounters : [];
   return encounters.find((entry) => Number(entry.roll) === Number(roll)) || encounters[Number(roll) - 1] || null;
 }
@@ -64,6 +69,7 @@ export function canAffordMove(monster, moveIndex, includeTurnGain = true) {
 }
 
 export function chooseEnemyMove(enemy, roll) {
+  if (!isValidD6Roll(roll)) throw new Error("enemy move roll must be between 1 and 6");
   const preferred = Number(roll) <= 3 ? 0 : 1;
   const alternate = 1 - preferred;
   if (canAffordMove(enemy, preferred, false)) return preferred;
@@ -71,17 +77,17 @@ export function chooseEnemyMove(enemy, roll) {
   return null;
 }
 
-export function resolveSpeedOrder(player, enemy, random = Math.random) {
-  if (player.speed > enemy.speed) return { first: "player", rolls: [] };
-  if (enemy.speed > player.speed) return { first: "enemy", rolls: [] };
-  const rolls = [];
-  while (true) {
-    const playerRoll = rollD6(random);
-    const enemyRoll = rollD6(random);
-    rolls.push({ player: playerRoll, enemy: enemyRoll });
-    if (playerRoll > enemyRoll) return { first: "player", rolls };
-    if (enemyRoll > playerRoll) return { first: "enemy", rolls };
-  }
+export function compareSpeed(player, enemy) {
+  if (Number(player.speed) > Number(enemy.speed)) return "player";
+  if (Number(enemy.speed) > Number(player.speed)) return "enemy";
+  return "tie";
+}
+
+export function resolveSpeedTie(playerRoll, enemyRoll) {
+  if (!isValidD6Roll(playerRoll) || !isValidD6Roll(enemyRoll)) throw new Error("speed tie rolls must each be between 1 and 6");
+  if (Number(playerRoll) > Number(enemyRoll)) return "player";
+  if (Number(enemyRoll) > Number(playerRoll)) return "enemy";
+  return "tie";
 }
 
 export function applyDamage(monster, damage) {
@@ -95,15 +101,15 @@ export function healMonster(monster) {
   return wasDamaged;
 }
 
-export function enemyTurn(enemy, target, random = Math.random) {
+export function enemyTurn(enemy, target, roll) {
+  if (!isValidD6Roll(roll)) throw new Error("enemy move roll must be between 1 and 6");
   enemy.battle_mana = Number(enemy.battle_mana || 0) + 1;
-  const roll = rollD6(random);
   const moveIndex = chooseEnemyMove(enemy, roll);
-  if (moveIndex === null) return { roll, moveIndex: null, damage: 0, killed: false };
+  if (moveIndex === null) return { roll: Number(roll), moveIndex: null, damage: 0, killed: false };
   const move = enemy.moves[moveIndex];
   enemy.battle_mana -= move.mana_cost;
   const killed = applyDamage(target, move.damage);
-  return { roll, moveIndex, damage: move.damage, killed };
+  return { roll: Number(roll), moveIndex, damage: move.damage, killed };
 }
 
 export function playerTurn(player, enemy, moveIndex) {
@@ -118,9 +124,9 @@ export function playerTurn(player, enemy, moveIndex) {
   return { moveIndex, damage: move.damage, killed };
 }
 
-export function recruitmentSucceeded(random = Math.random) {
-  const roll = rollD6(random);
-  return { roll, success: roll >= 5 };
+export function recruitmentSucceeded(roll) {
+  if (!isValidD6Roll(roll)) throw new Error("recruitment roll must be between 1 and 6");
+  return { roll: Number(roll), success: Number(roll) >= 5 };
 }
 
 export function isHealingLocation(locationId, healingLocationIds) {
