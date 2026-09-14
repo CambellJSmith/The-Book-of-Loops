@@ -52,6 +52,16 @@ test("player receives mana at turn start and spends move cost", () => {
   assert.equal(enemy.current_health, 60);
 });
 
+test("player mana resets immediately when the enemy dies", () => {
+  const player = createMonsterInstance(card, "m1");
+  const enemy = createMonsterInstance({ ...card, species_id: "0002" }, "e1");
+  player.battle_mana = 3;
+  enemy.current_health = 20;
+  const result = playerTurn(player, enemy, 0);
+  assert.equal(result.killed, true);
+  assert.equal(player.battle_mana, 0);
+});
+
 test("enemy falls back to affordable move", () => {
   const enemy = createMonsterInstance(card, "e1");
   enemy.battle_mana = 1;
