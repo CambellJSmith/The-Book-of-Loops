@@ -57,6 +57,7 @@ h1 { font-size: 21px; margin: 0 0 10px; font-weight: 650; }
 .empty-state strong { color: #cdd1d5; font-size: 14px; }
 .empty-state span { font-size: 11px; }
 .combatants { display: grid; grid-template-columns: 1fr 42px 1fr; gap: 8px; align-items: stretch; }
+.combatants[hidden] { display: none; }
 .versus { display: grid; place-items: center; color: #777e85; font-size: 11px; text-transform: uppercase; }
 .combatant { min-height: 170px; border: 1px solid #151719; background: #292d32; border-radius: 4px; padding: 12px; }
 .combatant.enemy { background: #2d292a; }
@@ -69,8 +70,20 @@ h1 { font-size: 21px; margin: 0 0 10px; font-weight: 650; }
 .mana-fill { height: 100%; background: #6b8fb7; }
 .move-summary { margin-top: 9px; display: grid; gap: 4px; }
 .move-summary div { display: flex; justify-content: space-between; color: #b5bbc1; font-size: 10px; }
+.dice-result { margin: 12px 0 0; border: 1px solid #5c452b; background: #312a22; border-radius: 5px; min-height: 72px; padding: 9px 12px; display: flex; align-items: center; gap: 12px; }
+.dice-result[hidden] { display: none; }
+.dice-face { width: 52px; text-align: center; color: var(--accent-2); font-size: 48px; line-height: 1; }
+.dice-result div { display: grid; gap: 2px; }
+.dice-result-label { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .06em; }
+.dice-result strong { font-size: 24px; color: #fff0df; }
 .battle-prompt { margin: 12px 0 7px; color: #c8ccd0; font-size: 12px; }
 .battle-controls { display: grid; gap: 6px; }
+.dice-roll-action { border: 1px solid #17191c; background: #292d31; border-radius: 5px; padding: 10px; display: grid; gap: 7px; }
+.dice-button { min-height: 58px; display: flex; justify-content: center; align-items: center; gap: 10px; background: linear-gradient(#c9792e, #9e571d); border-color: #724016; color: white; font-weight: 700; font-size: 14px; text-transform: lowercase; }
+.dice-button:hover { background: linear-gradient(#dc8835, #ad6221); }
+.dice-button-icon { width: 30px; height: 30px; display: grid; place-items: center; border: 2px solid #fff5e6; border-radius: 6px; transform: rotate(45deg); font-size: 0; }
+.dice-button-icon::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #fff5e6; box-shadow: 9px 9px #fff5e6, -9px -9px #fff5e6; }
+.dice-help { color: var(--muted); font-size: 10px; line-height: 1.45; text-align: center; }
 .move-button { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; text-align: left; align-items: center; min-height: 38px; }
 .move-button .cost { color: #8eb2d5; }.move-button .damage { color: #e29a7e; }
 .primary-button { background: linear-gradient(#c9792e, #a65d1e); border-color: #7a4214; color: white; font-weight: 650; }
