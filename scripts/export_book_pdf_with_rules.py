@@ -178,20 +178,21 @@ def draw_rules_page(pdf: canvas.Canvas, starts: list[tuple[int, str, int]]) -> N
         x,
         third_top,
         left_width,
-        102,
+        124,
     )
     draw_rule_panel(
         pdf,
         "7",
         "Recruit a defeated monster",
-        "When an enemy monster reaches 0 Health, roll the d6 once. On a 5-6, take that monster into your team and restore it to full Health. On a 1-4, it is not recruited and the encounter ends normally.",
+        f"When an enemy monster reaches 0 Health, roll the d6 once. On a 5-6, it can join your team at full Health. You can carry a maximum of {game.TEAM_SIZE_LIMIT} monsters. If you already have {game.TEAM_SIZE_LIMIT} when recruitment succeeds, choose one monster to discard: either the new monster or one you are already carrying. There is no storage or reserve team. On a 1-4, the monster is not recruited.",
         right_x,
         third_top,
         left_width,
-        102,
+        124,
+        body_size=7.8,
     )
 
-    note_y = third_top - 118
+    note_y = third_top - 140
     pdf.setFillColor(accent)
     pdf.setFont(base.FONT_BOLD, 9)
     pdf.drawCentredString(PAGE_WIDTH / 2, note_y, "Travel. Battle. Recruit. Keep moving through the loop.")
