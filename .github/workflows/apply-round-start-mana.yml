@@ -48,6 +48,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add README.md digital_game scripts/gameplay_rules.py scripts/export_book_pdf_with_rules.py .github/workflows/export-book-pdf.yml
+          git restore .github/workflows/export-book-pdf.yml
+          git add README.md digital_game scripts/gameplay_rules.py scripts/export_book_pdf_with_rules.py
           git commit -m "Use round-start mana with automatic skips"
           git push origin HEAD:feature/round-start-mana
