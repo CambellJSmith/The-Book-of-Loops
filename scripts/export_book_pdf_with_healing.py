@@ -25,7 +25,7 @@ def draw_location_page_with_healing(
         rendered_location = dict(location)
         description = str(location.get("description", "")).strip()
         healing_section = f"<b>healing</b><br/>{game.HEALING_NOTE}"
-        rendered_location["description"] = f"{description}<br/><br/>{healing_section}" if description else healing_section
+        rendered_location["description"] = f"{healing_section}<br/><br/>{description}" if description else healing_section
     return _original_draw_location_page(
         pdf,
         rendered_location,
