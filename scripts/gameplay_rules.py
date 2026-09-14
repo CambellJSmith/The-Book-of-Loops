@@ -3,14 +3,19 @@ from __future__ import annotations  # Enables forward-compatible type annotation
 from typing import Any  # Describes portable move and card dictionaries.
 
 STARTING_MANA = 0  # Every monster enters each battle with no stored mana.
-MANA_PER_TURN = 1  # Every monster gains exactly one mana at the start of each of its turns.
+MANA_PER_ROUND = 1  # Both active monsters gain exactly one mana at the start of every battle round.
+MANA_PER_TURN = MANA_PER_ROUND  # Backward-compatible alias for older tooling; round-start gain is canonical.
 TEAM_SIZE_LIMIT = 6  # The player can carry at most six monsters and has no reserve storage.
 ENEMY_FIRST_MOVE_ROLLS = range(1, 4)  # Enemy d6 results 1-3 select move one first.
 ENEMY_SECOND_MOVE_ROLLS = range(4, 7)  # Enemy d6 results 4-6 select move two first.
 
 
-def gain_turn_mana(current_mana: int) -> int:  # Applies the canonical start-of-turn mana gain.
-    return max(0, int(current_mana)) + MANA_PER_TURN  # Keeps malformed negative values from reducing the battle resource.
+def gain_round_mana(current_mana: int) -> int:  # Applies the canonical start-of-round mana gain to one active monster.
+    return max(0, int(current_mana)) + MANA_PER_ROUND  # Keeps malformed negative values from reducing the battle resource.
+
+
+def gain_turn_mana(current_mana: int) -> int:  # Preserves the old helper name for callers outside the canonical rules path.
+    return gain_round_mana(current_mana)  # Mana is no longer granted separately inside each monster action.
 
 
 def can_afford_move(current_mana: int, move: dict[str, Any]) -> bool:  # Checks whether a monster can legally use one move now.
@@ -33,8 +38,8 @@ def enemy_move_index(roll: int, current_mana: int, moves: list[dict[str, Any]]) 
     if can_afford_move(current_mana, moves[preferred]):  # Uses the rolled move whenever the monster can pay for it.
         return preferred  # Returns the selected zero-based move index.
     if can_afford_move(current_mana, moves[alternate]):  # Falls back when only the other move is currently affordable.
-        return alternate  # Prevents the enemy from wasting a turn while a legal attack exists.
-    return None  # The enemy takes no attack and keeps its accumulated mana when neither move is affordable.
+        return alternate  # Uses the legal attack instead of wasting a turn after a high-cost roll.
+    return None  # A monster with no affordable move skips its action and keeps accumulated mana.
 
 
 def recruitment_requires_discard(current_team_size: int) -> bool:  # Checks whether accepting a recruited monster forces a discard choice.

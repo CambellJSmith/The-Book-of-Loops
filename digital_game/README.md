@@ -32,7 +32,7 @@ Because roll phases are part of the saved game state, saving or closing the brow
 
 ## Implemented gameplay
 
-The digital player handles the full loop: player-driven starting village and starter rolls, travel over the real map links, player-driven d6 encounters, Speed ordering and separately clicked tie rolls, per-turn Mana gain, player move choice, explicitly rolled enemy move selection and affordability fallback, permanent monster death, recruitment rolls, the six-monster carry limit with immediate discard choice, all 25 healing locations, the final Duskervet encounter, game-over and victory states.
+The digital player handles the full loop: player-driven starting village and starter rolls, travel over the real map links, player-driven d6 encounters, Speed ordering and separately clicked tie rolls, round-start Mana gain for both active monsters, automatic no-Mana skips, player move choice, explicitly rolled enemy move selection and affordability fallback, permanent monster death, recruitment rolls, the six-monster carry limit with immediate discard choice, all 25 healing locations, the final Duskervet encounter, game-over and victory states.
 
 The app autosaves to browser `localStorage`. Saves can also be exported as JSON and imported later. There is no digital reserve or storage system; exported saves reject teams larger than six.
 
@@ -40,7 +40,9 @@ The app autosaves to browser `localStorage`. Saves can also be exported as JSON 
 
 Before each encounter the player chooses which carried monster enters battle. The printed rules do not define voluntary mid-battle switching, so the digital player does not add it. If the active monster dies and other carried monsters remain, the player chooses a replacement and the same enemy keeps its current Health and Mana.
 
-When an enemy turn occurs, the game stops at an explicit **roll enemy move d6** control. Results `1–3` select Move 1 and `4–6` select Move 2, with the normal affordability fallback. Recruitment likewise pauses at a visible d6 control after a non-boss enemy is defeated.
+Every battle starts at 0 Mana. At the start of each battle round, **both active monsters gain exactly 1 Mana before either acts**. The player then chooses from moves they can actually afford. If a monster cannot afford either move, that monster automatically skips its action and keeps the Mana for the next round. If both monsters must skip, the game advances through the empty round and grants the next round's Mana.
+
+When an enemy can afford at least one move and its action occurs, the game stops at an explicit **roll enemy move d6** control. Results `1–3` select Move 1 and `4–6` select Move 2, with the normal affordability fallback. An enemy that cannot afford either move simply skips, so there is no pointless move-selection roll. Recruitment likewise pauses at a visible d6 control after a non-boss enemy is defeated.
 
 A healing location can heal one damaged carried monster during that visit, before or after its encounter. Travelling away and returning creates a new visit.
 

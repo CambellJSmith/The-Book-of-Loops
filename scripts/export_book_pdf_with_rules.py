@@ -161,7 +161,7 @@ def draw_rules_page(pdf: canvas.Canvas, starts: list[tuple[int, str, int]]) -> N
         pdf,
         "5",
         "Moves and Mana",
-        f"Each monster starts a battle with {game.STARTING_MANA} Mana and gains {game.MANA_PER_TURN} Mana at the start of its turn. Mana carries between turns, is spent to use moves, and resets after battle. A monster can use only moves it can afford. You choose your monster's move. For an enemy, roll d6: 1-3 selects Move 1; 4-6 selects Move 2. If that move is unaffordable, use the other if affordable. If neither is affordable, it does not attack and keeps its Mana. Move 2 always costs more Mana and deals more damage than Move 1.",
+        f"Each monster starts a battle with {game.STARTING_MANA} Mana. At the start of every battle round, both active monsters gain {game.MANA_PER_ROUND} Mana before either acts. Mana carries between rounds, is spent to use moves, and resets after battle. If a monster cannot afford either move when its action comes up, it skips that action and keeps its Mana. You choose an affordable move for your monster. If the enemy can act, roll d6: 1-3 selects Move 1; 4-6 selects Move 2. If that move is unaffordable, use the other affordable move. Move 2 always costs more Mana and deals more damage than Move 1.",
         right_x,
         second_top,
         left_width,

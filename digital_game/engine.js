@@ -61,19 +61,29 @@ export function resetBattleMana(team) {
   for (const monster of team) monster.battle_mana = 0;
 }
 
-export function canAffordMove(monster, moveIndex, includeTurnGain = true) {
+export function grantRoundMana(player, enemy) {
+  for (const monster of [player, enemy]) {
+    if (!monster || Number(monster.current_health) <= 0) continue;
+    monster.battle_mana = Math.max(0, Number(monster.battle_mana || 0)) + 1;
+  }
+}
+
+export function canAffordMove(monster, moveIndex) {
   const move = monster?.moves?.[moveIndex];
   if (!move) return false;
-  const available = Number(monster.battle_mana || 0) + (includeTurnGain ? 1 : 0);
-  return available >= Number(move.mana_cost || 0);
+  return Number(monster.battle_mana || 0) >= Number(move.mana_cost || 0);
+}
+
+export function hasAffordableMove(monster) {
+  return Array.isArray(monster?.moves) && monster.moves.some((_, index) => canAffordMove(monster, index));
 }
 
 export function chooseEnemyMove(enemy, roll) {
   if (!isValidD6Roll(roll)) throw new Error("enemy move roll must be between 1 and 6");
   const preferred = Number(roll) <= 3 ? 0 : 1;
   const alternate = 1 - preferred;
-  if (canAffordMove(enemy, preferred, false)) return preferred;
-  if (canAffordMove(enemy, alternate, false)) return alternate;
+  if (canAffordMove(enemy, preferred)) return preferred;
+  if (canAffordMove(enemy, alternate)) return alternate;
   return null;
 }
 
@@ -103,7 +113,6 @@ export function healMonster(monster) {
 
 export function enemyTurn(enemy, target, roll) {
   if (!isValidD6Roll(roll)) throw new Error("enemy move roll must be between 1 and 6");
-  enemy.battle_mana = Number(enemy.battle_mana || 0) + 1;
   const moveIndex = chooseEnemyMove(enemy, roll);
   if (moveIndex === null) return { roll: Number(roll), moveIndex: null, damage: 0, killed: false };
   const move = enemy.moves[moveIndex];
@@ -113,9 +122,8 @@ export function enemyTurn(enemy, target, roll) {
 }
 
 export function playerTurn(player, enemy, moveIndex) {
-  player.battle_mana = Number(player.battle_mana || 0) + 1;
-  const move = player.moves[moveIndex];
-  if (!move || player.battle_mana < move.mana_cost) {
+  const move = player?.moves?.[moveIndex];
+  if (!move || !canAffordMove(player, moveIndex)) {
     return { moveIndex: null, damage: 0, killed: false };
   }
   player.battle_mana -= move.mana_cost;
