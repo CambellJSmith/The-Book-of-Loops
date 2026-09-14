@@ -1,0 +1,32 @@
+{
+  "format": "book_of_loops_healing_locations",
+  "schema_version": 1,
+  "note": "You may choose one of your monsters and fully heal it.",
+  "locations": [
+    "loc_007",
+    "loc_011",
+    "loc_015",
+    "loc_019",
+    "loc_023",
+    "loc_027",
+    "loc_031",
+    "loc_035",
+    "loc_039",
+    "loc_043",
+    "loc_047",
+    "loc_051",
+    "loc_055",
+    "loc_059",
+    "loc_063",
+    "loc_067",
+    "loc_071",
+    "loc_075",
+    "loc_079",
+    "loc_083",
+    "loc_087",
+    "loc_091",
+    "loc_095",
+    "loc_098",
+    "loc_099"
+  ]
+}
