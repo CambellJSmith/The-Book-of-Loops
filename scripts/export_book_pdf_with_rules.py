@@ -151,11 +151,12 @@ def draw_rules_page(pdf: canvas.Canvas, starts: list[tuple[int, str, int]]) -> N
         pdf,
         "4",
         "Battle order",
-        "Compare the Speed of your monster with the enemy monster. The monster with the higher Speed acts first each round. If the Speeds are tied, roll the d6 for each monster; the higher roll acts first, rerolling further ties.",
+        "At the start of each battle, choose which monster from your party enters first. Compare its Speed with the enemy monster. The monster with the higher Speed acts first each round. If Speeds are tied, roll the d6 for each monster; the higher roll acts first, rerolling further ties.",
         x,
         second_top,
         left_width,
         112,
+        body_size=8.5,
     )
     draw_rule_panel(
         pdf,
@@ -173,25 +174,27 @@ def draw_rules_page(pdf: canvas.Canvas, starts: list[tuple[int, str, int]]) -> N
     draw_rule_panel(
         pdf,
         "6",
-        "Defeat and death",
-        "When a monster's Health reaches 0, it dies immediately. If it belongs to the player, permanently discard that monster from the team. A defeated monster does not take any remaining turn that round.",
+        "Health, defeat and loss",
+        f"Health is persistent for every monster through the whole run. When a monster's Health reaches 0, it dies and is permanently discarded. If every monster in your party dies, you lose the run and restart from the beginning. At a marked healing location, {game.HEALING_NOTE[0].lower() + game.HEALING_NOTE[1:]}",
         x,
         third_top,
         left_width,
-        102,
+        124,
+        body_size=8.0,
     )
     draw_rule_panel(
         pdf,
         "7",
-        "Recruit a defeated monster",
-        "When an enemy monster reaches 0 Health, roll the d6 once. On a 5-6, take that monster into your team and restore it to full Health. On a 1-4, it is not recruited and the encounter ends normally.",
+        "Recruit, party and victory",
+        f"After defeating an enemy, roll d6. On 5-6, recruit it at full Health; on 1-4, do not recruit. Carry up to {game.PARTY_LIMIT} monsters. If a successful recruit would give you 7, immediately discard either one carried monster or the new recruit. There is no storage or reserve. Defeating Duskervet wins the run. Duskervet may still be recruited normally after defeat.",
         right_x,
         third_top,
         left_width,
-        102,
+        124,
+        body_size=7.8,
     )
 
-    note_y = third_top - 118
+    note_y = third_top - 140
     pdf.setFillColor(accent)
     pdf.setFont(base.FONT_BOLD, 9)
     pdf.drawCentredString(PAGE_WIDTH / 2, note_y, "Travel. Battle. Recruit. Keep moving through the loop.")
