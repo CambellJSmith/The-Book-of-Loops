@@ -25,9 +25,9 @@ All random results use one six-sided die (`d6`).
 3. Choose one of the travel routes printed on the current location page and move there.
 4. On arrival, roll the d6 against that location's monster encounter table. The result is the enemy monster for that battle.
 5. Compare Speed. The monster with the higher Speed acts first each round. If Speed is tied, roll a d6 for each monster and reroll further ties until one is higher.
-6. Every monster starts each battle with `0 Mana` and gains exactly `1 Mana` at the start of each of its turns. Mana accumulates until spent and resets when the battle ends.
-7. A move can only be used when the monster can pay its printed Mana cost. Using the move spends that amount of Mana.
-8. The player chooses which affordable move to use. For the enemy, roll the d6: `1–3` selects Move 1 and `4–6` selects Move 2. If the selected move is unaffordable, use the other move if it is affordable; if neither move is affordable, the enemy makes no attack and keeps its Mana.
+6. Every monster starts each battle with `0 Mana`. At the start of each battle round, both active monsters gain exactly `1 Mana` before either monster acts. Mana accumulates between rounds until spent and resets when the battle ends.
+7. When a monster's action comes up, it can use only a move it can afford. If neither move is affordable, that monster skips its action and keeps its Mana for the next round. Using a move spends exactly its printed Mana cost.
+8. The player chooses which affordable move to use. If the enemy has at least one affordable move, roll the d6: `1–3` selects Move 1 and `4–6` selects Move 2. If the selected move is unaffordable, use the other move if it is affordable. An enemy with no affordable move skips its action without a move-selection roll.
 9. Move 2 is always strictly more expensive in Mana and strictly stronger in damage than Move 1.
 10. Subtract the chosen move's damage from the target's current Health. A monster dies immediately when its Health reaches `0`.
 11. A dead player monster is permanently discarded from the team.

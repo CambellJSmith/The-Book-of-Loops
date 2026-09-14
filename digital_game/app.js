@@ -8,7 +8,9 @@ import {
   encounterForRoll,
   createMonsterInstance,
   resetBattleMana,
+  grantRoundMana,
   canAffordMove,
+  hasAffordableMove,
   compareSpeed,
   resolveSpeedTie,
   playerTurn,
@@ -111,6 +113,7 @@ function normalizeLoadedState(loaded) {
   loaded.encounter_roll ??= null;
   loaded.recruit_roll ??= null;
   loaded.healing_available ??= false;
+  loaded.battle_round ??= 0;
   return loaded;
 }
 
@@ -150,6 +153,7 @@ function newGame() {
     pending_move_index: null,
     round_order: null,
     speed_tie_player_roll: null,
+    battle_round: 0,
     last_roll: null,
     battle_count: 0,
     visits: 0,
@@ -255,15 +259,54 @@ function beginBattle() {
   if (state.phase !== "prebattle" || !state.enemy || !activeMonster()) return;
   resetBattleMana(state.team);
   state.enemy.battle_mana = 0;
+  state.battle_round = 0;
   clearRoundTracking();
-  state.phase = "battle";
   appendLog(`${activeMonster().species_name} enters battle. Both monsters begin with 0 Mana.`);
+  beginBattleRound();
   commitState();
+}
+
+function beginBattleRound() {
+  const player = activeMonster();
+  const enemy = state.enemy;
+  if (!player || !enemy) return;
+
+  while (true) {
+    clearRoundTracking();
+    state.battle_round = Number(state.battle_round || 0) + 1;
+    grantRoundMana(player, enemy);
+    appendLog(`Round ${state.battle_round} begins. ${player.species_name} and ${enemy.species_name} each gain 1 Mana.`);
+
+    const playerCanAct = hasAffordableMove(player);
+    const enemyCanAct = hasAffordableMove(enemy);
+    if (!playerCanAct) appendLog(`${player.species_name} cannot afford either move and skips this round.`);
+    if (!enemyCanAct) appendLog(`${enemy.species_name} cannot afford either move and skips this round.`);
+
+    if (!playerCanAct && !enemyCanAct) {
+      appendLog("Both monsters skip. The next round begins.");
+      continue;
+    }
+
+    if (!playerCanAct) {
+      state.round_order = "enemy_only";
+      state.phase = "enemy_move_roll";
+      appendLog(`${enemy.species_name} can act this round. Click the die to roll which move it attempts.`);
+      return;
+    }
+
+    state.phase = "battle";
+    return;
+  }
+}
+
+function completeBattleRound() {
+  clearRoundTracking();
+  beginBattleRound();
 }
 
 function logPlayerTurn(player, result) {
   if (result.moveIndex === null) {
-    appendLog(`${player.species_name} cannot afford the selected move and does not attack.`);
+    appendLog(`${player.species_name} cannot afford a move and skips its action.`);
     return;
   }
   const move = player.moves[result.moveIndex];
@@ -272,7 +315,7 @@ function logPlayerTurn(player, result) {
 
 function logEnemyTurn(enemy, result) {
   if (result.moveIndex === null) {
-    appendLog(`${enemy.species_name} rolled ${result.roll}; neither move is affordable, so it keeps its Mana and does not attack.`);
+    appendLog(`${enemy.species_name} cannot afford either move and skips its action, keeping its Mana.`);
     return;
   }
   const move = enemy.moves[result.moveIndex];
@@ -329,21 +372,36 @@ function resolveRoundOrder(first) {
       finishEnemyDefeat();
       return;
     }
+    if (!hasAffordableMove(enemy)) {
+      completeBattleRound();
+      return;
+    }
   }
 
   state.phase = "enemy_move_roll";
-  appendLog(`${enemy.species_name}'s turn. Click the die to roll which move it attempts.`);
+  appendLog(`${enemy.species_name}'s action. Click the die to roll which affordable move it attempts.`);
 }
 
 function startRound(moveIndex) {
   if (state.phase !== "battle") return;
   const player = activeMonster();
   const enemy = state.enemy;
-  if (!player || !enemy || !canAffordMove(player, moveIndex, true)) return;
+  if (!player || !enemy || !canAffordMove(player, moveIndex)) return;
 
   state.pending_move_index = moveIndex;
   state.round_order = null;
   state.speed_tie_player_roll = null;
+
+  if (!hasAffordableMove(enemy)) {
+    state.round_order = "player_only";
+    const result = playerTurn(player, enemy, moveIndex);
+    logPlayerTurn(player, result);
+    if (result.killed) finishEnemyDefeat();
+    else completeBattleRound();
+    commitState();
+    return;
+  }
+
   const speedOrder = compareSpeed(player, enemy);
   if (speedOrder === "tie") {
     state.phase = "speed_tie_player_roll";
@@ -408,8 +466,7 @@ function rollEnemyMove() {
     }
   }
 
-  clearRoundTracking();
-  state.phase = "battle";
+  completeBattleRound();
   commitState();
 }
 
@@ -452,8 +509,8 @@ function continueReplacement(instanceId) {
   if (!monster) return;
   state.active_instance_id = monster.instance_id;
   monster.battle_mana = 0;
-  state.phase = "battle";
-  appendLog(`${monster.species_name} enters the ongoing battle with 0 Mana.`);
+  appendLog(`${monster.species_name} enters the ongoing battle with 0 Mana. A new battle round begins.`);
+  beginBattleRound();
   commitState();
 }
 
@@ -682,11 +739,11 @@ function renderBattle() {
 
   if (state.phase === "battle") {
     const player = activeMonster();
-    ui.battlePrompt.textContent = "Choose an affordable move. Mana shown on the button includes the +1 gained at the start of this turn.";
+    ui.battlePrompt.textContent = `Round ${state.battle_round}. Both active monsters have already gained 1 Mana at the start of this round. Choose an affordable move.`;
     player.moves.forEach((move, index) => {
       const button = document.createElement("button");
       button.className = "move-button";
-      button.disabled = !canAffordMove(player, index, true);
+      button.disabled = !canAffordMove(player, index);
       button.innerHTML = `<strong>${escapeHtml(move.name)}</strong><span class="cost">${move.mana_cost} Mana</span><span class="damage">${move.damage} dmg</span>`;
       button.addEventListener("click", () => startRound(index));
       ui.battleControls.append(button);
@@ -707,7 +764,7 @@ function renderBattle() {
   }
 
   if (state.phase === "enemy_move_roll") {
-    ui.battlePrompt.textContent = `${state.enemy?.species_name || "The enemy"} is acting. Roll the enemy move die: 1–3 selects Move 1, 4–6 selects Move 2, with the normal affordability fallback.`;
+    ui.battlePrompt.textContent = `${state.enemy?.species_name || "The enemy"} has enough Mana to act this round. Roll the enemy move die: 1–3 selects Move 1, 4–6 selects Move 2; if that move is too expensive, it uses the other affordable move.`;
     renderRollButton("roll enemy move d6", rollEnemyMove, "The enemy cannot choose a move until you click this roll.");
     return;
   }

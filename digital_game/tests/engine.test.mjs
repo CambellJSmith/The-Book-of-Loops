@@ -5,7 +5,9 @@ import {
   buildAdjacency,
   getStartingLocations,
   createMonsterInstance,
+  grantRoundMana,
   canAffordMove,
+  hasAffordableMove,
   chooseEnemyMove,
   compareSpeed,
   resolveSpeedTie,
@@ -48,21 +50,44 @@ test("map adjacency and starting locations use degree one", () => {
   assert.deepEqual(getStartingLocations(map, adjacency).map((location) => location.id), ["loc_001"]);
 });
 
-test("player receives mana at turn start and spends move cost", () => {
+test("both active monsters receive exactly one mana at round start", () => {
   const player = createMonsterInstance(card, "m1");
   const enemy = createMonsterInstance({ ...card, species_id: "0002" }, "e1");
-  assert.equal(canAffordMove(player, 0, true), true);
-  assert.equal(canAffordMove(player, 1, true), false);
+  assert.equal(hasAffordableMove(player), false);
+  assert.equal(hasAffordableMove(enemy), false);
+  grantRoundMana(player, enemy);
+  assert.equal(player.battle_mana, 1);
+  assert.equal(enemy.battle_mana, 1);
+  assert.equal(canAffordMove(player, 0), true);
+  assert.equal(canAffordMove(player, 1), false);
+});
+
+test("player action spends existing mana and does not grant extra mana", () => {
+  const player = createMonsterInstance(card, "m1");
+  const enemy = createMonsterInstance({ ...card, species_id: "0002" }, "e1");
+  grantRoundMana(player, enemy);
   const result = playerTurn(player, enemy, 0);
   assert.equal(result.damage, 20);
   assert.equal(player.battle_mana, 0);
   assert.equal(enemy.current_health, 60);
 });
 
+test("a monster with no affordable move skips without spending mana", () => {
+  const expensiveCard = { ...card, moves: [{ name: "charge", mana_cost: 2, damage: 30 }, { name: "burst", mana_cost: 4, damage: 70 }] };
+  const player = createMonsterInstance(expensiveCard, "m1");
+  const enemy = createMonsterInstance(card, "e1");
+  grantRoundMana(player, enemy);
+  assert.equal(hasAffordableMove(player), false);
+  const result = playerTurn(player, enemy, 0);
+  assert.equal(result.moveIndex, null);
+  assert.equal(result.damage, 0);
+  assert.equal(player.battle_mana, 1);
+});
+
 test("player mana resets immediately when the enemy dies", () => {
   const player = createMonsterInstance(card, "m1");
   const enemy = createMonsterInstance({ ...card, species_id: "0002" }, "e1");
-  player.battle_mana = 3;
+  player.battle_mana = 1;
   enemy.current_health = 20;
   const result = playerTurn(player, enemy, 0);
   assert.equal(result.killed, true);
@@ -87,14 +112,16 @@ test("speed order only asks for dice when speeds tie", () => {
   assert.equal(resolveSpeedTie(1, 5), "enemy");
 });
 
-test("enemy turn uses the clicked roll rather than generating its own", () => {
+test("enemy action uses existing round mana and the clicked roll", () => {
   const enemy = createMonsterInstance(card, "e1");
   const player = createMonsterInstance(card, "m1");
   player.current_health = 20;
+  grantRoundMana(player, enemy);
   const result = enemyTurn(enemy, player, 1);
   assert.equal(result.roll, 1);
   assert.equal(result.moveIndex, 0);
   assert.equal(result.killed, true);
+  assert.equal(enemy.battle_mana, 0);
   assert.throws(() => enemyTurn(enemy, player, 0), /between 1 and 6/);
 });
 
