@@ -8,6 +8,7 @@ on:
       - "scripts/export_book_pdf_dense.py"
       - "scripts/export_book_pdf_with_lore.py"
       - "scripts/export_book_pdf_with_rules.py"
+      - "scripts/export_book_pdf_complete.py"
       - "scripts/gameplay_rules.py"
       - ".github/workflows/export-book-pdf.yml"
       - "location_map.json"
@@ -26,6 +27,7 @@ on:
       - "scripts/export_book_pdf_dense.py"
       - "scripts/export_book_pdf_with_lore.py"
       - "scripts/export_book_pdf_with_rules.py"
+      - "scripts/export_book_pdf_complete.py"
       - "scripts/gameplay_rules.py"
       - ".github/workflows/export-book-pdf.yml"
       - "location_map.json"
@@ -87,26 +89,37 @@ jobs:
         working-directory: card_foundry
         run: pnpm build
       - name: export book
-        run: python scripts/export_book_pdf_with_rules.py --output book_of_loops.pdf
+        run: python scripts/export_book_pdf_complete.py --output book_of_loops.pdf
       - name: validate pdf
         run: |
           python - <<'PY'
           from pypdf import PdfReader
 
           reader = PdfReader("book_of_loops.pdf")
-          assert len(reader.pages) == 122, len(reader.pages)
-          lore = reader.pages[0].extract_text() or ""
-          rules = reader.pages[1].extract_text() or ""
+          assert len(reader.pages) == 124, len(reader.pages)
+          cover = reader.pages[0].extract_text() or ""
+          contents = reader.pages[1].extract_text() or ""
+          lore = reader.pages[2].extract_text() or ""
+          rules = reader.pages[3].extract_text() or ""
           rules_flat = " ".join(rules.split())
-          first_location = reader.pages[2].extract_text() or ""
-          monsters = reader.pages[102].extract_text() or ""
-          final = reader.pages[121].extract_text() or ""
+          first_location = reader.pages[4].extract_text() or ""
+          monsters = reader.pages[104].extract_text() or ""
+          final = reader.pages[123].extract_text() or ""
           visible_text = "\n".join((page.extract_text() or "") for page in reader.pages).upper()
+          assert "THE BOOK" in cover and "OF LOOPS" in cover
+          assert "A DICE-DRIVEN MONSTER ADVENTURE" in cover
+          assert "Contents" in contents
+          assert "The First Loop" in contents and "3" in contents
+          assert "Gameplay Rules" in contents and "4" in contents
+          assert "Locations 001-100" in contents and "5-104" in contents
+          assert "Species #0001-#0400" in contents and "105-124" in contents
+          assert "Confluence village" in contents and "5" in contents
+          assert "Shower hill village" in contents and "10" in contents
           assert "The First Loop" in lore
           assert "And this time, you remember." in lore
           assert "Gameplay Rules" in rules
-          assert "Confluence village" in rules and "p. 3" in rules
-          assert "Shower hill village" in rules and "p. 8" in rules
+          assert "Confluence village" in rules and "p. 5" in rules
+          assert "Shower hill village" in rules and "p. 10" in rules
           assert "0 Mana" in rules_flat
           assert "gains 1 Mana" in rules_flat
           assert "Move 2 always costs more Mana" in rules_flat
@@ -115,7 +128,7 @@ jobs:
           assert "4-6" in rules_flat and "Move 2" in rules_flat
           assert "5-6" in rules_flat and "full Health" in rules_flat
           assert "monster_encounters" in first_location
-          assert "To go to Saffron prairie, go to page 16." in first_location
+          assert "To go to Saffron prairie, go to page 18." in first_location
           assert "monster_reference" in monsters
           assert "#0001" in monsters
           assert "#0400" in final
