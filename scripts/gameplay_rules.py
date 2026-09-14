@@ -4,6 +4,9 @@ from typing import Any  # Describes portable move and card dictionaries.
 
 STARTING_MANA = 0  # Every monster enters each battle with no stored mana.
 MANA_PER_TURN = 1  # Every monster gains exactly one mana at the start of each of its turns.
+PARTY_LIMIT = 6  # The player may carry at most six living monsters at once.
+HEALING_LOCATION_COUNT = 25  # Exactly twenty-five map locations offer the optional full-heal action.
+HEALING_NOTE = "You may choose one of your monsters and fully restore its Health."  # Canonical player-facing healing-location text.
 ENEMY_FIRST_MOVE_ROLLS = range(1, 4)  # Enemy d6 results 1-3 select move one first.
 ENEMY_SECOND_MOVE_ROLLS = range(4, 7)  # Enemy d6 results 4-6 select move two first.
 
