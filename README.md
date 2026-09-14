@@ -20,8 +20,9 @@ All random results use one six-sided die (`d6`).
 10. Subtract the chosen move's damage from the target's current Health. A monster dies immediately when its Health reaches `0`.
 11. A dead player monster is permanently discarded from the team.
 12. When an enemy monster dies, roll the d6 once. On `5–6`, recruit it into the team at full Health. On `1–4`, it is not recruited.
+13. The player can carry a maximum of 6 monsters. If recruitment succeeds while already carrying 6, immediately choose one monster to discard: either the newly recruited monster or one already being carried. There is no storage system, reserve team, or other place to keep additional monsters.
 
-The same rules are rendered on page 2 of the printable book. Canonical mana behavior is implemented in `scripts/gameplay_rules.py`, and the PDF build validates both retained 400-monster datasets against the Move 1 / Move 2 ordering rule.
+The same rules are rendered on page 4 of the complete printable book. Canonical mana and team-limit behavior is implemented in `scripts/gameplay_rules.py`, and the PDF build validates both retained 400-monster datasets against the Move 1 / Move 2 ordering rule.
 
 ## Automatic location art
 
@@ -65,6 +66,12 @@ Hard layout/routing rules remain enabled:
 
 The embedded preset is also supplied as `location_map.json`.
 
+## Healing locations
+
+Exactly 25 locations contain a healing section. At one of these locations, the player may choose one carried monster and fully restore that monster's Health. The same healing note is shown in the browser map tool and on the corresponding printable location page.
+
+The canonical location set and note text live in `scripts/healing_locations.py`. `scripts/build_location_encounters.py` reapplies the browser UI patch after encounter regeneration so rebuilding the map does not remove the healing sections.
+
 ## Monster encounters
 
 Every location has a deterministic six-sided-die encounter table. Select a location in `index.html` to see the six results; roll a d6 and use the monster shown for that face.
@@ -79,20 +86,22 @@ Every location has a deterministic six-sided-die encounter table. Select a locat
 
 `monster_encounters.json` is the readable encounter manifest for all 100 locations. `location_map.json` and the embedded preset in `index.html` contain the same encounter data. Existing v4 browser saves migrate to the v5 storage key and inherit the canonical encounter table for matching location IDs without discarding their saved map layout.
 
-The encounter distribution is reproducible with `python scripts/build_location_encounters.py`. The generator computes map progression and location type bias, assigns all ordinary monsters, globally swaps placements to improve ecological fit, adds sparse relevant guest appearances into remaining encounter capacity, validates the village/final-boss rules, and regenerates the map/manifest data.
+The encounter distribution is reproducible with `python scripts/build_location_encounters.py`. The generator computes map progression and location type bias, assigns all ordinary monsters, globally swaps placements to improve ecological fit, adds sparse relevant guest appearances into remaining encounter capacity, validates the village/final-boss rules, regenerates the map/manifest data, and reapplies the healing-location UI.
 
 ## Printable book
 
-The production exporter is `scripts/export_book_pdf_with_rules.py`.
+The production exporter is `scripts/export_book_pdf_complete.py`.
 
 The current structure is:
 
-- page 1: `The First Loop` narrative
-- page 2: gameplay rules
-- pages 3–102: the 100 locations
-- pages 103–122: the dense 400-monster reference
+- page 1: cover
+- page 2: contents
+- page 3: `The First Loop` narrative
+- page 4: gameplay rules
+- pages 5–104: the 100 locations
+- pages 105–124: the dense 400-monster reference
 
-Location travel instructions use physical PDF page numbers and clickable internal links. The monster appendix shows player-facing species, type, Health, Speed, move names, Mana costs, damage, and the `FINAL BOSS` marker for species `0400`. Internal progression metadata is deliberately excluded.
+Location travel instructions use physical PDF page numbers and clickable internal links. The 25 healing locations include the healing note directly on their location page. The monster appendix shows player-facing species, type, Health, Speed, move names, Mana costs, damage, and the `FINAL BOSS` marker for species `0400`. Internal progression metadata is deliberately excluded.
 
 ## Monster card editor
 
