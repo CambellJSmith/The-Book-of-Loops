@@ -75,6 +75,34 @@ def draw_cover_page(pdf: canvas.Canvas) -> None:
     pdf.showPage()
 
 
+def draw_lore_page(pdf: canvas.Canvas) -> None:
+    base.draw_page_background(pdf)
+    bookmark = "the_first_loop"
+    pdf.bookmarkPage(bookmark)
+    pdf.addOutlineEntry("The First Loop", bookmark, level=0, closed=False)
+
+    accent = colors.HexColor("#d8b36a")
+    pdf.setFillColor(accent)
+    pdf.setFont(base.FONT_BOLD, 8.5)
+    pdf.drawCentredString(PAGE_WIDTH / 2, PAGE_HEIGHT - 48, "THE BOOK OF LOOPS")
+    pdf.setFillColor(base.TEXT)
+    pdf.setFont(base.FONT_BOLD, 27)
+    pdf.drawCentredString(PAGE_WIDTH / 2, PAGE_HEIGHT - 82, "The First Loop")
+    pdf.setStrokeColor(accent)
+    pdf.setLineWidth(1.4)
+    pdf.line(PAGE_WIDTH / 2 - 70, PAGE_HEIGHT - 96, PAGE_WIDTH / 2 + 70, PAGE_HEIGHT - 96)
+
+    column_gap = 24
+    usable_width = PAGE_WIDTH - 2 * base.MARGIN
+    column_width = (usable_width - column_gap) / 2
+    column_top = PAGE_HEIGHT - 122
+    lore.draw_story_column(pdf, lore.STORY_PARAGRAPHS[:11], base.MARGIN, column_top, column_width)
+    lore.draw_story_column(pdf, lore.STORY_PARAGRAPHS[11:], base.MARGIN + column_width + column_gap, column_top, column_width)
+
+    base.draw_footer(pdf, LORE_PAGE, "The First Loop")
+    pdf.showPage()
+
+
 def contents_link_row(
     pdf: canvas.Canvas,
     label: str,
@@ -248,7 +276,7 @@ def export_pdf(output_path: Path) -> None:
 
     draw_cover_page(pdf)
     draw_contents_page(pdf, starts, first_location_id)
-    lore.draw_lore_page(pdf, page_number=LORE_PAGE)
+    draw_lore_page(pdf)
 
     rules.RULES_PAGE = RULES_PAGE
     rules.draw_rules_page(pdf, [(roll, name, page_number) for roll, _location_id, name, page_number in starts])
