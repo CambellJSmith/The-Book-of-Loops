@@ -1,0 +1,53 @@
+name: apply round-start mana migration
+
+on:
+  push:
+    branches:
+      - feature/round-start-mana
+    paths:
+      - ".github/workflows/apply-round-start-mana.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/round-start-mana
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: apply migration
+        run: python scripts/apply_round_start_mana_patch.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.19.0"
+      - name: validate javascript
+        run: |
+          node --check digital_game/engine.js
+          node --check digital_game/app.js
+      - name: run digital tests
+        run: node --test digital_game/tests/*.test.mjs
+      - name: validate canonical rules
+        run: |
+          python - <<'PY'
+          import sys
+          from pathlib import Path
+          sys.path.insert(0, str(Path('scripts').resolve()))
+          import gameplay_rules as rules
+          assert rules.STARTING_MANA == 0
+          assert rules.MANA_PER_ROUND == 1
+          assert rules.gain_round_mana(0) == 1
+          assert rules.gain_round_mana(4) == 5
+          print('round_start_mana_validated')
+          PY
+      - name: commit generated changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md digital_game scripts/gameplay_rules.py scripts/export_book_pdf_with_rules.py .github/workflows/export-book-pdf.yml
+          git commit -m "Use round-start mana with automatic skips"
+          git push origin HEAD:feature/round-start-mana
