@@ -1,0 +1,30 @@
+{
+  "note": "You can choose to fully heal one of your monsters.",
+  "location_ids": [
+    "loc_007",
+    "loc_011",
+    "loc_015",
+    "loc_018",
+    "loc_022",
+    "loc_026",
+    "loc_030",
+    "loc_034",
+    "loc_038",
+    "loc_042",
+    "loc_045",
+    "loc_049",
+    "loc_053",
+    "loc_057",
+    "loc_061",
+    "loc_064",
+    "loc_068",
+    "loc_072",
+    "loc_076",
+    "loc_080",
+    "loc_084",
+    "loc_088",
+    "loc_091",
+    "loc_095",
+    "loc_099"
+  ]
+}

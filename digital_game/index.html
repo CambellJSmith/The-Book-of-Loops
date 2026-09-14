@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Book of Loops · Digital Player</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="loop-mark">∞</span>
+      <div>
+        <strong>The Book of Loops</strong>
+        <span>digital player</span>
+      </div>
+    </div>
+    <nav class="top-actions" aria-label="Game actions">
+      <button id="save_button" class="tool-button">save</button>
+      <button id="export_button" class="tool-button">export save</button>
+      <label class="tool-button file-button">import save<input id="import_input" type="file" accept="application/json"></label>
+      <button id="new_game_button" class="tool-button danger">new loop</button>
+      <a class="tool-button" href="../index.html">map tool</a>
+    </nav>
+  </header>
+
+  <main class="workspace">
+    <section class="panel location-panel">
+      <div class="panel-title"><span>location</span><span id="location_id" class="muted"></span></div>
+      <div class="panel-body">
+        <h1 id="location_name">loading…</h1>
+        <div class="location-art-frame"><img id="location_art" alt=""><div id="location_art_fallback">no location art</div></div>
+        <p id="location_description" class="description"></p>
+        <section id="healing_section" class="subpanel healing" hidden>
+          <div class="subpanel-title">healing available</div>
+          <p>You can choose to fully heal one of your monsters.</p>
+          <div id="healing_choices" class="button-stack"></div>
+        </section>
+        <section class="subpanel">
+          <div class="subpanel-title">travel</div>
+          <div id="travel_choices" class="button-stack"></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="panel battle-panel">
+      <div class="panel-title"><span>encounter</span><span id="phase_label" class="status-pill"></span></div>
+      <div class="panel-body">
+        <div id="battle_empty" class="empty-state">
+          <strong>no active encounter</strong>
+          <span>choose a connected location to continue the loop.</span>
+        </div>
+        <div id="battle_content" hidden>
+          <div class="combatants">
+            <article id="player_combatant" class="combatant"></article>
+            <div class="versus">vs</div>
+            <article id="enemy_combatant" class="combatant enemy"></article>
+          </div>
+          <div id="battle_prompt" class="battle-prompt"></div>
+          <div id="battle_controls" class="battle-controls"></div>
+        </div>
+        <section id="recruit_panel" class="subpanel recruit-panel" hidden></section>
+        <section id="ending_panel" class="ending-panel" hidden></section>
+      </div>
+    </section>
+
+    <section class="panel team-panel">
+      <div class="panel-title"><span>team</span><span id="team_count" class="muted">0 / 6</span></div>
+      <div id="team_list" class="team-list"></div>
+    </section>
+
+    <section class="panel log-panel">
+      <div class="panel-title"><span>loop log</span><button id="clear_log_button" class="text-button">clear</button></div>
+      <div id="game_log" class="game-log" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <dialog id="start_dialog" class="start-dialog">
+    <div class="start-mark">∞</div>
+    <h2>The Book of Loops</h2>
+    <p>A complete digital implementation of the printed game. Your progress is stored locally in this browser.</p>
+    <div id="load_error" class="error-box" hidden></div>
+    <div class="start-actions">
+      <button id="start_new_button" class="primary-button">start a new loop</button>
+      <button id="continue_button" class="secondary-button" hidden>continue saved loop</button>
+    </div>
+    <small>For local play, run <code>python digital_game/play.py</code> from the repository.</small>
+  </dialog>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+name: digital game
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "digital_game/**"
+      - "healing_locations.json"
+      - "scripts/healing_locations.py"
+      - "location_map.json"
+      - "card_foundry/data/card_objects.json"
+      - ".github/workflows/digital-game.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "digital_game/**"
+      - "healing_locations.json"
+      - "scripts/healing_locations.py"
+      - "location_map.json"
+      - "card_foundry/data/card_objects.json"
+      - ".github/workflows/digital-game.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.19.0"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: check javascript syntax
+        run: |
+          node --check digital_game/engine.js
+          node --check digital_game/app.js
+      - name: run digital game tests
+        run: node --test digital_game/tests/*.test.mjs
+      - name: validate shared healing config
+        run: python scripts/healing_locations.py --check
+      - name: validate launcher
+        run: python -m py_compile digital_game/play.py
