@@ -9,7 +9,8 @@ import {
   createMonsterInstance,
   resetBattleMana,
   canAffordMove,
-  resolveSpeedOrder,
+  compareSpeed,
+  resolveSpeedTie,
   playerTurn,
   enemyTurn,
   recruitmentSucceeded,
@@ -22,6 +23,7 @@ import {
 
 const STORAGE_KEY = "book_of_loops_digital_save_v1";
 const MAX_LOG_ENTRIES = 160;
+const DICE_FACES = ["", "⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
 
 let mapData = null;
 let cardData = null;
@@ -44,8 +46,10 @@ const ui = {
   phaseLabel: document.getElementById("phase_label"),
   battleEmpty: document.getElementById("battle_empty"),
   battleContent: document.getElementById("battle_content"),
+  combatants: document.querySelector(".combatants"),
   playerCombatant: document.getElementById("player_combatant"),
   enemyCombatant: document.getElementById("enemy_combatant"),
+  diceResult: document.getElementById("dice_result"),
   battlePrompt: document.getElementById("battle_prompt"),
   battleControls: document.getElementById("battle_controls"),
   recruitPanel: document.getElementById("recruit_panel"),
@@ -95,10 +99,35 @@ function commitState() {
   render();
 }
 
+function normalizeLoadedState(loaded) {
+  loaded.version = 2;
+  loaded.log ??= [];
+  loaded.next_instance_id ??= 1;
+  loaded.last_roll ??= null;
+  loaded.pending_move_index ??= null;
+  loaded.round_order ??= null;
+  loaded.speed_tie_player_roll ??= null;
+  loaded.pending_recruit_species_id ??= null;
+  loaded.encounter_roll ??= null;
+  loaded.recruit_roll ??= null;
+  loaded.healing_available ??= false;
+  return loaded;
+}
+
 function createFromSpecies(speciesId, prefix = "m") {
   const card = cardIndex.get(String(speciesId));
   if (!card) throw new Error(`missing card data for species ${speciesId}`);
   return createMonsterInstance(card, allocateInstanceId(prefix));
+}
+
+function recordRoll(label, value) {
+  state.last_roll = { label: String(label), value: Number(value) };
+}
+
+function clearRoundTracking() {
+  state.pending_move_index = null;
+  state.round_order = null;
+  state.speed_tie_player_roll = null;
 }
 
 function newGame() {
@@ -106,50 +135,71 @@ function newGame() {
   if (starts.length !== 6) throw new Error(`expected six starting villages, found ${starts.length}`);
 
   state = {
-    version: 1,
+    version: 2,
     next_instance_id: 1,
     location_id: null,
     team: [],
     active_instance_id: null,
-    phase: "travel",
+    phase: "start_roll",
     enemy: null,
     pending_recruit: null,
+    pending_recruit_species_id: null,
     healing_available: false,
     encounter_roll: null,
     recruit_roll: null,
+    pending_move_index: null,
+    round_order: null,
+    speed_tie_player_roll: null,
+    last_roll: null,
     battle_count: 0,
     visits: 0,
     log: [],
   };
 
-  const startRoll = rollD6();
-  const location = starts[startRoll - 1];
-  const starterRoll = rollD6();
-  const starterEncounter = encounterForRoll(location, starterRoll);
-  if (!starterEncounter) throw new Error(`starting village ${location.name} has no encounter for roll ${starterRoll}`);
-  const starter = createFromSpecies(starterEncounter.species_id);
-
-  state.location_id = String(location.id);
-  state.team.push(starter);
-  state.active_instance_id = starter.instance_id;
-  state.visits = 1;
-  appendLog(`Starting village roll: ${startRoll}. You begin at ${location.name}.`);
-  appendLog(`Starter roll: ${starterRoll}. ${starter.species_name} #${starter.species_id} joins your team at full Health.`);
-  appendLog("Choose a travel route. Your starter is not battled at the starting village.");
-  saveState();
+  appendLog("A new loop begins. Click the die to roll for your starting village.");
   ui.startDialog.close();
-  render();
+  commitState();
 }
 
 function loadSavedState() {
   const serialized = localStorage.getItem(STORAGE_KEY);
   if (!serialized) return false;
-  state = parseState(serialized);
-  state.log ??= [];
-  state.next_instance_id ??= 1;
+  state = normalizeLoadedState(parseState(serialized));
   ui.startDialog.close();
   render();
   return true;
+}
+
+function rollStartingVillage() {
+  if (state.phase !== "start_roll") return;
+  const starts = getStartingLocations(mapData, adjacency);
+  const roll = rollD6();
+  recordRoll("starting village", roll);
+  const location = starts[roll - 1];
+  if (!location) throw new Error(`no starting village exists for roll ${roll}`);
+  state.location_id = String(location.id);
+  state.visits = 1;
+  state.phase = "starter_roll";
+  appendLog(`Starting village roll: ${roll}. You begin at ${location.name}.`);
+  appendLog("Click the die again to roll for your starter monster.");
+  commitState();
+}
+
+function rollStarterMonster() {
+  if (state.phase !== "starter_roll") return;
+  const location = currentLocation();
+  if (!location) return;
+  const roll = rollD6();
+  recordRoll("starter monster", roll);
+  const starterEncounter = encounterForRoll(location, roll);
+  if (!starterEncounter) throw new Error(`starting village ${location.name} has no encounter for roll ${roll}`);
+  const starter = createFromSpecies(starterEncounter.species_id);
+  state.team.push(starter);
+  state.active_instance_id = starter.instance_id;
+  state.phase = "travel";
+  appendLog(`Starter roll: ${roll}. ${starter.species_name} #${starter.species_id} joins your team at full Health.`);
+  appendLog("Choose a travel route. Your starter is not battled at the starting village.");
+  commitState();
 }
 
 function travelTo(locationId) {
@@ -163,22 +213,34 @@ function travelTo(locationId) {
   state.visits = Number(state.visits || 0) + 1;
   state.healing_available = isHealingLocation(targetId, healingLocationIds);
   state.pending_recruit = null;
+  state.pending_recruit_species_id = null;
   state.recruit_roll = null;
+  state.encounter_roll = null;
+  state.enemy = null;
   resetBattleMana(state.team);
+  clearRoundTracking();
+  state.phase = "encounter_roll";
 
-  const encounterRoll = rollD6();
-  const encounter = encounterForRoll(location, encounterRoll);
-  if (!encounter) throw new Error(`${location.name} has no encounter for roll ${encounterRoll}`);
+  appendLog(`Travelled to ${location.name}. Click the die to roll this location's encounter.`);
+  if (state.healing_available) appendLog("This location can fully heal one carried monster during this visit.");
+  commitState();
+}
+
+function rollEncounter() {
+  if (state.phase !== "encounter_roll") return;
+  const location = currentLocation();
+  if (!location) return;
+  const roll = rollD6();
+  recordRoll("encounter", roll);
+  const encounter = encounterForRoll(location, roll);
+  if (!encounter) throw new Error(`${location.name} has no encounter for roll ${roll}`);
   const enemy = createFromSpecies(encounter.species_id, "e");
   enemy.instance_id = `enemy-${Number(state.battle_count || 0) + 1}`;
   state.battle_count = Number(state.battle_count || 0) + 1;
   state.enemy = enemy;
-  state.encounter_roll = encounterRoll;
+  state.encounter_roll = roll;
   state.phase = "prebattle";
-
-  appendLog(`Travelled to ${location.name}. Encounter roll: ${encounterRoll}.`);
-  appendLog(`${enemy.species_name} #${enemy.species_id} appears with ${enemy.current_health} Health.`);
-  if (state.healing_available) appendLog("This location can fully heal one carried monster during this visit.");
+  appendLog(`Encounter roll: ${roll}. ${enemy.species_name} #${enemy.species_id} appears with ${enemy.current_health} Health.`);
   commitState();
 }
 
@@ -193,15 +255,10 @@ function beginBattle() {
   if (state.phase !== "prebattle" || !state.enemy || !activeMonster()) return;
   resetBattleMana(state.team);
   state.enemy.battle_mana = 0;
+  clearRoundTracking();
   state.phase = "battle";
   appendLog(`${activeMonster().species_name} enters battle. Both monsters begin with 0 Mana.`);
   commitState();
-}
-
-function describeTieRolls(order) {
-  for (const result of order.rolls) {
-    appendLog(`Speed tie: you rolled ${result.player}, enemy rolled ${result.enemy}${result.player === result.enemy ? "; reroll." : "."}`);
-  }
 }
 
 function logPlayerTurn(player, result) {
@@ -215,11 +272,11 @@ function logPlayerTurn(player, result) {
 
 function logEnemyTurn(enemy, result) {
   if (result.moveIndex === null) {
-    appendLog(`${enemy.species_name} rolls ${result.roll}; neither move is affordable, so it keeps its Mana and does not attack.`);
+    appendLog(`${enemy.species_name} rolled ${result.roll}; neither move is affordable, so it keeps its Mana and does not attack.`);
     return;
   }
   const move = enemy.moves[result.moveIndex];
-  appendLog(`${enemy.species_name} rolls ${result.roll} and uses ${move.name} for ${result.damage} damage. ${activeMonster()?.species_name || "Your monster"} Health: ${activeMonster()?.current_health ?? 0}.`);
+  appendLog(`${enemy.species_name} rolled ${result.roll} and uses ${move.name} for ${result.damage} damage. ${activeMonster()?.species_name || "Your monster"} Health: ${activeMonster()?.current_health ?? 0}.`);
 }
 
 function handlePlayerDeath(deadInstanceId) {
@@ -227,6 +284,7 @@ function handlePlayerDeath(deadInstanceId) {
   if (index < 0) return;
   const [dead] = state.team.splice(index, 1);
   appendLog(`${dead.species_name} has died and is permanently discarded.`);
+  clearRoundTracking();
   if (state.team.length === 0) {
     state.active_instance_id = null;
     state.phase = "game_over";
@@ -240,7 +298,9 @@ function handlePlayerDeath(deadInstanceId) {
 
 function finishEnemyDefeat() {
   const enemy = state.enemy;
+  if (!enemy) return;
   appendLog(`${enemy.species_name} is defeated.`);
+  clearRoundTracking();
 
   if (String(state.location_id) === FINAL_LOCATION_ID && enemy.species_id === FINAL_BOSS_SPECIES_ID) {
     state.enemy = null;
@@ -249,66 +309,140 @@ function finishEnemyDefeat() {
     return;
   }
 
-  const recruitment = recruitmentSucceeded();
-  state.recruit_roll = recruitment.roll;
-  if (!recruitment.success) {
-    appendLog(`Recruitment roll: ${recruitment.roll}. The defeated monster is not recruited.`);
-    state.enemy = null;
-    state.phase = "travel";
-    return;
-  }
-
-  const recruit = createFromSpecies(enemy.species_id);
-  appendLog(`Recruitment roll: ${recruitment.roll}. ${recruit.species_name} can join at full Health.`);
+  state.pending_recruit_species_id = enemy.species_id;
   state.enemy = null;
-  if (state.team.length < TEAM_SIZE_LIMIT) {
-    state.team.push(recruit);
-    appendLog(`${recruit.species_name} joins your team. Team size: ${state.team.length}/${TEAM_SIZE_LIMIT}.`);
-    state.phase = "travel";
-    return;
-  }
-
-  state.pending_recruit = recruit;
-  state.phase = "discard";
-  appendLog("Your team is full. Discard the new recruit or one monster you are already carrying.");
+  state.recruit_roll = null;
+  state.phase = "recruitment_roll";
+  appendLog("Click the die to roll for recruitment. A 5 or 6 recruits the defeated monster.");
 }
 
-function resolveRound(moveIndex) {
+function resolveRoundOrder(first) {
+  const player = activeMonster();
+  const enemy = state.enemy;
+  if (!player || !enemy) return;
+  state.round_order = first;
+
+  if (first === "player") {
+    const result = playerTurn(player, enemy, state.pending_move_index);
+    logPlayerTurn(player, result);
+    if (result.killed) {
+      finishEnemyDefeat();
+      return;
+    }
+  }
+
+  state.phase = "enemy_move_roll";
+  appendLog(`${enemy.species_name}'s turn. Click the die to roll which move it attempts.`);
+}
+
+function startRound(moveIndex) {
   if (state.phase !== "battle") return;
   const player = activeMonster();
   const enemy = state.enemy;
   if (!player || !enemy || !canAffordMove(player, moveIndex, true)) return;
 
-  const order = resolveSpeedOrder(player, enemy);
-  describeTieRolls(order);
-
-  if (order.first === "player") {
-    const result = playerTurn(player, enemy, moveIndex);
-    logPlayerTurn(player, result);
-    if (result.killed) {
-      finishEnemyDefeat();
-      commitState();
-      return;
-    }
-
-    const enemyResult = enemyTurn(enemy, player);
-    logEnemyTurn(enemy, enemyResult);
-    if (enemyResult.killed) handlePlayerDeath(player.instance_id);
-    commitState();
-    return;
+  state.pending_move_index = moveIndex;
+  state.round_order = null;
+  state.speed_tie_player_roll = null;
+  const speedOrder = compareSpeed(player, enemy);
+  if (speedOrder === "tie") {
+    state.phase = "speed_tie_player_roll";
+    appendLog(`Speed is tied at ${player.speed}. Click the die to roll your Speed tie-break.`);
+  } else {
+    resolveRoundOrder(speedOrder);
   }
+  commitState();
+}
 
-  const enemyResult = enemyTurn(enemy, player);
+function rollPlayerSpeedTie() {
+  if (state.phase !== "speed_tie_player_roll") return;
+  const roll = rollD6();
+  recordRoll("your Speed tie-break", roll);
+  state.speed_tie_player_roll = roll;
+  state.phase = "speed_tie_enemy_roll";
+  appendLog(`Speed tie: you rolled ${roll}. Now click the die to roll for the enemy.`);
+  commitState();
+}
+
+function rollEnemySpeedTie() {
+  if (state.phase !== "speed_tie_enemy_roll") return;
+  const enemyRoll = rollD6();
+  recordRoll("enemy Speed tie-break", enemyRoll);
+  const playerRoll = Number(state.speed_tie_player_roll);
+  const result = resolveSpeedTie(playerRoll, enemyRoll);
+  appendLog(`Speed tie: enemy rolled ${enemyRoll}.`);
+  if (result === "tie") {
+    appendLog(`Both rolled ${enemyRoll}. Click to roll your Speed die again.`);
+    state.speed_tie_player_roll = null;
+    state.phase = "speed_tie_player_roll";
+  } else {
+    appendLog(`${result === "player" ? "You act" : "The enemy acts"} first this round.`);
+    resolveRoundOrder(result);
+  }
+  commitState();
+}
+
+function rollEnemyMove() {
+  if (state.phase !== "enemy_move_roll") return;
+  const player = activeMonster();
+  const enemy = state.enemy;
+  if (!player || !enemy) return;
+  const roll = rollD6();
+  recordRoll("enemy move", roll);
+  const enemyResult = enemyTurn(enemy, player, roll);
   logEnemyTurn(enemy, enemyResult);
+
   if (enemyResult.killed) {
     handlePlayerDeath(player.instance_id);
     commitState();
     return;
   }
 
-  const result = playerTurn(player, enemy, moveIndex);
-  logPlayerTurn(player, result);
-  if (result.killed) finishEnemyDefeat();
+  if (state.round_order === "enemy") {
+    const result = playerTurn(player, enemy, state.pending_move_index);
+    logPlayerTurn(player, result);
+    if (result.killed) {
+      finishEnemyDefeat();
+      commitState();
+      return;
+    }
+  }
+
+  clearRoundTracking();
+  state.phase = "battle";
+  commitState();
+}
+
+function rollRecruitment() {
+  if (state.phase !== "recruitment_roll" || !state.pending_recruit_species_id) return;
+  const roll = rollD6();
+  recordRoll("recruitment", roll);
+  const recruitment = recruitmentSucceeded(roll);
+  state.recruit_roll = roll;
+  const speciesId = state.pending_recruit_species_id;
+  state.pending_recruit_species_id = null;
+
+  if (!recruitment.success) {
+    const card = cardIndex.get(String(speciesId));
+    appendLog(`Recruitment roll: ${roll}. ${card?.species_name || "The defeated monster"} is not recruited.`);
+    state.phase = "travel";
+    commitState();
+    return;
+  }
+
+  const recruit = createFromSpecies(speciesId);
+  appendLog(`Recruitment roll: ${roll}. ${recruit.species_name} can join at full Health.`);
+  if (state.team.length < TEAM_SIZE_LIMIT) {
+    state.team.push(recruit);
+    appendLog(`${recruit.species_name} joins your team. Team size: ${state.team.length}/${TEAM_SIZE_LIMIT}.`);
+    state.phase = "travel";
+    commitState();
+    return;
+  }
+
+  state.pending_recruit = recruit;
+  state.phase = "discard";
+  appendLog("Your team is full. Discard the new recruit or one monster you are already carrying.");
   commitState();
 }
 
@@ -317,6 +451,7 @@ function continueReplacement(instanceId) {
   const monster = state.team.find((entry) => entry.instance_id === String(instanceId));
   if (!monster) return;
   state.active_instance_id = monster.instance_id;
+  monster.battle_mana = 0;
   state.phase = "battle";
   appendLog(`${monster.species_name} enters the ongoing battle with 0 Mana.`);
   commitState();
@@ -345,7 +480,7 @@ function replaceTeamMember(instanceId) {
 }
 
 function useHealing(instanceId) {
-  if (!state.healing_available || !["prebattle", "travel"].includes(state.phase)) return;
+  if (!state.healing_available || !["encounter_roll", "prebattle", "travel"].includes(state.phase)) return;
   const monster = state.team.find((entry) => entry.instance_id === String(instanceId));
   if (!monster || monster.current_health >= monster.max_health) return;
   healMonster(monster);
@@ -374,11 +509,28 @@ function monsterCardHtml(monster) {
 
 function renderLocation() {
   const location = currentLocation();
-  if (!location) return;
+  if (!location) {
+    ui.locationId.textContent = "—";
+    ui.locationName.textContent = "the loop awaits";
+    ui.locationDescription.textContent = "Roll the die to determine where your run begins.";
+    ui.locationArt.removeAttribute("src");
+    ui.locationArt.style.display = "none";
+    ui.locationArtFallback.style.display = "block";
+    ui.locationArtFallback.textContent = "starting location not rolled yet";
+    ui.healingSection.hidden = true;
+    ui.healingChoices.replaceChildren();
+    ui.travelChoices.replaceChildren();
+    const blocked = document.createElement("span");
+    blocked.className = "muted";
+    blocked.textContent = "roll your starting village first";
+    ui.travelChoices.append(blocked);
+    return;
+  }
+
   ui.locationId.textContent = String(location.id);
   ui.locationName.textContent = String(location.name);
   ui.locationDescription.textContent = String(location.description || "");
-
+  ui.locationArtFallback.textContent = "no location art";
   ui.locationArt.style.display = "none";
   ui.locationArtFallback.style.display = "block";
   ui.locationArt.alt = `${location.name} artwork`;
@@ -393,7 +545,7 @@ function renderLocation() {
   const art = String(location.art || "").trim();
   ui.locationArt.src = art.startsWith("data:image/") ? art : `../${encodeURIComponent(location.name)}.png`;
 
-  const canHeal = state.healing_available && ["prebattle", "travel"].includes(state.phase);
+  const canHeal = state.healing_available && ["encounter_roll", "prebattle", "travel"].includes(state.phase);
   ui.healingSection.hidden = !canHeal;
   ui.healingChoices.replaceChildren();
   if (canHeal) {
@@ -419,7 +571,7 @@ function renderLocation() {
   if (state.phase !== "travel") {
     const blocked = document.createElement("span");
     blocked.className = "muted";
-    blocked.textContent = state.phase === "victory" ? "the loop is complete" : "resolve the current encounter before travelling";
+    blocked.textContent = state.phase === "victory" ? "the loop is complete" : "resolve the current step before travelling";
     ui.travelChoices.append(blocked);
     return;
   }
@@ -434,26 +586,79 @@ function renderLocation() {
   }
 }
 
+function renderRollButton(label, handler, detail = "") {
+  const action = document.createElement("div");
+  action.className = "dice-roll-action";
+  const button = document.createElement("button");
+  button.className = "dice-button";
+  button.type = "button";
+  button.innerHTML = `<span class="dice-button-icon">◆</span><span>${escapeHtml(label)}</span>`;
+  button.addEventListener("click", handler);
+  action.append(button);
+  if (detail) {
+    const note = document.createElement("span");
+    note.className = "dice-help";
+    note.textContent = detail;
+    action.append(note);
+  }
+  ui.battleControls.append(action);
+}
+
+function renderDiceResult() {
+  if (!state.last_roll) {
+    ui.diceResult.hidden = true;
+    ui.diceResult.replaceChildren();
+    return;
+  }
+  const value = Number(state.last_roll.value);
+  ui.diceResult.hidden = false;
+  ui.diceResult.innerHTML = `<span class="dice-face" aria-hidden="true">${DICE_FACES[value] || value}</span><div><span class="dice-result-label">${escapeHtml(state.last_roll.label)}</span><strong>${value}</strong></div>`;
+}
+
 function renderBattle() {
   ui.phaseLabel.textContent = String(state.phase).replaceAll("_", " ");
   ui.recruitPanel.hidden = true;
   ui.endingPanel.hidden = true;
-
-  if (["travel", "victory", "game_over", "discard"].includes(state.phase) && !state.enemy) {
-    ui.battleEmpty.hidden = state.phase !== "travel";
-    ui.battleContent.hidden = true;
-  } else {
-    ui.battleEmpty.hidden = true;
-    ui.battleContent.hidden = false;
-  }
-
-  if (state.enemy) {
-    ui.playerCombatant.innerHTML = monsterCardHtml(activeMonster());
-    ui.enemyCombatant.innerHTML = monsterCardHtml(state.enemy);
-  }
-
   ui.battleControls.replaceChildren();
   ui.battlePrompt.textContent = "";
+  renderDiceResult();
+
+  const showEnemy = Boolean(state.enemy);
+  ui.combatants.hidden = !showEnemy;
+  if (showEnemy) {
+    ui.playerCombatant.innerHTML = monsterCardHtml(activeMonster());
+    ui.enemyCombatant.innerHTML = monsterCardHtml(state.enemy);
+  } else {
+    ui.playerCombatant.innerHTML = "";
+    ui.enemyCombatant.innerHTML = "";
+  }
+
+  ui.battleEmpty.hidden = true;
+  ui.battleContent.hidden = false;
+
+  if (state.phase === "travel") {
+    ui.battleEmpty.hidden = false;
+    ui.battleContent.hidden = true;
+    return;
+  }
+
+  if (state.phase === "start_roll") {
+    ui.battlePrompt.textContent = "Roll one six-sided die to choose which of the six starting villages begins this run.";
+    renderRollButton("roll starting village d6", rollStartingVillage, "The result 1–6 maps directly to the six starting villages.");
+    return;
+  }
+
+  if (state.phase === "starter_roll") {
+    ui.battlePrompt.textContent = `You begin at ${currentLocation()?.name || "your starting village"}. Roll its encounter table to determine your starter.`;
+    renderRollButton("roll starter d6", rollStarterMonster, "The rolled monster joins at full Health and is not battled here.");
+    return;
+  }
+
+  if (state.phase === "encounter_roll") {
+    ui.battlePrompt.textContent = `You arrived at ${currentLocation()?.name || "a new location"}. Roll its d6 encounter table.`;
+    renderRollButton("roll encounter d6", rollEncounter, "The result selects exactly one face of this location's encounter table.");
+    return;
+  }
 
   if (state.phase === "prebattle") {
     ui.battlePrompt.textContent = `Encounter roll ${state.encounter_roll}. Choose the monster that will enter battle.`;
@@ -472,6 +677,7 @@ function renderBattle() {
     begin.textContent = "begin battle";
     begin.addEventListener("click", beginBattle);
     ui.battleControls.append(begin);
+    return;
   }
 
   if (state.phase === "battle") {
@@ -482,9 +688,28 @@ function renderBattle() {
       button.className = "move-button";
       button.disabled = !canAffordMove(player, index, true);
       button.innerHTML = `<strong>${escapeHtml(move.name)}</strong><span class="cost">${move.mana_cost} Mana</span><span class="damage">${move.damage} dmg</span>`;
-      button.addEventListener("click", () => resolveRound(index));
+      button.addEventListener("click", () => startRound(index));
       ui.battleControls.append(button);
     });
+    return;
+  }
+
+  if (state.phase === "speed_tie_player_roll") {
+    ui.battlePrompt.textContent = `Speed is tied at ${activeMonster()?.speed}. Roll your tie-break die.`;
+    renderRollButton("roll your Speed d6", rollPlayerSpeedTie, "After this result, you will separately roll the enemy's Speed die.");
+    return;
+  }
+
+  if (state.phase === "speed_tie_enemy_roll") {
+    ui.battlePrompt.textContent = `You rolled ${state.speed_tie_player_roll}. Now roll the enemy's tie-break die.`;
+    renderRollButton("roll enemy Speed d6", rollEnemySpeedTie, "If both dice match, both rolls must be clicked again.");
+    return;
+  }
+
+  if (state.phase === "enemy_move_roll") {
+    ui.battlePrompt.textContent = `${state.enemy?.species_name || "The enemy"} is acting. Roll the enemy move die: 1–3 selects Move 1, 4–6 selects Move 2, with the normal affordability fallback.`;
+    renderRollButton("roll enemy move d6", rollEnemyMove, "The enemy cannot choose a move until you click this roll.");
+    return;
   }
 
   if (state.phase === "replacement") {
@@ -499,10 +724,17 @@ function renderBattle() {
       grid.append(button);
     }
     ui.battleControls.append(grid);
+    return;
+  }
+
+  if (state.phase === "recruitment_roll") {
+    const card = cardIndex.get(String(state.pending_recruit_species_id));
+    ui.battlePrompt.textContent = `${card?.species_name || "The defeated monster"} is defeated. Roll d6: 5–6 recruits it at full Health; 1–4 leaves it behind.`;
+    renderRollButton("roll recruitment d6", rollRecruitment, "Recruitment is not resolved until you click the die.");
+    return;
   }
 
   if (state.phase === "discard" && state.pending_recruit) {
-    ui.battleEmpty.hidden = true;
     ui.battleContent.hidden = true;
     ui.recruitPanel.hidden = false;
     ui.recruitPanel.replaceChildren();
@@ -524,17 +756,17 @@ function renderBattle() {
       grid.append(button);
     }
     ui.recruitPanel.append(grid);
+    return;
   }
 
   if (state.phase === "victory") {
-    ui.battleEmpty.hidden = true;
     ui.battleContent.hidden = true;
     ui.endingPanel.hidden = false;
     ui.endingPanel.innerHTML = `<h2>the loop is broken</h2><p>Duskervet has been defeated at the Stillwater sanctum.</p><p>You completed this run with ${state.team.length} monster${state.team.length === 1 ? "" : "s"} still carried.</p>`;
+    return;
   }
 
   if (state.phase === "game_over") {
-    ui.battleEmpty.hidden = true;
     ui.battleContent.hidden = true;
     ui.endingPanel.hidden = false;
     ui.endingPanel.innerHTML = `<h2>the loop closes</h2><p>Every monster in your team has died. Start a new loop to try again.</p>`;
@@ -597,13 +829,12 @@ function exportSave() {
 async function importSave(file) {
   if (!file) return;
   try {
-    const imported = parseState(await file.text());
-    if (!locationById.has(String(imported.location_id))) throw new Error("save references an unknown location");
+    const imported = normalizeLoadedState(parseState(await file.text()));
+    if (imported.location_id !== null && !locationById.has(String(imported.location_id))) throw new Error("save references an unknown location");
     for (const monster of imported.team) {
       if (!cardIndex.has(String(monster.species_id))) throw new Error(`save references unknown species ${monster.species_id}`);
     }
     state = imported;
-    state.log ??= [];
     saveState();
     ui.startDialog.close();
     render();
