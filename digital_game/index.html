@@ -56,6 +56,7 @@
             <div class="versus">vs</div>
             <article id="enemy_combatant" class="combatant enemy"></article>
           </div>
+          <div id="dice_result" class="dice-result" hidden aria-live="polite"></div>
           <div id="battle_prompt" class="battle-prompt"></div>
           <div id="battle_controls" class="battle-controls"></div>
         </div>
@@ -78,7 +79,7 @@
   <dialog id="start_dialog" class="start-dialog">
     <div class="start-mark">∞</div>
     <h2>The Book of Loops</h2>
-    <p>A complete digital implementation of the printed game. Your progress is stored locally in this browser.</p>
+    <p>A complete digital implementation of the printed game. Every d6 result is rolled by clicking the die yourself; no gameplay roll resolves silently in the background.</p>
     <div id="load_error" class="error-box" hidden></div>
     <div class="start-actions">
       <button id="start_new_button" class="primary-button">start a new loop</button>

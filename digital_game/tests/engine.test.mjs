@@ -7,11 +7,13 @@ import {
   createMonsterInstance,
   canAffordMove,
   chooseEnemyMove,
-  resolveSpeedOrder,
+  compareSpeed,
+  resolveSpeedTie,
   playerTurn,
   enemyTurn,
   healMonster,
   recruitmentSucceeded,
+  rollD6,
   parseState,
 } from "../engine.js";
 
@@ -29,6 +31,11 @@ const card = {
 
 test("canonical team limit", () => {
   assert.equal(TEAM_SIZE_LIMIT, 6);
+});
+
+test("d6 simulation maps random values to one through six", () => {
+  assert.equal(rollD6(() => 0), 1);
+  assert.equal(rollD6(() => 0.999999), 6);
 });
 
 test("map adjacency and starting locations use degree one", () => {
@@ -62,28 +69,33 @@ test("player mana resets immediately when the enemy dies", () => {
   assert.equal(player.battle_mana, 0);
 });
 
-test("enemy falls back to affordable move", () => {
+test("enemy move resolution consumes an explicit supplied d6 roll", () => {
   const enemy = createMonsterInstance(card, "e1");
   enemy.battle_mana = 1;
   assert.equal(chooseEnemyMove(enemy, 6), 0);
+  assert.throws(() => chooseEnemyMove(enemy, 7), /between 1 and 6/);
 });
 
-test("speed ties reroll until resolved", () => {
+test("speed order only asks for dice when speeds tie", () => {
   const player = createMonsterInstance(card, "m1");
-  const enemy = createMonsterInstance(card, "e1");
-  const values = [0.0, 0.0, 0.9, 0.1];
-  const order = resolveSpeedOrder(player, enemy, () => values.shift());
-  assert.equal(order.first, "player");
-  assert.equal(order.rolls.length, 2);
+  const fasterEnemy = createMonsterInstance({ ...card, speed: 120 }, "e1");
+  const tiedEnemy = createMonsterInstance(card, "e2");
+  assert.equal(compareSpeed(player, fasterEnemy), "enemy");
+  assert.equal(compareSpeed(player, tiedEnemy), "tie");
+  assert.equal(resolveSpeedTie(6, 2), "player");
+  assert.equal(resolveSpeedTie(3, 3), "tie");
+  assert.equal(resolveSpeedTie(1, 5), "enemy");
 });
 
-test("enemy turn gains mana and can kill", () => {
+test("enemy turn uses the clicked roll rather than generating its own", () => {
   const enemy = createMonsterInstance(card, "e1");
   const player = createMonsterInstance(card, "m1");
   player.current_health = 20;
-  const result = enemyTurn(enemy, player, () => 0.0);
+  const result = enemyTurn(enemy, player, 1);
+  assert.equal(result.roll, 1);
   assert.equal(result.moveIndex, 0);
   assert.equal(result.killed, true);
+  assert.throws(() => enemyTurn(enemy, player, 0), /between 1 and 6/);
 });
 
 test("healing fully restores one monster", () => {
@@ -93,9 +105,10 @@ test("healing fully restores one monster", () => {
   assert.equal(monster.current_health, 80);
 });
 
-test("recruitment succeeds only on five or six", () => {
-  assert.deepEqual(recruitmentSucceeded(() => 0.5), { roll: 4, success: false });
-  assert.deepEqual(recruitmentSucceeded(() => 0.7), { roll: 5, success: true });
+test("recruitment resolves only the supplied clicked roll", () => {
+  assert.deepEqual(recruitmentSucceeded(4), { roll: 4, success: false });
+  assert.deepEqual(recruitmentSucceeded(5), { roll: 5, success: true });
+  assert.throws(() => recruitmentSucceeded(9), /between 1 and 6/);
 });
 
 test("save parser rejects reserve-sized teams", () => {
