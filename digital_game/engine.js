@@ -114,6 +114,7 @@ export function playerTurn(player, enemy, moveIndex) {
   }
   player.battle_mana -= move.mana_cost;
   const killed = applyDamage(enemy, move.damage);
+  if (killed) player.battle_mana = 0;
   return { moveIndex, damage: move.damage, killed };
 }
 
