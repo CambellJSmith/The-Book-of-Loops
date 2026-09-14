@@ -1,41 +1,20 @@
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 INDEX_PATH = ROOT / "index.html"
+CONFIG_PATH = ROOT / "healing_locations.json"
 
-HEALING_LOCATION_IDS = frozenset(
-    {
-        "loc_007",
-        "loc_011",
-        "loc_015",
-        "loc_018",
-        "loc_022",
-        "loc_026",
-        "loc_030",
-        "loc_034",
-        "loc_038",
-        "loc_042",
-        "loc_045",
-        "loc_049",
-        "loc_053",
-        "loc_057",
-        "loc_061",
-        "loc_064",
-        "loc_068",
-        "loc_072",
-        "loc_076",
-        "loc_080",
-        "loc_084",
-        "loc_088",
-        "loc_091",
-        "loc_095",
-        "loc_099",
-    }
-)
-HEALING_NOTE = "You can choose to fully heal one of your monsters."
+_config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+HEALING_LOCATION_IDS = frozenset(str(location_id) for location_id in _config.get("location_ids", []))
+HEALING_NOTE = str(_config.get("note", "")).strip()
+if len(HEALING_LOCATION_IDS) != 25:
+    raise RuntimeError(f"expected exactly 25 healing locations, found {len(HEALING_LOCATION_IDS)}")
+if not HEALING_NOTE:
+    raise RuntimeError("healing note cannot be empty")
 
 HEALING_CSS = r'''
 
@@ -131,8 +110,6 @@ def validate_index() -> None:
         raise RuntimeError("index.html is missing the canonical healing-location patch")
     if html.count(HEALING_NOTE) != 1:
         raise RuntimeError("healing note must appear exactly once in the map tool template")
-    if len(HEALING_LOCATION_IDS) != 25:
-        raise RuntimeError(f"expected exactly 25 healing locations, found {len(HEALING_LOCATION_IDS)}")
     missing_ids = [location_id for location_id in HEALING_LOCATION_IDS if f'"{location_id}"' not in html]
     if missing_ids:
         raise RuntimeError(f"map tool is missing healing location ids: {missing_ids}")
