@@ -73,7 +73,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_002",
@@ -146,7 +147,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_003",
@@ -219,7 +221,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_004",
@@ -292,7 +295,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_005",
@@ -365,7 +369,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_006",
@@ -438,7 +443,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_007",
@@ -521,7 +527,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_008",
@@ -604,7 +611,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_009",
@@ -687,7 +695,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_010",
@@ -765,7 +774,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_011",
@@ -848,7 +858,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_012",
@@ -931,7 +942,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_013",
@@ -1014,7 +1026,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_014",
@@ -1097,7 +1110,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_015",
@@ -1180,7 +1194,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_016",
@@ -1263,7 +1278,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_017",
@@ -1346,7 +1362,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_018",
@@ -1429,7 +1446,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_019",
@@ -1512,7 +1530,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_020",
@@ -1595,7 +1614,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_021",
@@ -1678,7 +1698,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_022",
@@ -1761,7 +1782,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_023",
@@ -1844,7 +1866,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_024",
@@ -1927,7 +1950,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_025",
@@ -2010,7 +2034,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_026",
@@ -2093,7 +2118,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_027",
@@ -2176,7 +2202,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_028",
@@ -2254,7 +2281,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_029",
@@ -2337,7 +2365,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_030",
@@ -2420,7 +2449,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_031",
@@ -2503,7 +2533,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_032",
@@ -2586,7 +2617,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_033",
@@ -2669,7 +2701,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_034",
@@ -2752,7 +2785,8 @@
           "difficulty": "hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_035",
@@ -2835,7 +2869,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_036",
@@ -2918,7 +2953,8 @@
           "difficulty": "hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_037",
@@ -3001,7 +3037,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_038",
@@ -3084,7 +3121,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_039",
@@ -3167,7 +3205,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_040",
@@ -3245,7 +3284,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_041",
@@ -3328,7 +3368,8 @@
           "difficulty": "easy",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_042",
@@ -3411,7 +3452,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_043",
@@ -3494,7 +3536,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_044",
@@ -3572,7 +3615,8 @@
           "difficulty": "hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_045",
@@ -3655,7 +3699,8 @@
           "difficulty": "hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_046",
@@ -3738,7 +3783,8 @@
           "difficulty": "hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_047",
@@ -3816,7 +3862,8 @@
           "difficulty": "hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_048",
@@ -3899,7 +3946,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_049",
@@ -3982,7 +4030,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_050",
@@ -4065,7 +4114,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_051",
@@ -4143,7 +4193,8 @@
           "difficulty": "hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_052",
@@ -4226,7 +4277,8 @@
           "difficulty": "hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_053",
@@ -4304,7 +4356,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_054",
@@ -4387,7 +4440,8 @@
           "difficulty": "hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_055",
@@ -4470,7 +4524,8 @@
           "difficulty": "hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_056",
@@ -4548,7 +4603,8 @@
           "difficulty": "extra_hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_057",
@@ -4631,7 +4687,8 @@
           "difficulty": "hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_058",
@@ -4714,7 +4771,8 @@
           "difficulty": "hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_059",
@@ -4792,7 +4850,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_060",
@@ -4875,7 +4934,8 @@
           "difficulty": "hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_061",
@@ -4958,7 +5018,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_062",
@@ -5041,7 +5102,8 @@
           "difficulty": "extra_hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_063",
@@ -5124,7 +5186,8 @@
           "difficulty": "hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_064",
@@ -5207,7 +5270,8 @@
           "difficulty": "medium",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_065",
@@ -5290,7 +5354,8 @@
           "difficulty": "extra_hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_066",
@@ -5373,7 +5438,8 @@
           "difficulty": "extra_hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_067",
@@ -5456,7 +5522,8 @@
           "difficulty": "hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_068",
@@ -5534,7 +5601,8 @@
           "difficulty": "hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_069",
@@ -5612,7 +5680,8 @@
           "difficulty": "hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_070",
@@ -5695,7 +5764,8 @@
           "difficulty": "extra_hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_071",
@@ -5778,7 +5848,8 @@
           "difficulty": "extra_hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_072",
@@ -5856,7 +5927,8 @@
           "difficulty": "extra_hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_073",
@@ -5939,7 +6011,8 @@
           "difficulty": "ultra",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_074",
@@ -6022,7 +6095,8 @@
           "difficulty": "ultra",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_075",
@@ -6105,7 +6179,8 @@
           "difficulty": "extra_hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_076",
@@ -6188,7 +6263,8 @@
           "difficulty": "extra_hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_077",
@@ -6271,7 +6347,8 @@
           "difficulty": "ultra",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_078",
@@ -6354,7 +6431,8 @@
           "difficulty": "extra_hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_079",
@@ -6432,7 +6510,8 @@
           "difficulty": "hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_080",
@@ -6515,7 +6594,8 @@
           "difficulty": "extra_hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_081",
@@ -6598,7 +6678,8 @@
           "difficulty": "ultra",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_082",
@@ -6681,7 +6762,8 @@
           "difficulty": "ultra",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_083",
@@ -6764,7 +6846,8 @@
           "difficulty": "ultra",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_084",
@@ -6842,7 +6925,8 @@
           "difficulty": "ultra",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_085",
@@ -6925,7 +7009,8 @@
           "difficulty": "extra_hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_086",
@@ -7003,7 +7088,8 @@
           "difficulty": "extra_hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_087",
@@ -7086,7 +7172,8 @@
           "difficulty": "extra_hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_088",
@@ -7169,7 +7256,8 @@
           "difficulty": "hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_089",
@@ -7252,7 +7340,8 @@
           "difficulty": "extra_hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_090",
@@ -7330,7 +7419,8 @@
           "difficulty": "ultra",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_091",
@@ -7413,7 +7503,8 @@
           "difficulty": "ultra",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_092",
@@ -7496,7 +7587,8 @@
           "difficulty": "ultra",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_093",
@@ -7574,7 +7666,8 @@
           "difficulty": "ultra",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_094",
@@ -7657,7 +7750,8 @@
           "difficulty": "extra_hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_095",
@@ -7740,7 +7834,8 @@
           "difficulty": "extra_hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_096",
@@ -7818,7 +7913,8 @@
           "difficulty": "ultra",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_097",
@@ -7901,7 +7997,8 @@
           "difficulty": "ultra",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": true
     },
     {
       "id": "loc_098",
@@ -7984,7 +8081,8 @@
           "difficulty": "extra_hard",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_099",
@@ -8067,7 +8165,8 @@
           "difficulty": "ultra",
           "is_final_boss": false
         }
-      ]
+      ],
+      "healing_location": false
     },
     {
       "id": "loc_100",
@@ -8140,7 +8239,8 @@
           "difficulty": "ultra",
           "is_final_boss": true
         }
-      ]
+      ],
+      "healing_location": false
     }
   ],
   "links": [
@@ -9088,5 +9188,12 @@
     "die": "d6",
     "final_boss_location": "loc_100",
     "final_boss_species_id": "0400"
+  },
+  "healing_system": {
+    "schema_version": 1,
+    "location_count": 25,
+    "effect": "You may choose one of your monsters and fully restore its Health.",
+    "starting_villages_excluded": true,
+    "stillwater_sanctum_excluded": true
   }
 }
