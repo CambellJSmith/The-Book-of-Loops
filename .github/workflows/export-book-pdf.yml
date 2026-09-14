@@ -78,12 +78,12 @@ jobs:
               invalid = [card.get("species_id") for card in collection if not rules.move_two_is_stronger(card)]
               assert not invalid, invalid[:10]
           assert rules.STARTING_MANA == 0
-          assert rules.MANA_PER_TURN == 1
+          assert rules.MANA_PER_ROUND == 1
           assert rules.TEAM_SIZE_LIMIT == 6
           assert not rules.recruitment_requires_discard(5)
           assert rules.recruitment_requires_discard(6)
-          assert rules.gain_turn_mana(0) == 1
-          assert rules.gain_turn_mana(4) == 5
+          assert rules.gain_round_mana(0) == 1
+          assert rules.gain_round_mana(4) == 5
           assert rules.enemy_move_index(4, 1, [{"mana_cost": 1}, {"mana_cost": 3}]) == 0
           assert rules.enemy_move_index(4, 0, [{"mana_cost": 1}, {"mana_cost": 3}]) is None
           print("validated_combat_rules=400+400")
@@ -136,7 +136,9 @@ jobs:
           assert "Confluence village" in rules and "p. 5" in rules
           assert "Shower hill village" in rules and "p. 10" in rules
           assert "0 Mana" in rules_flat
-          assert "gains 1 Mana" in rules_flat
+          assert "start of every battle round" in rules_flat
+          assert "both active monsters gain 1 Mana" in rules_flat
+          assert "skips that action" in rules_flat
           assert "Move 2 always costs more Mana" in rules_flat
           assert "deals more damage than Move 1" in rules_flat
           assert "1-3" in rules_flat and "Move 1" in rules_flat
